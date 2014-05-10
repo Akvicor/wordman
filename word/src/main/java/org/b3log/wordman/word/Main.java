@@ -50,12 +50,17 @@ public final class Main {
     /**
      * 课程数.
      */
-    private static final int CLASS_NUM = 105;
+    private static final int CLASS_NUM = 375;
 
     /**
-     * 课程名.
+     * 课程词库名.
      */
-    private static final String CLASS_NAME = "六级必备词汇";
+    private static final String CLASS_NAME = "GRE考试必备词汇";
+    
+    /**
+     * 课程词库 id.
+     */
+    private static final String CLASS_ID = "16";
 
     /**
      * 私有的构造器.
@@ -71,7 +76,7 @@ public final class Main {
      */
     public static void main(final String[] args) throws Exception {
         final Clazz clazz = new Clazz();
-        clazz.setId("12");
+        clazz.setId(CLASS_ID);
         clazz.setName(CLASS_NAME);
         final List<Word> classWords = new ArrayList<Word>();
         clazz.setWords(classWords);
