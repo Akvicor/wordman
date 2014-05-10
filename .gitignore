@@ -1,0 +1,6 @@
+/word/target/
+/wordman/platforms/android/CordovaLib/ant-build/
+/wordman/platforms/android/CordovaLib/ant-gen/
+
+*.class
+*.apk
