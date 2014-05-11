@@ -14,33 +14,31 @@
  * limitations under the License.
  */
 /**
- * @fileoverview lexicon.
+ * @fileoverview recite word.
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @version 0.0.0.1, May 11, 2014
  */
 function LexiconCtrl($scope) {
-    clazz.getClasses(db, function(data) {
-        var classes = [];
-        
-        for (var i = 0; i < data.length; i++) {
-            var clazz = {
-                title: data[i].name,
-                count: data[i].size,
-                hasReview: true,
-                progress: 50
-            };
-
-            classes.push(clazz);
-        }
-
-        $scope.lexicons = classes;
-    });
-
-
+    $scope.lexicons = [{
+            title: '四级词汇', 
+            count: 1231,
+            hasReview: true,
+            progress: 50
+        }, {
+            title: '六级词汇',
+            count: 123,
+            hasReview: true,
+            progress: 90
+        }, {
+            title: '八级词汇',
+            count: 123,
+            hasReview: false,
+            progress: 0
+        }];
 
     $scope.archive = function() {
-
+        
     };
 }
 
