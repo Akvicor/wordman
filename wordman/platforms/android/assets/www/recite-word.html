@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app>
     <head>
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
@@ -7,11 +7,13 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
         <title>词库</title>
+         <script src="js/lib/angular.min.js"></script>
     </head>
     <body>
         <div>
             <h1>Word</h1>
-            <input />
+            <input ng-model="yourName"/>
+            <h1>Hello {{yourName}}!</h1>
         </div>
     </body>
 </html>

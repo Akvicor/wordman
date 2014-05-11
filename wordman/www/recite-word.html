@@ -4,16 +4,24 @@
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>词库</title>
-         <script src="js/lib/angular.min.js"></script>
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, width=device-width, height=device-height" />
+        <title>单词学习</title>
+        <script src="js/lib/angular.min.js"></script>
+        <script src="js/recite-word.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/base.css" />
     </head>
     <body>
-        <div>
-            <h1>Word</h1>
-            <input ng-model="yourName"/>
-            <h1>Hello {{yourName}}!</h1>
+        <div ng-include src="'common/header.html'"></div> 
+        <div class="recite-word">
+            <div class="word">
+                <h1>Word</h1>
+                <span>[word]</span>
+            </div>
+            <div class="explain">
+                <span class="class">n.</span> 单词
+            </div>
+            <input />
         </div>
+
     </body>
 </html>

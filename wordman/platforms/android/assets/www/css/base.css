@@ -1,0 +1,134 @@
+/**
+* base style
+*
+* @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
+* @version 0.0.0.1, May 11, 2014
+*/
+body {
+    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    background-attachment:fixed;
+    font-family: 'HelveticaNeue-Light', '微软雅黑';
+    font-size:1em;
+    height:100%;
+    margin:0px;
+    padding:0px;
+    width:100%;
+}
+
+@keyframes fade {
+    from { opacity: 1.0; }
+    50% { opacity: 0.4; }
+    to { opacity: 1.0; }
+}
+
+@-webkit-keyframes fade {
+    from { opacity: 1.0; }
+    50% { opacity: 0.4; }
+    to { opacity: 1.0; }
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* start function */
+.fn-clear:before,
+.fn-clear:after {
+    display: table;
+    content: "";
+}
+
+.fn-clear:after {
+    clear: both;
+}
+
+.fn-left {
+    float: left;
+}
+
+.fn-right {
+    float: right;
+}
+
+.fn-none {
+    display: none;
+}
+/* end function */
+
+/* start common */
+.btn {
+    color: #FFF;
+    height: 3em;
+    line-height: 3em;
+    padding: 0 0.8em;
+    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.05));
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.btn-red {
+    background-color: #D95C5C;
+}
+
+.btn-green {
+    background-color: #5BBD72;
+}
+
+.list li {
+    width: 100%;
+    border-bottom: 1px solid #DDDDDD;
+    height: 3em;
+}
+
+.list li.last {
+    border-bottom-width: 0;
+}
+/* end common */
+/* start lexicon list */
+.lexicon .rate {
+    height: 3em;
+    background-color: rgba(150,205,233,0.8);
+    z-index: 6;
+    position: absolute;
+    opacity: 0.4;
+    top: 0;
+    left: 0;
+}
+
+.lexicon .intro {
+    width: 80%;
+    position: relative;
+    height: 3em;
+    padding-left: 1em;
+    box-sizing: border-box;
+}
+
+.lexicon .blue {
+    background-color: #D9EDF7;
+    color: #1D4356;
+}
+
+.lexicon .red {
+    background-color: #FCF8E3;
+    color: #8A6D3B;
+}
+
+.lexicon .title {
+    font-size: 1.2em;
+}
+
+.lexicon .detail {
+    font-size: 0.8em;
+    color: #30708f;
+}
+
+.lexicon .red .detail {
+    color: #b89559;
+}
+/* end lexicon list */
+
+
