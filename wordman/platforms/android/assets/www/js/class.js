@@ -34,7 +34,7 @@ var clazz = {
      * </p>
      */
     initClasses: function() {
-        this.dropTables();
+        // this.dropTables();
 
         var db = openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
         db.transaction(function(tx) {
