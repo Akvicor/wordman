@@ -34,15 +34,12 @@ var clazz = {
      * </p>
      */
     initClasses: function() {
+        // this.dropTables();
+
         var db = openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
-
-        this.dropTables();
-
         db.transaction(function(tx) {
             tx.executeSql("select 1 from option", [], function(tx, result) {
                 console.debug('已经初始化过词库了');
-                
-                alert('已经初始化过词库了');
 
 //            tx.executeSql('select count(*) as c from word', [], function(tx, result) {
 //                console.log(result.rows.item(0).c);
@@ -98,7 +95,7 @@ var clazz = {
      */
     importClass: function(clazz) {
         var db = window.openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
-        
+
         JSZipUtils.getBinaryContent('resources/classes/' + clazz + '.zip', function(err, data) {
             if (err) {
                 console.error('加载词库异常', err);
@@ -144,12 +141,8 @@ var clazz = {
      */
     getClasses: function(cb) {
         var classes = [];
-        
-        alert(1);
 
         var db = openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
-        
-        alert(2);
 
         db.transaction(function(tx) {
             tx.executeSql('select * from class', [], function(tx, result) {
@@ -168,13 +161,14 @@ var clazz = {
      */
     dropTables: function() {
         var db = window.openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
-        
+
         db.transaction(function(tx) {
             tx.executeSql('drop table class');
             tx.executeSql('drop table classwords');
             tx.executeSql('drop table option');
             tx.executeSql('drop table word');
         });
+
         console.info('删除所有表完毕');
     }
 };

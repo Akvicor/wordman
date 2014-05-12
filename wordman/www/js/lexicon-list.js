@@ -36,6 +36,8 @@ function LexiconCtrl($scope) {
             classes.push(clazz);
         }
         
+        alert(classes[0].title);
+
         $scope.lexicons = classes;
     });
 
