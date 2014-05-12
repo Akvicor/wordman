@@ -50,17 +50,17 @@ public final class Main {
     /**
      * 课程数.
      */
-    private static final int CLASS_NUM = 19;
+    private static final int CLASS_NUM = 226;
 
     /**
      * 课程词库名.
      */
-    private static final String CLASS_NAME = "高考常用短语";
+    private static final String CLASS_NAME = "四级必备词汇";
     
     /**
      * 课程词库 id.
      */
-    private static final String CLASS_ID = "141";
+    private static final String CLASS_ID = "11";
 
     /**
      * 私有的构造器.

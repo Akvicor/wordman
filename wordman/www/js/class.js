@@ -70,8 +70,8 @@ var clazz = {
 
                                     // 导入默认的词库
                                     clazz.importClass('1');
+                                    clazz.importClass('2');
                                     // TODO: 加载默认词库
-//                                    clazz.importClass('2');
 //                                    clazz.importClass('3');
 //                                    clazz.importClass('4');
 //                                    clazz.importClass('5');
@@ -96,9 +96,9 @@ var clazz = {
      */
     importClass: function(clazz) {
         var db = dbs.openDatabase();
-        
+
         var own = this;
-        
+
         JSZipUtils.getBinaryContent('resources/classes/' + clazz + '.zip', function(err, data) {
             if (err) {
                 console.error('加载词库异常', err);
@@ -117,9 +117,7 @@ var clazz = {
                     });
                 }
 
-                own.countWords(function(count) {
-                    console.info('初始化词库 [' + clazz + '] 完毕，目前所有词库单词计数 [' + count + ']');
-                });
+                console.info('初始化词库 [' + clazz + '] 完毕');
             });
         });
     },

@@ -1,4 +1,4 @@
-/*
+inputWord/*
  * Copyright (c) 2014, B3log Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,21 +22,26 @@
 function ReciteWordCtrl($scope) {
     $scope.reciteWords = [{
             sounds: "英 [prəˌnʌnsiˈeɪʃn] 美 [prəˌnʌnsiˈeʃən] ",
-            letter: "pronunciation",
+            letter: "Vanessa",
             explain: "发音； 读法； 发音方法； 发音方式",
             speech: "n."
         }, {
             sounds: "英 [prəˌnʌnsiˈeɪʃn] 美 [prəˌnʌnsiˈeʃən] ",
-            letter: "pronunciation1",
+            letter: "Vanessa1",
             explain: "发音； 读法； 发音方法； 发音方式",
             speech: "n."
         }, {
             sounds: "英 [prəˌnʌnsiˈeɪʃn] 美 [prəˌnʌnsiˈeʃən] ",
-            letter: "pronunciation2",
+            letter: "Vanessa2",
+            explain: "发音； 读法； 发音方法； 发音方式",
+            speech: "n."
+        }, {
+            sounds: "英 [prəˌnʌnsiˈeɪʃn] 美 [prəˌnʌnsiˈeʃən] ",
+            letter: "Vanessa3",
             explain: "发音； 读法； 发音方法； 发音方式",
             speech: "n."
         }];
-    $scope.inputWord = "1";
+    $scope.inputWord = "";
     $scope.btnText = "清空";
     $scope.index = 1;
 
@@ -48,7 +53,7 @@ function ReciteWordCtrl($scope) {
 
     $scope.mattch = function() {
         if ($scope.inputWord === $scope.letter) {
-            $scope.btnText = '下一个';
+            $scope.btnText = '确定';
         } else {
             $scope.btnText = '清空';
         }
@@ -64,19 +69,23 @@ function ReciteWordCtrl($scope) {
     };
 
     $scope.studyNext = function() {
-        if ($scope.index === $scope.reciteWords.length) {
-            alert("恭喜你完成该课程的学习");
-            window.location = 'lexicon-list.html';
-            return false;
+        if ($scope.btnText === "清空") {
+            $scope.inputWord = "";
+        } else {
+            if ($scope.index === $scope.reciteWords.length) {
+                alert("恭喜你完成该课程的学习");
+                window.location = 'lexicon-list.html';
+                return false;
+            }
+            $scope.index++;
+            $scope.sounds = $scope.reciteWords[$scope.index - 1].sounds;
+            $scope.letter = $scope.reciteWords[$scope.index - 1].letter;
+            $scope.explain = $scope.reciteWords[$scope.index - 1].explain;
+            $scope.speech = $scope.reciteWords[$scope.index - 1].speech;
+            $scope.reciteWords[$scope.index - 2].hasStudy = true;
+            $scope.hasStudy = false;
+            $scope.inputWord = "";
         }
-        $scope.index++;
-        $scope.sounds = $scope.reciteWords[$scope.index - 1].sounds;
-        $scope.letter = $scope.reciteWords[$scope.index - 1].letter;
-        $scope.explain = $scope.reciteWords[$scope.index - 1].explain;
-        $scope.speech = $scope.reciteWords[$scope.index - 1].speech;
-        $scope.reciteWords[$scope.index - 2].hasStudy = true;
-        $scope.hasStudy = false;
-        $scope.inputWord = "";
     };
 
     $scope.prev = function() {
