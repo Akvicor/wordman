@@ -32,6 +32,8 @@ var clazz = {
      * <p>
      * 将 /resources/classes/ 下的 *.zip 词库包导入到数据库中。
      * </p>
+     * 
+     * @returns {undefined}
      */
     initClasses: function() {
         this.dropTables();
@@ -108,9 +110,7 @@ var clazz = {
             var initClassSqls = zip.file('class.sql').asText().split('----');
             db.transaction(function(tx) {
                 for (var i in initClassSqls) {
-                    tx.executeSql(initClassSqls[i], [], function(tx, result) {
-                    }, function(tx, err) {
-                    });
+                    tx.executeSql(initClassSqls[i]);
                 }
 
                 console.info('初始化词库 [' + clazz + '] 完毕');
@@ -120,8 +120,8 @@ var clazz = {
     /**
      * 获取指定词库的单词数.
      * 
-     * @param {type} clazz 指定词库
-     * @param {type} cb 回调
+     * @param {String} clazz 指定词库
+     * @param {Function} cb 回调
      * @returns {undefined}
      */
     countWord: function(clazz, cb) {
@@ -136,7 +136,22 @@ var clazz = {
     /**
      * 获取所有词库列表.
      * 
-     * @param {type} cb 回调
+     * <p>
+     * 回调实参：
+     * <pre>
+     * [{
+     *     id: "12",
+     *     name: "六级必备词汇",
+     *     size: 2087,
+     *     times: 1,
+     *     selected: true,
+     *     learned: 500, 
+     *     finished: 300, 
+     * }, ....]
+     * </pre>
+     * </p>
+     * 
+     * @param {Function} cb 回调
      * @returns {undefined}
      */
     getClasses: function(cb) {
@@ -153,6 +168,29 @@ var clazz = {
                 cb(classes);
             });
         });
+    },
+    /**
+     * 进行学习计划.
+     * 
+     * <ol>
+     *   <li>
+     *   当用户<i>选定</i>了一个要学习的词库后，使用 DEFAULT_LEARN_NUM 个单词为一课/天生成学习计划（对于同一词库，一天只能学习一课，默认是 
+     *   DEFAULT_LEARN_NUM 个单词）
+     *   </li>
+     *   <li>
+     *   用户每天学习一个词库时可以设置今天学习该词库的单词数（[20, 200]），设定完毕后将使用该单词数为默认单词数调整后续学习计划
+     *   </li>
+     * </ol>
+     * 
+     * @param {String} clazz 词库
+     * @param {Number} learnNum 学习单词数
+     * @param {Function} cb 回调
+     * @returns {undefined}
+     */
+    planLearn: function(clazz, learnNum, cb) {
+        // 第一次对某词库进行学习计划认为是选定了该词库，此时用每课 DEFAULT_LEARN_NUM 个单词进行学习计划
+
+
     },
     /**
      * 删除所有表，仅用于开发阶段.

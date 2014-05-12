@@ -23,7 +23,7 @@ import java.util.UUID;
  * 课程词库.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.0, May 10, 2014
+ * @version 1.0.1.0, May 12, 2014
  * @since 1.0.0
  */
 public final class Clazz {
@@ -122,7 +122,7 @@ public final class Clazz {
                     + word.getId() + "','" + id + "')");
         }
 
-        ret.add("INSERT INTO class VALUES ('" + id + "','" + name + "','" + words.size() + "')");
+        ret.add("INSERT INTO class VALUES ('" + id + "','" + name + "'," + words.size() + ",0,0,0,0)");
 
         return ret;
     }
