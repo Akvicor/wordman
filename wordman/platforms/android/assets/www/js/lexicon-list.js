@@ -22,7 +22,12 @@
  * @since 1.0.0
  */
 function LexiconCtrl($scope) {
+<<<<<<< HEAD
     $scope.lexicons = [];
+=======
+
+    $scope.lexicons = [{"title": "s"}];
+>>>>>>> 0a9907304a1ddcadb0b4eca83ad5827307665b61
 
     clazz.getClasses(function(data) {
         var classes = [];
