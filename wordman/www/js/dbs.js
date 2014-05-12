@@ -29,7 +29,7 @@ var dbs = {
     /**
      * 打开数据库.
      * 
-     * @returns {unresolved}
+     * @returns {Database}
      */
     openDatabase: function() {
         return openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);

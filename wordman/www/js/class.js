@@ -18,7 +18,7 @@
  * 词库操作.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.0, May 10, 2014
+ * @version 1.1.0.0, May 12, 2014
  * @since 1.0.0
  */
 
@@ -38,16 +38,14 @@ var clazz = {
     initClasses: function() {
         this.dropTables();
 
-        var db = openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
+        var db = dbs.openDatabase();
         db.transaction(function(tx) {
             tx.executeSql("select 1 from option", [], function(tx, result) {
                 console.debug('已经初始化过词库了');
 
-//            tx.executeSql('select count(*) as c from word', [], function(tx, result) {
-//                console.log(result.rows.item(0).c);
-//            }, function(tx, err) {
-//                console.error(err);
-//            });
+                clazz.countWords(function(count) {
+                    console.info('所有词库单词计数 [' + count + ']');
+                });
 
                 return;
             }, function(tx, err) {
@@ -72,13 +70,14 @@ var clazz = {
 
                                     // 导入默认的词库
                                     clazz.importClass('1');
-                                    clazz.importClass('2');
-                                    clazz.importClass('3');
-                                    clazz.importClass('4');
-                                    clazz.importClass('5');
-                                    clazz.importClass('6');
-                                    clazz.importClass('7');
-                                    clazz.importClass('8');
+                                    // TODO: 加载默认词库
+//                                    clazz.importClass('2');
+//                                    clazz.importClass('3');
+//                                    clazz.importClass('4');
+//                                    clazz.importClass('5');
+//                                    clazz.importClass('6');
+//                                    clazz.importClass('7');
+//                                    clazz.importClass('8');
                                 }
                             }, function(tx, err) {
                                 console.error(err);
@@ -96,8 +95,10 @@ var clazz = {
      * @returns {undefined}
      */
     importClass: function(clazz) {
-        var db = window.openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
-
+        var db = dbs.openDatabase();
+        
+        var own = this;
+        
         JSZipUtils.getBinaryContent('resources/classes/' + clazz + '.zip', function(err, data) {
             if (err) {
                 console.error('加载词库异常', err);
@@ -110,10 +111,15 @@ var clazz = {
             var initClassSqls = zip.file('class.sql').asText().split('----');
             db.transaction(function(tx) {
                 for (var i in initClassSqls) {
-                    tx.executeSql(initClassSqls[i]);
+                    tx.executeSql(initClassSqls[i], [], function(tx, result) {
+                    }, function(tx, error) {
+                        console.error('导入词库 [' + clazz + '] 异常 [' + tx + ']', error);
+                    });
                 }
 
-                console.info('初始化词库 [' + clazz + '] 完毕');
+                own.countWords(function(count) {
+                    console.info('初始化词库 [' + clazz + '] 完毕，目前所有词库单词计数 [' + count + ']');
+                });
             });
         });
     },
@@ -125,11 +131,28 @@ var clazz = {
      * @returns {undefined}
      */
     countWord: function(clazz, cb) {
-        var db = window.openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
+        var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
             tx.executeSql('select size from class where name = ?', [clazz], function(tx, result) {
                 cb(result.rows.item(0).size);
+            });
+        });
+    },
+    /**
+     * 所有词库一共单词计数.
+     * 
+     * @param {Function} cb 回调
+     * @returns {undefined}
+     */
+    countWords: function(cb) {
+        var db = dbs.openDatabase();
+
+        db.transaction(function(tx) {
+            tx.executeSql('select count(*) as c from word', [], function(tx, result) {
+                cb(result.rows.item(0).c);
+            }, function(tx, err) {
+                console.error(err);
             });
         });
     },
@@ -157,7 +180,7 @@ var clazz = {
     getClasses: function(cb) {
         var classes = [];
 
-        var db = openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
+        var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
             tx.executeSql('select * from class', [], function(tx, result) {
@@ -198,7 +221,7 @@ var clazz = {
      * @returns {undefined}
      */
     dropTables: function() {
-        var db = window.openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
+        var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
             tx.executeSql('drop table class');
@@ -209,6 +232,8 @@ var clazz = {
 
         console.info('删除所有表完毕');
     }
+
+
 };
 
 

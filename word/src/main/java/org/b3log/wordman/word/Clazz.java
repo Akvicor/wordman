@@ -106,23 +106,20 @@ public final class Clazz {
         final List<String> ret = new ArrayList<String>();
 
         for (final Word word : words) {
-            String phon = word.getPhon();
-            if (phon.contains("'")) {
-                System.out.println("===" + phon);
-            }
+            final String w = word.getWord().replaceAll("'", "''");
+            final String phon = word.getPhon().replaceAll("'", "''");
+            final String para = word.getPara().replaceAll("'", "''");
+            final String build = (null == word.getBuild()) ? null : word.getBuild().replaceAll("'", "''");
+            final String example = (null == word.getExample()) ? null : word.getExample().replaceAll("'", "''");
 
-            phon = phon.replaceAll("'", "''");
-            System.out.println("");
-            
-            
-            ret.add("INSERT INTO word VALUES ('" + word.getId() + "','" + word.getWord() + "','" + phon + "','"
-                    + word.getPron() + "','" + word.getPara() + "','" + word.getBuild() + "','" + word.getExample() + "')");
+            ret.add("INSERT INTO word VALUES ('" + word.getId() + "','" + w + "','" + phon + "','"
+                    + word.getPron() + "','" + para + "','" + build + "','" + example + "');----");
 
             ret.add("INSERT INTO classwords VALUES ('" + UUID.randomUUID().toString().replaceAll("-", "") + "','"
-                    + word.getId() + "','" + id + "')");
+                    + word.getId() + "','" + id + "');----");
         }
 
-        ret.add("INSERT INTO class VALUES ('" + id + "','" + name + "'," + words.size() + ",0,0,0,0)");
+        ret.add("INSERT INTO class VALUES ('" + id + "','" + name + "'," + words.size() + ",0,0,0,0);");
 
         return ret;
     }

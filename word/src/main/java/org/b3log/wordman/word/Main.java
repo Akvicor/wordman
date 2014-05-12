@@ -32,7 +32,7 @@ import org.jsoup.select.Elements;
  * 词库获取与生成.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.0, May 11, 2014
+ * @version 1.1.0.1, May 12, 2014
  * @since 1.0.0
  */
 public final class Main {
@@ -125,7 +125,7 @@ public final class Main {
         final List<String> sqls = clazz.toSQLs();
         for (final String sql : sqls) {
             System.out.println(sql);
-            sqlBuilder.append(sql).append(";----").append(IOUtils.LINE_SEPARATOR);
+            sqlBuilder.append(sql).append(IOUtils.LINE_SEPARATOR);
         }
 
         final OutputStream outputStream = new FileOutputStream(new File("C:\\" + CLASS_NAME + ".sql"));
