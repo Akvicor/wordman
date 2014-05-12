@@ -17,10 +17,12 @@
  * @fileoverview lexicon.
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
- * @version 0.0.0.1, May 11, 2014
+ * @author <a href="http://88250.b3log.org">Liang Ding</a>
+ * @version 1.0.0.1, May 11, 2014
+ * @since 1.0.0
  */
 function LexiconCtrl($scope) {
-    clazz.getClasses(db, function(data) {
+    clazz.getClasses(function(data) {
         var classes = [];
         
         for (var i = 0; i < data.length; i++) {
@@ -33,7 +35,7 @@ function LexiconCtrl($scope) {
 
             classes.push(clazz);
         }
-
+        
         $scope.lexicons = classes;
     });
 

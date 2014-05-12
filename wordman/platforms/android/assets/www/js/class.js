@@ -24,8 +24,6 @@
 
 "use strict";
 
-// 数据库
-var db = openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
 // 词库操作封装
 var clazz = {
     /**
@@ -36,11 +34,15 @@ var clazz = {
      * </p>
      */
     initClasses: function() {
-        this.dropTables(db);
+        var db = openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
+
+        this.dropTables();
 
         db.transaction(function(tx) {
             tx.executeSql("select 1 from option", [], function(tx, result) {
                 console.debug('已经初始化过词库了');
+                
+                alert('已经初始化过词库了');
 
 //            tx.executeSql('select count(*) as c from word', [], function(tx, result) {
 //                console.log(result.rows.item(0).c);
@@ -70,14 +72,14 @@ var clazz = {
                                     console.info('建表完毕，开始导入默认词库');
 
                                     // 导入默认的词库
-                                    clazz.importClass(db, '1');
-                                    clazz.importClass(db, '2');
-                                    clazz.importClass(db, '3');
-                                    clazz.importClass(db, '4');
-                                    clazz.importClass(db, '5');
-                                    clazz.importClass(db, '6');
-                                    clazz.importClass(db, '7');
-                                    clazz.importClass(db, '8');
+                                    clazz.importClass('1');
+                                    clazz.importClass('2');
+                                    clazz.importClass('3');
+                                    clazz.importClass('4');
+                                    clazz.importClass('5');
+                                    clazz.importClass('6');
+                                    clazz.importClass('7');
+                                    clazz.importClass('8');
                                 }
                             }, function(tx, err) {
                                 console.error(err);
@@ -88,7 +90,15 @@ var clazz = {
             });
         });
     },
-    importClass: function(db, clazz) {
+    /**
+     * 导入指定的词库.
+     * 
+     * @param {type} clazz 指定的词库
+     * @returns {undefined}
+     */
+    importClass: function(clazz) {
+        var db = window.openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
+        
         JSZipUtils.getBinaryContent('resources/classes/' + clazz + '.zip', function(err, data) {
             if (err) {
                 console.error('加载词库异常', err);
@@ -113,12 +123,13 @@ var clazz = {
     /**
      * 获取指定词库的单词数.
      * 
-     * @param {type} db
      * @param {type} clazz 指定词库
      * @param {type} cb 回调
      * @returns {undefined}
      */
-    countWord: function(db, clazz, cb) {
+    countWord: function(clazz, cb) {
+        var db = window.openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
+
         db.transaction(function(tx) {
             tx.executeSql('select size from class where name = ?', [clazz], function(tx, result) {
                 cb(result.rows.item(0).size);
@@ -128,12 +139,17 @@ var clazz = {
     /**
      * 获取所有词库列表.
      * 
-     * @param {type} db
      * @param {type} cb 回调
      * @returns {undefined}
      */
-    getClasses: function(db, cb) {
+    getClasses: function(cb) {
         var classes = [];
+        
+        alert(1);
+
+        var db = openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
+        
+        alert(2);
 
         db.transaction(function(tx) {
             tx.executeSql('select * from class', [], function(tx, result) {
@@ -148,10 +164,11 @@ var clazz = {
     /**
      * 删除所有表，仅用于开发阶段.
      * 
-     * @param {type} db
      * @returns {undefined}
      */
-    dropTables: function(db) {
+    dropTables: function() {
+        var db = window.openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
+        
         db.transaction(function(tx) {
             tx.executeSql('drop table class');
             tx.executeSql('drop table classwords');
