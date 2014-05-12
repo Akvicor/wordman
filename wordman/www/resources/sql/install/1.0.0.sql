@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `class` (
   `times` int(11) NOT NULL,
   `selected` int(11) NOT NULL,
   `learned` int(11) NOT NULL,
-  `compeleted` int(11) NOT NULL
+  `finished` int(11) NOT NULL
 );
 ----
 CREATE TABLE IF NOT EXISTS `classwords` (

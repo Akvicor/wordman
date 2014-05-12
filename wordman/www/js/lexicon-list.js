@@ -18,7 +18,7 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.1, May 11, 2014
+ * @version 1.0.0.2, May 12, 2014
  * @since 1.0.0
  */
 function LexiconCtrl($scope) {
@@ -32,7 +32,7 @@ function LexiconCtrl($scope) {
                 title: data[i].name,
                 count: data[i].size,
                 hasReview: true,
-                progress: 50
+                progress: data[i].finished / data[i].size * 100
             };
 
             classes.push(clazz);
