@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS `option` (
   `id` char(32) NOT NULL,
+  `category` char(32) NOT NULL,
   `key` varchar(128) NOT NULL,
   `value` varchar(1024) NOT NULL 
 );

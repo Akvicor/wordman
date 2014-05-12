@@ -18,7 +18,7 @@
  * 词库操作.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.0, May 10, 2014
+ * @version 1.1.0.0, May 12, 2014
  * @since 1.0.0
  */
 
@@ -27,6 +27,12 @@
 // 词库操作封装
 var clazz = {
     /**
+     * 一个词库默认的一课（每天）学习单词数.
+     * 
+     * @type Number
+     */
+    DEFAULT_LEARN_NUM: 20,
+    /**
      * 初始化词库.
      * 
      * <p>
@@ -34,9 +40,9 @@ var clazz = {
      * </p>
      */
     initClasses: function() {
-        // this.dropTables();
+        this.dropTables();
 
-        var db = openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
+        var db = dbs.openDatabase();
         db.transaction(function(tx) {
             tx.executeSql("select 1 from option", [], function(tx, result) {
                 console.debug('已经初始化过词库了');
@@ -77,6 +83,9 @@ var clazz = {
                                     clazz.importClass('6');
                                     clazz.importClass('7');
                                     clazz.importClass('8');
+
+                                    // 生成 Wordman UUID
+                                    genWordmanUUID();
                                 }
                             }, function(tx, err) {
                                 console.error(err);
@@ -94,7 +103,7 @@ var clazz = {
      * @returns {undefined}
      */
     importClass: function(clazz) {
-        var db = window.openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
+        var db = dbs.openDatabase();
 
         JSZipUtils.getBinaryContent('resources/classes/' + clazz + '.zip', function(err, data) {
             if (err) {
@@ -125,7 +134,7 @@ var clazz = {
      * @returns {undefined}
      */
     countWord: function(clazz, cb) {
-        var db = window.openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
+        var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
             tx.executeSql('select size from class where name = ?', [clazz], function(tx, result) {
@@ -142,7 +151,7 @@ var clazz = {
     getClasses: function(cb) {
         var classes = [];
 
-        var db = openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
+        var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
             tx.executeSql('select * from class', [], function(tx, result) {
@@ -160,7 +169,7 @@ var clazz = {
      * @returns {undefined}
      */
     dropTables: function() {
-        var db = window.openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
+        var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
             tx.executeSql('drop table class');
@@ -173,5 +182,18 @@ var clazz = {
     }
 };
 
+function genWordmanUUID() {
+    var uuid = dbs.genId();
 
+    // 去除 '-'
+    uuid = uuid.replace(new RegExp('-', 'gm'), '');
 
+    var db = dbs.openDatabase();
+    db.transaction(function(tx) {
+        tx.executeSql('insert into option values (?, ?, ?, ?)', [dbs.genId(), 'conf', 'uuid', uuid], function(tx, result) {
+            console.info('生成了沃德曼 UUID [' + uuid + ']');
+        }, function(tx, err) {
+            console.error('生成沃德曼 UUID 异常', err);
+        });
+    });
+}
