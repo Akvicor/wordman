@@ -15,7 +15,7 @@
  */
 
 /**
- * 数据库工具.
+ * @fileoverview 数据库工具.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
  * @version 1.0.0.0, May 12, 2014
