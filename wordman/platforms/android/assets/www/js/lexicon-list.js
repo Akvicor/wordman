@@ -22,9 +22,11 @@
  * @since 1.0.0
  */
 function LexiconCtrl($scope) {
+    $scope.lexicons = [];
+
     clazz.getClasses(function(data) {
         var classes = [];
-        
+
         for (var i = 0; i < data.length; i++) {
             var clazz = {
                 title: data[i].name,
@@ -35,16 +37,9 @@ function LexiconCtrl($scope) {
 
             classes.push(clazz);
         }
-        
-        alert(classes[0].title);
 
         $scope.lexicons = classes;
+        $scope.$apply();
     });
-
-
-
-    $scope.archive = function() {
-
-    };
 }
 

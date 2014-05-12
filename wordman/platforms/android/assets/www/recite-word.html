@@ -10,18 +10,21 @@
         <script src="js/recite-word.js"></script>
         <link rel="stylesheet" type="text/css" href="css/base.css" />
     </head>
-    <body>
-        <div ng-include src="'common/header.html'"></div> 
+    <body ng-controller="ReciteWordCtrl">
+        <header class="fn-clear">
+            <span class="fn-left" ng-click="back()">返回</span>
+            <span class="fn-right"></span>
+        </header>
         <div class="recite-word">
             <div class="word">
-                <h1>Word</h1>
+                <h1>{{word}}</h1>
                 <span>[word]</span>
             </div>
             <div class="explain">
                 <span class="class">n.</span> 单词
             </div>
-            <input />
+            <input ng-model="inputWord" ng-change="mattch()"/>
+            <button>{{btnText}}</button>
         </div>
-
     </body>
 </html>

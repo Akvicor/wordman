@@ -19,26 +19,80 @@
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @version 0.0.0.1, May 11, 2014
  */
-function LexiconCtrl($scope) {
-    $scope.lexicons = [{
-            title: '四级词汇', 
-            count: 1231,
-            hasReview: true,
-            progress: 50
+function ReciteWordCtrl($scope) {
+    $scope.reciteWords = [{
+            sounds: "英 [prəˌnʌnsiˈeɪʃn] 美 [prəˌnʌnsiˈeʃən] ",
+            letter: "pronunciation",
+            explain: "发音； 读法； 发音方法； 发音方式",
+            speech: "n."
         }, {
-            title: '六级词汇',
-            count: 123,
-            hasReview: true,
-            progress: 90
+            sounds: "英 [prəˌnʌnsiˈeɪʃn] 美 [prəˌnʌnsiˈeʃən] ",
+            letter: "pronunciation1",
+            explain: "发音； 读法； 发音方法； 发音方式",
+            speech: "n."
         }, {
-            title: '八级词汇',
-            count: 123,
-            hasReview: false,
-            progress: 0
+            sounds: "英 [prəˌnʌnsiˈeɪʃn] 美 [prəˌnʌnsiˈeʃən] ",
+            letter: "pronunciation2",
+            explain: "发音； 读法； 发音方法； 发音方式",
+            speech: "n."
         }];
+    $scope.inputWord = "1";
+    $scope.btnText = "清空";
+    $scope.index = 1;
 
-    $scope.archive = function() {
-        
+    $scope.sounds = $scope.reciteWords[0].sounds;
+    $scope.letter = $scope.reciteWords[0].letter;
+    $scope.explain = $scope.reciteWords[0].explain;
+    $scope.speech = $scope.reciteWords[0].speech;
+    $scope.hasStudy = false;
+
+    $scope.mattch = function() {
+        if ($scope.inputWord === $scope.letter) {
+            $scope.btnText = '下一个';
+        } else {
+            $scope.btnText = '清空';
+        }
+    };
+
+    $scope.next = function() {
+        $scope.index++;
+        $scope.sounds = $scope.reciteWords[$scope.index - 1].sounds;
+        $scope.letter = $scope.reciteWords[$scope.index - 1].letter;
+        $scope.explain = $scope.reciteWords[$scope.index - 1].explain;
+        $scope.speech = $scope.reciteWords[$scope.index - 1].speech;
+        $scope.hasStudy = $scope.reciteWords[$scope.index - 1].hasStudy;
+    };
+
+    $scope.studyNext = function() {
+        if ($scope.index === $scope.reciteWords.length) {
+            alert("恭喜你完成该课程的学习");
+            window.location = 'lexicon-list.html';
+            return false;
+        }
+        $scope.index++;
+        $scope.sounds = $scope.reciteWords[$scope.index - 1].sounds;
+        $scope.letter = $scope.reciteWords[$scope.index - 1].letter;
+        $scope.explain = $scope.reciteWords[$scope.index - 1].explain;
+        $scope.speech = $scope.reciteWords[$scope.index - 1].speech;
+        $scope.reciteWords[$scope.index - 2].hasStudy = true;
+        $scope.hasStudy = false;
+        $scope.inputWord = "";
+    };
+
+    $scope.prev = function() {
+        $scope.index--;
+        $scope.sounds = $scope.reciteWords[$scope.index - 1].sounds;
+        $scope.letter = $scope.reciteWords[$scope.index - 1].letter;
+        $scope.explain = $scope.reciteWords[$scope.index - 1].explain;
+        $scope.speech = $scope.reciteWords[$scope.index - 1].speech;
+        $scope.hasStudy = true;
+    };
+
+    $scope.back = function() {
+        var result = confirm("坚持住，否则将从头开始");
+        if (result) {
+            window.location = 'lexicon-list.html';
+        }
     };
 }
 

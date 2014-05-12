@@ -19,26 +19,24 @@
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @version 0.0.0.1, May 11, 2014
  */
-function LexiconCtrl($scope) {
-    $scope.lexicons = [{
-            title: '四级词汇', 
-            count: 1231,
-            hasReview: true,
-            progress: 50
-        }, {
-            title: '六级词汇',
-            count: 123,
-            hasReview: true,
-            progress: 90
-        }, {
-            title: '八级词汇',
-            count: 123,
-            hasReview: false,
-            progress: 0
-        }];
+function ReciteWordCtrl($scope) {
+    $scope.inputWord = "";
+    $scope.btnText = "1";
+    $scope.word = "Vanessa";
 
-    $scope.archive = function() {
-        
+    $scope.mattch = function() {
+         if ($scope.inputWord === $scope.word) {
+             $scope.btnText = '下一个';
+         } else {
+              $scope.btnText = '清空';
+         }
+    };
+    
+    $scope.back = function() {
+         var result = confirm("坚持住，否则将从头开始");
+         if (result) {
+             window.location = 'lexicon-list.html';
+         }
     };
 }
 

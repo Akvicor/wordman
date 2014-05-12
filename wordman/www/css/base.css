@@ -65,24 +65,6 @@ ul {
     padding: 0 1em;
 }
 
-.btn {
-    color: #FFF;
-    height: 4em;
-    line-height: 4em;
-    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.05));
-    box-sizing: border-box;
-    text-align: center;
-    text-decoration: none;
-}
-
-.btn-red {
-    background-color: #D95C5C;
-}
-
-.btn-green {
-    background-color: #5BBD72;
-}
-
 .list li {
     width: 100%;
     border-bottom: 1px solid #DDDDDD;
@@ -96,6 +78,60 @@ header {
     background-color: #F5F5F5;
     padding: 0.3125em 1rem;
     font-size: 1.6rem;
+}
+
+.btn {
+    background-color: #5CB85C;
+    border-color: #4CAE4C;
+    color: #FFFFFF;
+}
+.btn {
+    -moz-user-select: none;
+    background-image: none;
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    color: #FFFFFF;
+    outline: none;
+}
+
+.btn-green {
+    background-color: #5CB85C;
+    border-color: #4CAE4C;
+}
+
+.btn-green:hover {
+    background-color: #47A447;
+    border-color: #398439;
+}
+
+.btn-red {
+    background-color: #D9534F;
+    border-color: #D43F3A;
+}
+
+.btn-red:hover {
+    background-color: #D2322D;
+    border-color: #AC2925;
+}
+
+.btn-orange {
+    background-color: #F0AD4E;
+    border-color: #EEA236;
+}
+
+.btn-orange:hover {
+    background-color: #ED9C28;
+    border-color: #D58512;
 }
 /* end common */
 /* start lexicon list */
@@ -140,6 +176,24 @@ header {
 .lexicon .red .detail {
     color: #b89559;
 }
+
+.lexicon .link {
+    color: #FFF;
+    height: 4em;
+    line-height: 4em;
+    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.05));
+    box-sizing: border-box;
+    text-align: center;
+    text-decoration: none;
+}
+
+.lexicon .link-red {
+    background-color: #D95C5C;
+}
+
+.lexicon .link-green {
+    background-color: #5BBD72;
+}
 /* end lexicon list */
 
 /* end recite word */
@@ -169,7 +223,14 @@ header {
     width: 91%;
     display: block;
     font-size: 2em;
+    padding: 0 0.3125em;
+    border: 1px solid #CCC;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+}
+
+.recite-word input:focus {
+    border-color: #66AFE9;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+    outline: none;
 }
 /* end recite word */
-
-
