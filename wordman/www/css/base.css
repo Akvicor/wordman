@@ -218,19 +218,32 @@ header {
 }
 
 .recite-word input {
-    margin: 1rem auto;
     height: 3rem;
-    width: 91%;
+    width: 100%;
     display: block;
     font-size: 2em;
     padding: 0 0.3125em;
     border: 1px solid #CCC;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    box-sizing: border-box;
 }
 
 .recite-word input:focus {
     border-color: #66AFE9;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
     outline: none;
+}
+
+.recite-word .btns {
+    padding: 1em;
+}
+
+.recite-word .btns > .btn {
+    width: 45%;
+}
+
+.recite-word .input-wrap {
+    padding: 1em;
+    
 }
 /* end recite word */

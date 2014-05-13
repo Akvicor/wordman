@@ -26,6 +26,7 @@
 
 // 词库操作封装
 var clazz = {
+    DEFAULT_LEARN_NUM: 20,
     /**
      * 初始化词库.
      * 
@@ -191,27 +192,61 @@ var clazz = {
         });
     },
     /**
-     * 进行学习计划.
+     * 指定词库“选定”状态.
      * 
-     * <ol>
-     *   <li>
-     *   当用户<i>选定</i>了一个要学习的词库后，使用 DEFAULT_LEARN_NUM 个单词为一课/天生成学习计划（对于同一词库，一天只能学习一课，默认是 
-     *   DEFAULT_LEARN_NUM 个单词）
-     *   </li>
-     *   <li>
-     *   用户每天学习一个词库时可以设置今天学习该词库的单词数（[20, 200]），设定完毕后将使用该单词数为默认单词数调整后续学习计划
-     *   </li>
-     * </ol>
+     * <p>
+     * 回调实参：
+     * <pre>
+     * {
+     *     selected: true, 
+     *     learnNum: 25, 
+     * }
+     * </pre>
+     * </p>
      * 
-     * @param {String} clazz 词库
+     * @param {String} clazzId 指定词库 id
+     * @param {Function} cb 回调
+     * @returns {undefined}
+     */
+    selectState: function(clazzId, cb) {
+        var db = dbs.openDatabase();
+
+        db.transaction(function(tx) {
+            tx.executeSql('select selected from class where id = ?', [clazzId], function(tx, result) {
+                var ret = {};
+                ret.selected = result.rows.item(0);
+
+                db.transaction(function(tx) {
+                    // TODO: 查询上一次用户设置的学习词数
+                    tx.executeSql('select count(*) as c from plan where classId = ? and date = ?', [clazzId, today], function(tx, result) {
+                        ret.learnNum = result.rows.item(0).c;
+
+                        cb(ret);
+                    });
+                });
+            });
+        });
+    },
+    /**
+     * 生成学习计划.
+     * 
+     * @param {String} clazzId 词库 id
      * @param {Number} learnNum 学习单词数
      * @param {Function} cb 回调
      * @returns {undefined}
      */
-    planLearn: function(clazz, learnNum, cb) {
-        // 第一次对某词库进行学习计划认为是选定了该词库，此时用每课 DEFAULT_LEARN_NUM 个单词进行学习计划
+    genPlan: function(classId, learnNum, cb) {
+        // TODO: remove today and gen
 
-
+    },
+    /**
+     * “选定”指定的词库.
+     * 
+     * @param {type} classId 指定的词库 id
+     * @returns {undefined}
+     */
+    selectClass: function(classId) {
+        // class.selected = 1
     },
     /**
      * 删除所有表，仅用于开发阶段.

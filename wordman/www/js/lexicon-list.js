@@ -30,6 +30,7 @@ function LexiconCtrl($scope) {
         for (var i = 0; i < data.length; i++) {
             var clazz = {
                 title: data[i].name,
+                id: data[i].id,
                 count: data[i].size,
                 hasReview: true,
                 progress: data[i].finished / data[i].size * 100

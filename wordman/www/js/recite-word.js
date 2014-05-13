@@ -1,4 +1,4 @@
-inputWord/*
+/*
  * Copyright (c) 2014, B3log Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -105,3 +105,22 @@ function ReciteWordCtrl($scope) {
     };
 }
 
+var reciteWord = {
+    init: function() {
+        var idArray = window.location.search.split("=");
+        var classId = idArray[1];
+        
+        clazz.selectState(classId, function(result) {
+            if (!result.selected) {
+                // TODO: 询问用户是否开始学习该词库，如果确定学习则“选定”该词库，否则返回列表
+                clazz.selectClass(classId);
+            }
+
+            var learnNum = result.learnNum;
+            // TODO: 询问用户今天学习词数
+            clazz.genPlan(classId, learnNum, function(todayWords) {
+
+            });
+        });
+    }
+};
