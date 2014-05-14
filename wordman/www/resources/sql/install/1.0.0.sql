@@ -21,16 +21,6 @@ CREATE TABLE IF NOT EXISTS `classwords` (
   `classId` char(32) NOT NULL
 );
 ----
-CREATE TABLE IF NOT EXISTS `word` (
-  `id` char(32) NOT NULL,
-  `word` varchar(55) NOT NULL,
-  `phon` varchar(255) NOT NULL,
-  `pron` varchar(255) NOT NULL,
-  `para` varchar(512) NOT NULL,
-  `build` varchar(512) NOT NULL,
-  `example` varchar(1024) NOT NULL
-);
-----
 CREATE TABLE IF NOT EXISTS `plan` (
   `id` char(32) NOT NULL,
   `classId` char(32) NOT NULL,

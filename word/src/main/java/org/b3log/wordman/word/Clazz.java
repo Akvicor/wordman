@@ -17,13 +17,12 @@ package org.b3log.wordman.word;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 课程词库.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.1.0, May 12, 2014
+ * @version 1.0.1.1, May 14, 2014
  * @since 1.0.0
  */
 public final class Clazz {
@@ -105,6 +104,17 @@ public final class Clazz {
     public List<String> toSQLs() {
         final List<String> ret = new ArrayList<String>();
 
+        ret.add("CREATE TABLE IF NOT EXISTS `" + "word_" + id + "` ("
+                + "  `id` char(32) NOT NULL,"
+                + "  `word` varchar(55) NOT NULL,"
+                + "  `classId` char(32) NOT NULL,"
+                + "  `phon` varchar(255) NOT NULL,"
+                + "  `pron` varchar(255) NOT NULL,"
+                + "  `para` varchar(512) NOT NULL,"
+                + "  `build` varchar(512) NOT NULL,"
+                + "  `example` varchar(1024) NOT NULL"
+                + ");----");
+
         for (final Word word : words) {
             final String w = word.getWord().replaceAll("'", "''");
             final String phon = word.getPhon().replaceAll("'", "''");
@@ -112,11 +122,8 @@ public final class Clazz {
             final String build = (null == word.getBuild()) ? null : word.getBuild().replaceAll("'", "''");
             final String example = (null == word.getExample()) ? null : word.getExample().replaceAll("'", "''");
 
-            ret.add("INSERT INTO word VALUES ('" + word.getId() + "','" + w + "','" + phon + "','"
+            ret.add("INSERT INTO " + "word_" + id + " VALUES ('" + word.getId() + "','" + w + "','" + id + "','" + phon + "','"
                     + word.getPron() + "','" + para + "','" + build + "','" + example + "');----");
-
-            ret.add("INSERT INTO classwords VALUES ('" + UUID.randomUUID().toString().replaceAll("-", "") + "','"
-                    + word.getId() + "','" + id + "');----");
         }
 
         ret.add("INSERT INTO class VALUES ('" + id + "','" + name + "'," + words.size() + ",0,0,0,0);");

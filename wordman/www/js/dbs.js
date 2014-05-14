@@ -105,16 +105,18 @@ var dbs = {
         var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
-            tx.executeSql('drop table if exists class');
-            tx.executeSql('drop table if exists classwords');
-            tx.executeSql('drop table if exists option');
-            tx.executeSql('drop table if exists word');
-            tx.executeSql('drop table if exists plan');
+            tx.executeSql('drop table if exists `class`');
+            tx.executeSql('drop table if exists `classwords`');
+            tx.executeSql('drop table if exists `option`');
+            tx.executeSql('drop table if exists `plan`');
+
+            tx.executeSql('drop table if exists `word_12`');
+        }, function(err) {
+        }, function() {
+            console.info('删除所有表完毕');
+            
+            cb();
         });
-
-        console.info('删除所有表完毕');
-
-        cb();
     }
 };
 
