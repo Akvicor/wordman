@@ -26,6 +26,11 @@
 
 // 词库操作封装
 var clazz = {
+    /**
+     * 第一次学习一个词库时默认的学习词数.
+     * 
+     * @type Number
+     */
     DEFAULT_LEARN_NUM: 20,
     /**
      * 初始化词库.
@@ -37,56 +42,22 @@ var clazz = {
      * @returns {undefined}
      */
     initClasses: function() {
-        this.dropTables();
+        dbs.initDB(function() {
+            console.info('建表完毕，开始导入默认词库');
 
-        var db = dbs.openDatabase();
-        db.transaction(function(tx) {
-            tx.executeSql("select 1 from option", [], function(tx, result) {
-                console.debug('已经初始化过词库了');
+            // 导入默认的词库
+            clazz.importClass('1');
+            clazz.importClass('2');
+            // TODO: 加载默认词库
+//            clazz.importClass('3');
+//            clazz.importClass('4');
+//            clazz.importClass('5');
+//            clazz.importClass('6');
+//            clazz.importClass('7');
+//            clazz.importClass('8');
 
-                clazz.countWords(function(count) {
-                    console.info('所有词库单词计数 [' + count + ']');
-                });
-
-                return;
-            }, function(tx, err) {
-                if (5 !== err.code) { // 非“表不存在”异常
-                    console.error(err);
-
-                    throw err;
-                }
-
-                // option 表不存在，说明是第一次使用，进行数据库初始化
-
-                $.get('resources/sql/install/1.0.0.sql', function(data) { // 获取建表语句
-                    db.transaction(function(tx) {
-                        console.info('第一次使用，初始化数据库');
-                        var index = 0;
-                        var createTableSqls = data.split('----');
-                        for (var i in createTableSqls) {
-                            tx.executeSql(createTableSqls[i], [], function(tx, result) {
-                                index++;
-                                if (index === (createTableSqls.length - 1)) { // 最后一个表建表完毕
-                                    console.info('建表完毕，开始导入默认词库');
-
-                                    // 导入默认的词库
-                                    clazz.importClass('1');
-                                    clazz.importClass('2');
-                                    // TODO: 加载默认词库
-//                                    clazz.importClass('3');
-//                                    clazz.importClass('4');
-//                                    clazz.importClass('5');
-//                                    clazz.importClass('6');
-//                                    clazz.importClass('7');
-//                                    clazz.importClass('8');
-                                }
-                            }, function(tx, err) {
-                                console.error(err);
-                            });
-                        }
-                    });
-                });
-            });
+            // 生成 Wordman UUID
+            genWordmanUUID();
         });
     },
     /**
@@ -247,27 +218,29 @@ var clazz = {
      */
     selectClass: function(classId) {
         // class.selected = 1
-    },
-    /**
-     * 删除所有表，仅用于开发阶段.
-     * 
-     * @returns {undefined}
-     */
-    dropTables: function() {
-        var db = dbs.openDatabase();
-
-        db.transaction(function(tx) {
-            tx.executeSql('drop table class');
-            tx.executeSql('drop table classwords');
-            tx.executeSql('drop table option');
-            tx.executeSql('drop table word');
-        });
-
-        console.info('删除所有表完毕');
     }
 
-
 };
+
+// 2.0.0 用于标识客户端
+function genWordmanUUID() {
+    var uuid = dbs.genId();
+    var time = new Date().getTime();
+    
+    var value = {
+      uuid: uuid,
+      time: time
+    };
+
+    var db = dbs.openDatabase();
+    db.transaction(function(tx) {
+        tx.executeSql('insert into option values (?, ?, ?, ?)', [dbs.genId(), 'conf', 'client', JSON.stringify(value)], function(tx, result) {
+            console.info('生成了沃德曼 UUID [' + uuid + ']');
+        }, function(tx, err) {
+            console.error('生成沃德曼 UUID 异常', err);
+        });
+    });
+}
 
 
 
