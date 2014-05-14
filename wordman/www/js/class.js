@@ -45,11 +45,20 @@ var clazz = {
      * @returns {undefined}
      */
     initClasses: function() {
-        dbs.initDB(function() {
-            console.info('建表完毕，开始导入默认词库');
+        async.series([
+            function(cb) {
+                // 建表
+                dbs.initDB(cb);
+            },
+            function(cb) {
+                // 生成 Wordman 客户端标识
+                dbs.wordman(cb);
+            },
+            function(cb) {
+                console.info('开始导入默认词库');
 
-            // 导入默认的词库
-            clazz.importClass('1'); // 六级必备词汇
+                // 导入默认的词库
+                clazz.importClass('1'); // 六级必备词汇
 //            clazz.importClass('2'); // 四级必备词汇
 //            clazz.importClass('3');
 //            clazz.importClass('4');
@@ -58,9 +67,9 @@ var clazz = {
 //            clazz.importClass('7');
 //            clazz.importClass('8');
 
-            // 生成 Wordman 客户端标识
-            wordman();
-        });
+                cb();
+            }
+        ]);
     },
     /**
      * 导入指定的词库.
@@ -82,18 +91,16 @@ var clazz = {
 
             var initClassSqls = zip.file('class.sql').asText().split('----');
             db.transaction(function(tx) {
-                async.series([
-                    function() {
-                        for (var i in initClassSqls) {
-                            tx.executeSql(initClassSqls[i], [], function(tx, result) {
-                            }, function(tx, err) {
-                                console.error('导入词库 [' + clazz + '] 异常 [' + tx + ']', err);
-                                throw err;
-                            });
-                        }
-                    }, function() {
-                        console.info('初始化词库 [' + clazz + '] 完毕');
-                    }]);
+                for (var i in initClassSqls) {
+                    tx.executeSql(initClassSqls[i], [], function(tx, result) {
+                    }, function(tx, err) {
+                        console.error('导入词库 [' + clazz + '] 异常 [' + tx + ']', err);
+
+                        throw err;
+                    });
+                }
+                
+                console.info('初始化词库 [' + clazz + '] 完毕');
             });
         });
     },
@@ -282,26 +289,6 @@ var clazz = {
         });
     }
 };
-
-// 2.0.0 用于标识客户端
-function wordman() {
-    var uuid = dbs.genId();
-    var time = new Date().getTime();
-
-    var value = {
-        uuid: uuid,
-        time: time
-    };
-
-    var db = dbs.openDatabase();
-    db.transaction(function(tx) {
-        tx.executeSql('insert into option values (?, ?, ?, ?)', [dbs.genId(), 'conf', 'client', JSON.stringify(value)], function(tx, result) {
-            console.info('沃德曼 [' + JSON.stringify(value) + ']');
-        }, function(tx, err) {
-            console.error('生成沃德曼 UUID 异常', err);
-        });
-    });
-}
 
 // 对Date的扩展，将 Date 转化为指定格式的String   
 // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，   

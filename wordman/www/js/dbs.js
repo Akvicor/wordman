@@ -67,18 +67,18 @@ var dbs = {
                         db.transaction(function(tx) {
                             console.info('第一次使用，初始化数据库');
 
-                            var index = 0;
                             // 每一句建表 SQL 使用 ---- 分割
                             var createTableSqls = data.split('----');
 
                             for (var i in createTableSqls) {
                                 tx.executeSql(createTableSqls[i], [], function(tx, result) {
-                                    index++;
-                                    if (index === (createTableSqls.length - 1)) { // 最后一个表建表完毕
+                                    if (parseInt(i) === createTableSqls.length - 1) {
                                         cb();
                                     }
                                 }, function(tx, err) {
                                     console.error(err);
+                                    
+                                    cb(err);
                                 });
                             }
                         });
@@ -114,11 +114,42 @@ var dbs = {
         }, function(err) {
         }, function() {
             console.info('删除所有表完毕');
-            
+
             cb();
         });
+    },
+    /**
+     * 2.0.0 用于标识客户端.
+     * 
+     * @param {Function} cb 回调
+     * @returns {undefined}
+     */
+    wordman: function(cb) {
+        var uuid = dbs.genId();
+        var time = new Date().getTime();
+
+        var value = {
+            uuid: uuid,
+            time: time
+        };
+
+        var db = dbs.openDatabase();
+        db.transaction(function(tx) {
+            tx.executeSql('insert into option values (?, ?, ?, ?)', [dbs.genId(), 'conf', 'client', JSON.stringify(value)], function(tx, result) {
+                console.info('沃德曼 [' + JSON.stringify(value) + ']');
+                
+                cb();
+            }, function(tx, err) {
+                console.error('生成沃德曼异常', err);
+                
+                throw err;
+            });
+        });
     }
+
 };
+
+
 
 function uuid() {
     var s = [];
