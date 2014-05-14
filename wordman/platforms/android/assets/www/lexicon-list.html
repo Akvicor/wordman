@@ -7,6 +7,7 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, width=device-width, height=device-height" />
         <title>词库列表</title>
         <script src="js/lib/angular.min.js"></script>
+        <script type="text/javascript" src="js/dbs.js"></script>
         <script type="text/javascript" src="js/class.js"></script>
         <script src="js/lexicon-list.js"></script>
         <link rel="stylesheet" type="text/css" href="css/base.css" />
@@ -22,9 +23,9 @@
                             <span class="detail">总计 {{lexicon.count}} 个单词</span>
                             <div class="rate" style="width: {{lexicon.progress}}%"></div>
                         </div>
-                        <a href="recite-word.html" class="fn-right btn btn-green" style="width: 12%">学习</a>
+                        <a href="recite-word.html?id={{lexicon.id}}" class="fn-right link link-green" style="width: 12%">学习</a>
                         <a href="review-word.html" 
-                           class="fn-right btn btn-red"
+                           class="fn-right link link-red"
                            ng-show="{{lexicon.hasReview}}" 
                            style="width: 12%">复习</a>
                     </div>
@@ -34,7 +35,7 @@
                             <div class="title">{{lexicon.title}}</div>
                             <span class="detail">总计 {{lexicon.count}} 个单词</span>
                         </div>
-                        <a href="recite-word.html" class="fn-right btn btn-green" style="width: 12%">学习</a>
+                        <a href="recite-word.html?id={{lexicon.id}}" class="fn-right link link-green" style="width: 12%">学习</a>
                     </div>
                 </li>
             </ul>

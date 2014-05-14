@@ -33,6 +33,12 @@ var clazz = {
      */
     DEFAULT_LEARN_NUM: 20,
     /**
+     * 一次学习一个词库时最大的学习词数.
+     * 
+     * @type Number
+     */
+    MAX_LEARN_NUM: 100,
+    /**
      * 初始化词库.
      * 
      * <p>
@@ -260,13 +266,15 @@ var clazz = {
                                                                 function(tx, result) {
                                                                     count++;
 
-                                                                    if (count === classSize) { // 生成完毕
-                                                                        console.debug('生成完毕');
+                                                                    if (count >= learnNum) { // 生成完毕一课
+                                                                        // 先返回，剩余的还在异步执行
                                                                         callback();
                                                                     }
                                                                 },
                                                                 function(tx, err) {
                                                                     console.error('生成学习计划异常', err);
+
+                                                                    throw err;
                                                                 }
                                                         );
                                                     }
@@ -307,7 +315,8 @@ var clazz = {
                                                                         function(tx, result) {
                                                                             count++;
 
-                                                                            if (count === result.rowsAffected) { // 生成完毕
+                                                                            if (count >= learnNum) { // 生成完毕一课
+                                                                                // 先返回，剩余的还在异步执行
                                                                                 callback();
                                                                             }
                                                                         },
@@ -323,6 +332,8 @@ var clazz = {
                                     });
                                 });
                             });
+                        } else { // 没有修改计划
+                            callback();
                         }
                     });
                 });
@@ -339,16 +350,16 @@ var clazz = {
                         for (var i = 0; i < result.rows.length; i++) {
                             plans.push(result.rows.item(i));
                         }
-                        
+
                         var db = dbs.openDatabase();
 
                         db.transaction(function(tx) {
                             for (var i = 0; i < plans.length; i++) {
                                 var plan = plans[i];
-                                
+
                                 tx.executeSql('select * from word_' + classId + ' where id = ?', [plan.wordId], function(tx, result) {
                                     words.push(result.rows.item(0));
-                                    
+
                                     if (words.length === learnNum) {
                                         cb(words);
                                     }

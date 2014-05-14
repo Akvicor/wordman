@@ -18,16 +18,11 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.1, May 11, 2014
+ * @version 1.0.0.2, May 12, 2014
  * @since 1.0.0
  */
 function LexiconCtrl($scope) {
-<<<<<<< HEAD
     $scope.lexicons = [];
-=======
-
-    $scope.lexicons = [{"title": "s"}];
->>>>>>> 0a9907304a1ddcadb0b4eca83ad5827307665b61
 
     clazz.getClasses(function(data) {
         var classes = [];
@@ -35,9 +30,10 @@ function LexiconCtrl($scope) {
         for (var i = 0; i < data.length; i++) {
             var clazz = {
                 title: data[i].name,
+                id: data[i].id,
                 count: data[i].size,
                 hasReview: true,
-                progress: 50
+                progress: data[i].finished / data[i].size * 100
             };
 
             classes.push(clazz);

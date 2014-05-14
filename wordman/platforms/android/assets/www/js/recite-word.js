@@ -20,23 +20,112 @@
  * @version 0.0.0.1, May 11, 2014
  */
 function ReciteWordCtrl($scope) {
+    $scope.reciteWords = [{
+            sounds: "英 [prəˌnʌnsiˈeɪʃn] 美 [prəˌnʌnsiˈeʃən] ",
+            letter: "Vanessa",
+            explain: "发音； 读法； 发音方法； 发音方式",
+            speech: "n."
+        }, {
+            sounds: "英 [prəˌnʌnsiˈeɪʃn] 美 [prəˌnʌnsiˈeʃən] ",
+            letter: "Vanessa1",
+            explain: "发音； 读法； 发音方法； 发音方式",
+            speech: "n."
+        }, {
+            sounds: "英 [prəˌnʌnsiˈeɪʃn] 美 [prəˌnʌnsiˈeʃən] ",
+            letter: "Vanessa2",
+            explain: "发音； 读法； 发音方法； 发音方式",
+            speech: "n."
+        }, {
+            sounds: "英 [prəˌnʌnsiˈeɪʃn] 美 [prəˌnʌnsiˈeʃən] ",
+            letter: "Vanessa3",
+            explain: "发音； 读法； 发音方法； 发音方式",
+            speech: "n."
+        }];
     $scope.inputWord = "";
-    $scope.btnText = "1";
-    $scope.word = "Vanessa";
+    $scope.btnText = "清空";
+    $scope.index = 1;
+
+    $scope.sounds = $scope.reciteWords[0].sounds;
+    $scope.letter = $scope.reciteWords[0].letter;
+    $scope.explain = $scope.reciteWords[0].explain;
+    $scope.speech = $scope.reciteWords[0].speech;
+    $scope.hasStudy = false;
 
     $scope.mattch = function() {
-         if ($scope.inputWord === $scope.word) {
-             $scope.btnText = '下一个';
-         } else {
-              $scope.btnText = '清空';
-         }
+        if ($scope.inputWord === $scope.letter) {
+            $scope.btnText = '确定';
+        } else {
+            $scope.btnText = '清空';
+        }
     };
-    
+
+    $scope.next = function() {
+        $scope.index++;
+        $scope.sounds = $scope.reciteWords[$scope.index - 1].sounds;
+        $scope.letter = $scope.reciteWords[$scope.index - 1].letter;
+        $scope.explain = $scope.reciteWords[$scope.index - 1].explain;
+        $scope.speech = $scope.reciteWords[$scope.index - 1].speech;
+        $scope.hasStudy = $scope.reciteWords[$scope.index - 1].hasStudy;
+    };
+
+    $scope.studyNext = function() {
+        if ($scope.btnText === "清空") {
+            $scope.inputWord = "";
+        } else {
+            if ($scope.index === $scope.reciteWords.length) {
+                alert("恭喜你完成该课程的学习");
+                window.location = 'lexicon-list.html';
+                return false;
+            }
+            $scope.index++;
+            $scope.sounds = $scope.reciteWords[$scope.index - 1].sounds;
+            $scope.letter = $scope.reciteWords[$scope.index - 1].letter;
+            $scope.explain = $scope.reciteWords[$scope.index - 1].explain;
+            $scope.speech = $scope.reciteWords[$scope.index - 1].speech;
+            $scope.reciteWords[$scope.index - 2].hasStudy = true;
+            $scope.hasStudy = false;
+            $scope.inputWord = "";
+        }
+    };
+
+    $scope.prev = function() {
+        $scope.index--;
+        $scope.sounds = $scope.reciteWords[$scope.index - 1].sounds;
+        $scope.letter = $scope.reciteWords[$scope.index - 1].letter;
+        $scope.explain = $scope.reciteWords[$scope.index - 1].explain;
+        $scope.speech = $scope.reciteWords[$scope.index - 1].speech;
+        $scope.hasStudy = true;
+    };
+
     $scope.back = function() {
-         var result = confirm("坚持住，否则将从头开始");
-         if (result) {
-             window.location = 'lexicon-list.html';
-         }
+        var result = confirm("坚持住，否则将从头开始");
+        if (result) {
+            window.location = 'lexicon-list.html';
+        }
     };
 }
 
+var reciteWord = {
+    init: function() {
+        var idArray = window.location.search.split("=");
+        var classId = idArray[1];
+        
+        clazz.selectState(classId, function(result) {
+            if (!result.selected) {
+                // TODO: 询问用户是否开始学习该词库，如果确定学习则“选定”该词库，否则返回列表
+                clazz.selectClass(classId);
+            }
+
+            var learnNum = result.learnNum;
+            // TODO: 询问用户今天学习词数
+            clazz.genPlan(classId, learnNum, function(words) {
+                alert(words.length + ': ' + words[0].word);
+                for (var i in words) {
+                    console.debug(words[i].word);
+                }
+            });
+        });
+    }
+};
+
+reciteWord.init();
