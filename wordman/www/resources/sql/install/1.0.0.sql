@@ -33,7 +33,6 @@ CREATE TABLE IF NOT EXISTS `word` (
 ----
 CREATE TABLE IF NOT EXISTS `plan` (
   `id` char(32) NOT NULL,
-  `userId` char(32) NOT NULL,
   `classId` char(32) NOT NULL,
   `wordId` char(32) NOT NULL,
   `date` char(8) NOT NULL,

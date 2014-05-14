@@ -204,14 +204,58 @@ var clazz = {
     /**
      * 生成学习计划.
      * 
+     * <p>
+     * 回调实参（今天学习的单词列表）：
+     * <pre>
+     * [{
+     *     id: "342", 
+     *     word: "cloak",
+     *     phon: "[klok]",
+     *     ....
+     * }, ....]
+     * </pre>
+     * </p>
+     * 
      * @param {String} clazzId 词库 id
      * @param {Number} learnNum 学习单词数
      * @param {Function} cb 回调
      * @returns {undefined}
      */
     genPlan: function(classId, learnNum, cb) {
-        // TODO: remove today and gen
+        var words = [];
+        
+        var db = dbs.openDatabase();
 
+        db.transaction(function(tx) {
+            var today =  new Date().format('yyyyMMdd');
+            
+            tx.executeSql('select count(*) as c from plan where classId = ? and date = ?', [clazzId, today], function(tx, result) {
+                if (learnNum !== result.rows.item(0).c) { // 用户修改了计划
+                    var db = dbs.openDatabase();
+                    
+                    // 删除后续计划
+                    db.transaction(function(tx) {
+                        tx.executeSql('delete from plan where classId = ? and date >= ?', [clazzId, today]);
+                    });
+
+                    // 新建新计划
+                    db.transaction(function(tx) {
+                        // TODO: 分页迭代添加
+                        tx.executeSql('insert into plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), classId, wordId, today, null, 0]);
+                    });
+                }
+            });
+        });
+        
+        db.transaction(function(tx) {
+            tx.executeSql('select * from plan where classId = ? and date = ?', [classId, today], function(tx, result) {
+                for (var i = 0; i < result.rows.length; i++) {
+                    words.push(result.rows.item(i));
+                }
+
+                cb(words);
+            });
+        });
     },
     /**
      * “选定”指定的词库.
@@ -220,7 +264,6 @@ var clazz = {
      * @returns {undefined}
      */
     selectClass: function(classId) {
-        // class.selected = 1
         var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
