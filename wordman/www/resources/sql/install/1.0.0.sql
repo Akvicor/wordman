@@ -15,12 +15,6 @@ CREATE TABLE IF NOT EXISTS `class` (
   `finished` int(11) NOT NULL
 );
 ----
-CREATE TABLE IF NOT EXISTS `classwords` (
-  `id` char(32) NOT NULL,
-  `wordId` char(32) NOT NULL,
-  `classId` char(32) NOT NULL
-);
-----
 CREATE TABLE IF NOT EXISTS `plan` (
   `id` char(32) NOT NULL,
   `classId` char(32) NOT NULL,
