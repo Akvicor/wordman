@@ -70,9 +70,12 @@ var dbs = {
                             // 每一句建表 SQL 使用 ---- 分割
                             var createTableSqls = data.split('----');
 
+                            var count = 0;
+                            
                             for (var i in createTableSqls) {
                                 tx.executeSql(createTableSqls[i], [], function(tx, result) {
-                                    if (parseInt(i) === createTableSqls.length - 1) {
+                                    count++;
+                                    if (parseInt(i) === count) {
                                         cb();
                                     }
                                 }, function(tx, err) {
@@ -119,12 +122,11 @@ var dbs = {
         });
     },
     /**
-     * 2.0.0 用于标识客户端.
+     * 用于标识客户端.
      * 
-     * @param {Function} cb 回调
      * @returns {undefined}
      */
-    wordman: function(cb) {
+    wordman: function() {
         var uuid = dbs.genId();
         var time = new Date().getTime();
 
@@ -137,8 +139,6 @@ var dbs = {
         db.transaction(function(tx) {
             tx.executeSql('insert into option values (?, ?, ?, ?)', [dbs.genId(), 'conf', 'client', JSON.stringify(value)], function(tx, result) {
                 console.info('沃德曼 [' + JSON.stringify(value) + ']');
-                
-                cb();
             }, function(tx, err) {
                 console.error('生成沃德曼异常', err);
                 
