@@ -36,7 +36,10 @@ var clazz = {
      * 初始化词库.
      * 
      * <p>
-     * 将 /resources/classes/ 下的 *.zip 词库包导入到数据库中。
+     *   <ol>
+     *     <li>如果没有初始化数据库，先初始化数据库</li>
+     *     <li>将 /resources/classes/ 下的 *.zip 词库包导入到数据库中</li>
+     *   </ol>
      * </p>
      * 
      * @returns {undefined}
@@ -235,7 +238,7 @@ function genWordmanUUID() {
     var db = dbs.openDatabase();
     db.transaction(function(tx) {
         tx.executeSql('insert into option values (?, ?, ?, ?)', [dbs.genId(), 'conf', 'client', JSON.stringify(value)], function(tx, result) {
-            console.info('生成了沃德曼 UUID [' + uuid + ']');
+            console.info('沃德曼应用 [' + JSON.stringify(value)+ ']');
         }, function(tx, err) {
             console.error('生成沃德曼 UUID 异常', err);
         });

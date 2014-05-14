@@ -65,11 +65,11 @@ var dbs = {
                     $.get('resources/sql/install/1.0.0.sql', function(data) { // 获取建表语句
                         db.transaction(function(tx) {
                             console.info('第一次使用，初始化数据库');
-                            
+
                             var index = 0;
                             // 每一句建表 SQL 使用 ---- 分割
                             var createTableSqls = data.split('----');
-                            
+
                             for (var i in createTableSqls) {
                                 tx.executeSql(createTableSqls[i], [], function(tx, result) {
                                     index++;
