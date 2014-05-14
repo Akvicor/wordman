@@ -41,6 +41,7 @@ var dbs = {
      * @returns {undefined}
      */
     initDB: function(cb) {
+        // TODO: 不重新初始化库
         this.dropTables(function() {
             var db = dbs.openDatabase();
 

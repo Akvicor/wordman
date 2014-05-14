@@ -238,7 +238,7 @@ function genWordmanUUID() {
     var db = dbs.openDatabase();
     db.transaction(function(tx) {
         tx.executeSql('insert into option values (?, ?, ?, ?)', [dbs.genId(), 'conf', 'client', JSON.stringify(value)], function(tx, result) {
-            console.info('沃德曼应用 [' + JSON.stringify(value)+ ']');
+            console.info('沃德曼 [' + JSON.stringify(value)+ ']');
         }, function(tx, err) {
             console.error('生成沃德曼 UUID 异常', err);
         });
