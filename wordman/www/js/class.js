@@ -49,8 +49,8 @@ var clazz = {
             console.info('建表完毕，开始导入默认词库');
 
             // 导入默认的词库
-            clazz.importClass('1');
-            clazz.importClass('2');
+            clazz.importClass('1'); // 高考常用短语
+            clazz.importClass('2'); // 四级必备词汇
             // TODO: 加载默认词库
 //            clazz.importClass('3');
 //            clazz.importClass('4');
@@ -59,8 +59,8 @@ var clazz = {
 //            clazz.importClass('7');
 //            clazz.importClass('8');
 
-            // 生成 Wordman UUID
-            genWordmanUUID();
+            // 生成 Wordman 客户端标识
+            wordman();
         });
     },
     /**
@@ -71,8 +71,6 @@ var clazz = {
      */
     importClass: function(clazz) {
         var db = dbs.openDatabase();
-
-        var own = this;
 
         JSZipUtils.getBinaryContent('resources/classes/' + clazz + '.zip', function(err, data) {
             if (err) {
@@ -191,9 +189,11 @@ var clazz = {
                 ret.selected = result.rows.item(0);
 
                 db.transaction(function(tx) {
-                    // TODO: 查询上一次用户设置的学习词数
-                    tx.executeSql('select count(*) as c from plan where classId = ? and date = ?', [clazzId, today], function(tx, result) {
+                    tx.executeSql('select count(*) as c from plan where classId = ? and date = ?', [clazzId, new Date().format('yyyyMMdd')], function(tx, result) {
                         ret.learnNum = result.rows.item(0).c;
+
+                        // 第一次学习时使用默认学习词数
+                        ret.learnNum = ret.learnNum > 0 ? ret.learnNum : clazz.DEFAULT_LEARN_NUM;
 
                         cb(ret);
                     });
@@ -221,28 +221,57 @@ var clazz = {
      */
     selectClass: function(classId) {
         // class.selected = 1
-    }
+        var db = dbs.openDatabase();
 
+        db.transaction(function(tx) {
+            tx.executeSql('update class set selected = 1 where id = ?', [classId]);
+        });
+    }
 };
 
 // 2.0.0 用于标识客户端
-function genWordmanUUID() {
+function wordman() {
     var uuid = dbs.genId();
     var time = new Date().getTime();
-    
+
     var value = {
-      uuid: uuid,
-      time: time
+        uuid: uuid,
+        time: time
     };
 
     var db = dbs.openDatabase();
     db.transaction(function(tx) {
         tx.executeSql('insert into option values (?, ?, ?, ?)', [dbs.genId(), 'conf', 'client', JSON.stringify(value)], function(tx, result) {
-            console.info('沃德曼 [' + JSON.stringify(value)+ ']');
+            console.info('沃德曼 [' + JSON.stringify(value) + ']');
         }, function(tx, err) {
             console.error('生成沃德曼 UUID 异常', err);
         });
     });
+}
+
+// 对Date的扩展，将 Date 转化为指定格式的String   
+// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，   
+// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)   
+// 例子：   
+// (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423   
+// (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18   
+Date.prototype.Format = function(fmt)
+{ //author: meizz   
+    var o = {
+        "M+": this.getMonth() + 1, //月份   
+        "d+": this.getDate(), //日   
+        "h+": this.getHours(), //小时   
+        "m+": this.getMinutes(), //分   
+        "s+": this.getSeconds(), //秒   
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度   
+        "S": this.getMilliseconds()             //毫秒   
+    };
+    if (/(y+)/.test(fmt))
+        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
 }
 
 
