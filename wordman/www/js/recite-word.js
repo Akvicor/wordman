@@ -119,8 +119,12 @@ var reciteWord = {
             var learnNum = result.learnNum;
             // TODO: 询问用户今天学习词数
             clazz.genPlan(classId, learnNum, function(words) {
-
+                for (var i in words) {
+                    console.debug(words[i].word);
+                }
             });
         });
     }
 };
+
+reciteWord.init();

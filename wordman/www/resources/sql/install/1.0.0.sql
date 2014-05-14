@@ -20,6 +20,6 @@ CREATE TABLE IF NOT EXISTS `plan` (
   `classId` char(32) NOT NULL,
   `wordId` char(32) NOT NULL,
   `date` char(8) NOT NULL,
-  `done` char(8) NOT NULL,
+  `done` char(8),
   `type` int(1) NOT NULL
 );

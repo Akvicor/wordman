@@ -90,15 +90,15 @@ var clazz = {
     /**
      * 获取指定词库的单词数.
      * 
-     * @param {String} clazz 指定词库
+     * @param {String} classId 指定词库 id
      * @param {Function} cb 回调
      * @returns {undefined}
      */
-    countWord: function(clazz, cb) {
+    countWord: function(classId, cb) {
         var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
-            tx.executeSql('select size from class where name = ?', [clazz], function(tx, result) {
+            tx.executeSql('select size from class where id = ?', [classId], function(tx, result) {
                 cb(result.rows.item(0).size);
             });
         });
@@ -215,28 +215,111 @@ var clazz = {
      * @returns {undefined}
      */
     genPlan: function(classId, learnNum, cb) {
-        var words = [];
-
-        var db = dbs.openDatabase();
+        var classSize;
 
         async.series([
-            function() {
+            function(callback) {
+                clazz.countWord(classId, function(count) {
+                    classSize = count;
+
+                    callback();
+                });
+            },
+            function(callback) {
+                var db = dbs.openDatabase();
+
                 // 如果学习计划有变则重建计划
                 db.transaction(function(tx) {
                     var today = new Date().format('yyyyMMdd');
 
-                    tx.executeSql('select count(*) as c from plan where classId = ? and date = ?', [clazzId, today], function(tx, result) {
-                        if (learnNum !== result.rows.item(0).c) { // 用户修改了计划
+                    tx.executeSql('select count(*) as c from plan where classId = ? and date = ?', [classId, today], function(tx, result) {
+                        var lastLearnNum = result.rows.item(0).c;
+
+                        if (0 === lastLearnNum) { // 首次学习时无学习计划
+                            var count = 0;
+
+                            var db = dbs.openDatabase();
+
+                            // 新建新计划
+                            db.transaction(function(tx) {
+                                var pageNum = Math.ceil(classSize / learnNum);
+
+                                var day = 0;
+
+                                for (var i = 0; i < pageNum; i++) {
+                                    tx.executeSql('select id from word_' + classId + ' limit ?, ?', [i * learnNum, learnNum],
+                                            function(tx, result) {
+                                                var date = new Date();
+                                                date.setDate(date.getDate() + day++);
+
+                                                db.transaction(function(tx) {
+                                                    for (var i = 0; i < result.rows.length; i++) {
+                                                        var word = result.rows.item(i);
+
+                                                        tx.executeSql('insert into plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), classId, word.id, date.format('yyyyMMdd'), null, 0],
+                                                                function(tx, result) {
+                                                                    count++;
+
+                                                                    if (count === classSize) { // 生成完毕
+                                                                        console.debug('生成完毕');
+                                                                        callback();
+                                                                    }
+                                                                },
+                                                                function(tx, err) {
+                                                                    console.error('生成学习计划异常', err);
+                                                                }
+                                                        );
+                                                    }
+                                                });
+                                            }
+                                    );
+                                }
+                            });
+                        } else if (learnNum !== lastLearnNum) { // 用户修改了计划
+                            console.debug('最近该词库设置的学习词数 [' + lastLearnNum + ']，现在修改为 [' + learnNum + ']');
+
                             var db = dbs.openDatabase();
 
                             // 删除后续计划
                             db.transaction(function(tx) {
-                                tx.executeSql('delete from plan where classId = ? and date >= ?', [clazzId, today], function(tx, result) {
+                                tx.executeSql('delete from plan where classId = ? and date >= ?', [classId, today], function(tx, result) {
+                                    console.debug('删除了 [' + result.rowsAffected + '] 学习计划');
+
+                                    var count = 0;
 
                                     // 新建新计划
                                     db.transaction(function(tx) {
-                                        // TODO: 分页迭代添加
-                                        tx.executeSql('insert into plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), classId, wordId, today, null, 0]);
+                                        var pageNum = Math.ceil(result.rowsAffected / learnNum);
+
+                                        var day = 0;
+
+                                        for (var i = 0; i < pageNum; i++) {
+                                            tx.executeSql('select id from word_' + classId + ' limit ?, ?', [i * learnNum, learnNum],
+                                                    function(tx, result) {
+                                                        var date = new Date();
+                                                        date.setDate(date.getDate() + day++);
+
+                                                        db.transaction(function(tx) {
+                                                            for (var i = 0; i < result.rows.length; i++) {
+                                                                var word = result.rows.item(i);
+
+                                                                tx.executeSql('insert into plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), classId, word.id, date.format('yyyyMMdd'), null, 0],
+                                                                        function(tx, result) {
+                                                                            count++;
+
+                                                                            if (count === result.rowsAffected) { // 生成完毕
+                                                                                callback();
+                                                                            }
+                                                                        },
+                                                                        function(tx, err) {
+                                                                            console.error('生成学习计划异常', err);
+                                                                        }
+                                                                );
+                                                            }
+                                                        });
+                                                    }
+                                            );
+                                        }
                                     });
                                 });
                             });
@@ -244,17 +327,40 @@ var clazz = {
                     });
                 });
             },
-            function() {
-                // 返回今天需要学习的单词列表
-                db.transaction(function(tx) {
-                    tx.executeSql('select * from plan where classId = ? and date = ?', [classId, today], function(tx, result) {
-                        for (var i = 0; i < result.rows.length; i++) {
-                            words.push(result.rows.item(i));
-                        }
+            function(callback) {
+                var words = [];
+                var plans = [];
 
-                        cb(words);
+                // 返回今天需要学习的单词列表
+                var db = dbs.openDatabase();
+
+                db.transaction(function(tx) {
+                    tx.executeSql('select * from plan where classId = ? and date = ?', [classId, new Date().format('yyyyMMdd')], function(tx, result) {
+                        for (var i = 0; i < result.rows.length; i++) {
+                            plans.push(result.rows.item(i));
+                        }
+                        
+                        var db = dbs.openDatabase();
+
+                        db.transaction(function(tx) {
+                            for (var i = 0; i < plans.length; i++) {
+                                var plan = plans[i];
+                                
+                                tx.executeSql('select * from word_' + classId + ' where id = ?', [plan.wordId], function(tx, result) {
+                                    words.push(result.rows.item(0));
+                                    
+                                    if (words.length === learnNum) {
+                                        cb(words);
+                                    }
+                                }, function(tx, err) {
+                                    console.error(err);
+                                });
+                            }
+                        });
                     });
                 });
+
+                callback();
             }
         ]);
     },
@@ -279,7 +385,7 @@ var clazz = {
 // 例子：   
 // (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423   
 // (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18   
-Date.prototype.Format = function(fmt)
+Date.prototype.format = function(fmt)
 { //author: meizz   
     var o = {
         "M+": this.getMonth() + 1, //月份   
