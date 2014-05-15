@@ -258,26 +258,32 @@ var clazz = {
                                                 var date = new Date();
                                                 date.setDate(date.getDate() + day++);
 
+                                                var wordIds = [];
+
+                                                // 组装 wordIds 字段
+                                                for (var i = 0; i < result.rows.length; i++) {
+                                                    var word = result.rows.item(i);
+
+                                                    wordIds.push("'" + word.id + "'");
+                                                }
+
+                                                // 保存对该词库一天（一课）的学习计划
                                                 db.transaction(function(tx) {
-                                                    for (var i = 0; i < result.rows.length; i++) {
-                                                        var word = result.rows.item(i);
+                                                    tx.executeSql('insert into plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), classId, '(' + wordIds.toString() + ')', date.format('yyyyMMdd'), null, 0],
+                                                            function(tx, result) {
+                                                                count++;
 
-                                                        tx.executeSql('insert into plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), classId, word.id, date.format('yyyyMMdd'), null, 0],
-                                                                function(tx, result) {
-                                                                    count++;
-
-                                                                    if (count >= learnNum) { // 生成完毕一课
-                                                                        // 先返回，剩余的还在异步执行
-                                                                        callback();
-                                                                    }
-                                                                },
-                                                                function(tx, err) {
-                                                                    console.error('生成学习计划异常', err);
-
-                                                                    throw err;
+                                                                if (count >= 2) { // 生成完毕 2 课
+                                                                    // 先返回，剩余的还在异步执行
+                                                                    callback();
                                                                 }
-                                                        );
-                                                    }
+                                                            },
+                                                            function(tx, err) {
+                                                                console.error('生成学习计划异常', err);
+
+                                                                throw err;
+                                                            }
+                                                    );
                                                 });
                                             }
                                     );
@@ -302,29 +308,38 @@ var clazz = {
                                         var day = 0;
 
                                         for (var i = 0; i < pageNum; i++) {
+                                            // FIXME: 起始点不对
                                             tx.executeSql('select id from word_' + classId + ' limit ?, ?', [i * learnNum, learnNum],
                                                     function(tx, result) {
                                                         var date = new Date();
                                                         date.setDate(date.getDate() + day++);
 
+                                                        var wordIds = [];
+
+                                                        // 组装 wordIds 字段
+                                                        for (var i = 0; i < result.rows.length; i++) {
+                                                            var word = result.rows.item(i);
+
+                                                            wordIds.push("'" + word.id + "'");
+                                                        }
+
+                                                        // 保存对该词库一天（一课）的学习计划
                                                         db.transaction(function(tx) {
-                                                            for (var i = 0; i < result.rows.length; i++) {
-                                                                var word = result.rows.item(i);
+                                                            tx.executeSql('insert into plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), classId, '(' + wordIds.toString() + ')', date.format('yyyyMMdd'), null, 0],
+                                                                    function(tx, result) {
+                                                                        count++;
 
-                                                                tx.executeSql('insert into plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), classId, word.id, date.format('yyyyMMdd'), null, 0],
-                                                                        function(tx, result) {
-                                                                            count++;
-
-                                                                            if (count >= learnNum) { // 生成完毕一课
-                                                                                // 先返回，剩余的还在异步执行
-                                                                                callback();
-                                                                            }
-                                                                        },
-                                                                        function(tx, err) {
-                                                                            console.error('生成学习计划异常', err);
+                                                                        if (count >= 2) { // 生成完毕 2 课
+                                                                            // 先返回，剩余的还在异步执行
+                                                                            callback();
                                                                         }
-                                                                );
-                                                            }
+                                                                    },
+                                                                    function(tx, err) {
+                                                                        console.error('生成学习计划异常', err);
+
+                                                                        throw err;
+                                                                    }
+                                                            );
                                                         });
                                                     }
                                             );
@@ -340,33 +355,28 @@ var clazz = {
             },
             function(callback) {
                 var words = [];
-                var plans = [];
 
                 // 返回今天需要学习的单词列表
                 var db = dbs.openDatabase();
 
                 db.transaction(function(tx) {
                     tx.executeSql('select * from plan where classId = ? and date = ?', [classId, new Date().format('yyyyMMdd')], function(tx, result) {
-                        for (var i = 0; i < result.rows.length; i++) {
-                            plans.push(result.rows.item(i));
-                        }
+                        var plan = result.rows.item(0);
+
+                        var wordIds = plan.wordIds;
 
                         var db = dbs.openDatabase();
 
                         db.transaction(function(tx) {
-                            for (var i = 0; i < plans.length; i++) {
-                                var plan = plans[i];
+                            tx.executeSql('select * from word_' + classId + " where id in " + wordIds, [], function(tx, result) {
+                                for (var i = 0; i < result.rows.length; i++) {
+                                    words.push(result.rows.item(i));
+                                }
 
-                                tx.executeSql('select * from word_' + classId + ' where id = ?', [plan.wordId], function(tx, result) {
-                                    words.push(result.rows.item(0));
-
-                                    if (words.length === learnNum) {
-                                        cb(words);
-                                    }
-                                }, function(tx, err) {
-                                    console.error(err);
-                                });
-                            }
+                                cb(words);
+                            }, function(tx, err) {
+                                console.error(err);
+                            });
                         });
                     });
                 });
