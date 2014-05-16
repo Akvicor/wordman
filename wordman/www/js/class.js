@@ -192,13 +192,13 @@ var clazz = {
         var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
-            tx.executeSql('select count(*) as c from plan where classId = ? and date <= ? and type = 0', [clazz.id, new Date().format('yyyyMMdd')], function(tx, result) {
+            tx.executeSql('select count(*) as c from plan where classId = ? and date <= ? and done is null and type = 0', [clazz.id, new Date().format('yyyyMMdd')], function(tx, result) {
                 var ret = clazz;
 
                 ret.toLearns = result.rows.item(0).c
 
                 db.transaction(function(tx) {
-                    tx.executeSql('select count(*) as c from plan where classId = ? and date <= ? and type = 1', [clazz.id, new Date().format('yyyyMMdd')], function(tx, result) {
+                    tx.executeSql('select count(*) as c from plan where classId = ? and date <= ? and done is null and type = 1', [clazz.id, new Date().format('yyyyMMdd')], function(tx, result) {
                         ret.toReviews = result.rows.item(0).c;
 
                         cb(ret);
@@ -284,7 +284,7 @@ var clazz = {
                 // 如果学习计划有变则重建计划
                 db.transaction(function(tx) {
                     var today = new Date().format('yyyyMMdd');
-                    tx.executeSql('select * from plan where classId = ? and date <= ? limit 1', [classId, today], function(tx, result) {
+                    tx.executeSql('select * from plan where classId = ? and date <= ? and done is null order by date asc limit 1', [classId, today], function(tx, result) {
                         var lastLearnNum = 0;
 
                         if (result.rows.length > 0) {
@@ -410,7 +410,7 @@ var clazz = {
                 var db = dbs.openDatabase();
 
                 db.transaction(function(tx) {
-                    tx.executeSql('select * from plan where classId = ? and date <= ? limit 1', [classId, new Date().format('yyyyMMdd')], function(tx, result) {
+                    tx.executeSql('select * from plan where classId = ? and date <= ? and done is null and type = 0 order by date asc limit 1', [classId, new Date().format('yyyyMMdd')], function(tx, result) {
                         var plan = result.rows.item(0);
 
                         var wordIds = plan.wordIds;
