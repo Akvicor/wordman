@@ -18,7 +18,7 @@
  * 词库操作.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.0, May 12, 2014
+ * @version 1.2.2.0, May 16, 2014
  * @since 1.0.0
  */
 
@@ -56,6 +56,7 @@ var clazz = {
             // 导入默认的词库
             clazz.importClass('1'); // 六级必备词汇
             clazz.importClass('2'); // 四级必备词汇
+
             // 生成 Wordman 客户端标识
             dbs.wordman();
         });
@@ -248,7 +249,7 @@ var clazz = {
         });
     },
     /**
-     * 生成学习计划.
+     * 获取今天指定词库的学习计划.
      * 
      * <p>
      * 回调实参（今天学习一课的单词列表）：
@@ -267,7 +268,7 @@ var clazz = {
      * @param {Function} cb 回调
      * @returns {undefined}
      */
-    genPlans: function(classId, learnNum, cb) {
+    getLearnPlans: function(classId, learnNum, cb) {
         var classSize;
 
         async.series([
@@ -290,57 +291,58 @@ var clazz = {
                             lastLearnNum = result.rows.item(0).wordIds.split(',').length;
                         }
 
-                        if (0 === lastLearnNum) { // 首次学习时无学习计划
-                            var count = 0;
-
-                            var db = dbs.openDatabase();
-
-                            // 新建新计划
-                            db.transaction(function(tx) {
-                                var pageNum = Math.ceil(classSize / learnNum);
-
-                                var day = 0;
-
-                                for (var i = 0; i < pageNum; i++) {
-                                    tx.executeSql('select id from word_' + classId + ' limit ?, ?', [i * learnNum, learnNum],
-                                            function(tx, result) {
-                                                var date = new Date();
-                                                date.setDate(date.getDate() + day++);
-
-                                                var wordIds = [];
-
-                                                // 组装 wordIds 字段
-                                                for (var i = 0; i < result.rows.length; i++) {
-                                                    var word = result.rows.item(i);
-
-                                                    wordIds.push("'" + word.id + "'");
-                                                }
-
-                                                // 保存对该词库一天（一课）的学习计划
-                                                db.transaction(function(tx) {
-                                                    tx.executeSql('insert into plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), classId, '(' + wordIds.toString() + ')', date.format('yyyyMMdd'), null, 0],
-                                                            function(tx, result) {
-                                                                count++;
-
-                                                                if (count >= 2) { // 生成完毕 2 课
-                                                                    // 先返回，剩余的还在异步执行
-                                                                    callback();
-                                                                }
-                                                            },
-                                                            function(tx, err) {
-                                                                console.error('生成学习计划异常', err);
-
-                                                                throw err;
-                                                            }
-                                                    );
-                                                });
-                                            }
-                                    );
-                                }
-                            });
-                        } else { // 没有修改计划
+                        if (0 !== lastLearnNum) { // 早已经开始学习该词库
                             callback();
+
+                            return;
                         }
+
+                        // 首次学习时无学习计划
+
+                        var count = 0;
+                        var db = dbs.openDatabase();
+
+                        // 新建新计划
+                        db.transaction(function(tx) {
+                            var pageNum = Math.ceil(classSize / learnNum);
+                            var day = 0;
+
+                            for (var i = 0; i < pageNum; i++) {
+                                tx.executeSql('select id from word_' + classId + ' limit ?, ?', [i * learnNum, learnNum],
+                                        function(tx, result) {
+                                            var date = new Date();
+                                            date.setDate(date.getDate() + day++);
+
+                                            var wordIds = [];
+                                            // 组装 wordIds 字段
+                                            for (var i = 0; i < result.rows.length; i++) {
+                                                var word = result.rows.item(i);
+
+                                                wordIds.push("'" + word.id + "'");
+                                            }
+
+                                            // 保存对该词库一天（一课）的学习计划
+                                            db.transaction(function(tx) {
+                                                tx.executeSql('insert into plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), classId, '(' + wordIds.toString() + ')', date.format('yyyyMMdd'), null, 0],
+                                                        function(tx, result) {
+                                                            count++;
+
+                                                            if (count >= 2) { // 生成完毕 2 课
+                                                                // 先返回，剩余的还在异步执行
+                                                                callback();
+                                                            }
+                                                        },
+                                                        function(tx, err) {
+                                                            console.error('生成学习计划异常', err);
+
+                                                            throw err;
+                                                        }
+                                                );
+                                            });
+                                        }
+                                );
+                            }
+                        });
                     });
                 });
             },
@@ -354,12 +356,10 @@ var clazz = {
                     tx.executeSql('select * from plan where classId = ? and date <= ? and done is null and type = 0 order by date asc limit 1', [classId, new Date().format('yyyyMMdd')], function(tx, result) {
                         var plan = result.rows.item(0);
 
-                        var wordIds = plan.wordIds;
-
                         var db = dbs.openDatabase();
 
                         db.transaction(function(tx) {
-                            tx.executeSql('select * from word_' + classId + " where id in " + wordIds, [], function(tx, result) {
+                            tx.executeSql('select * from word_' + classId + " where id in " + plan.wordIds, [], function(tx, result) {
                                 for (var i = 0; i < result.rows.length; i++) {
                                     words.push(result.rows.item(i));
                                 }
