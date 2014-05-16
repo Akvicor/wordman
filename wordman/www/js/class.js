@@ -140,6 +140,7 @@ var clazz = {
      *     selected: true,
      *     learned: 500, 
      *     finished: 300, 
+     *     planLearns: 2 // 今天需要学习的课程数
      * }, ....]
      * </pre>
      * </p>
@@ -153,12 +154,58 @@ var clazz = {
         var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
-            tx.executeSql('select * from class', [], function(tx, result) {
+            tx.executeSql('select * from class order by selected desc, id asc', [], function(tx, result) {
                 for (var i = 0; i < result.rows.length; i++) {
-                    classes.push(result.rows.item(i));
-                }
 
-                cb(classes);
+                    clazz.countClassPlans(result.rows.item(i), function(clz) {
+                        classes.push(clz);
+
+                        if (i === result.rows.length) {
+                            cb(classes);
+                        }
+                    });
+                }
+            });
+        });
+    },
+    /**
+     * 获取指定词库今天的学习与复习计划课程数.
+     * 
+     * <p>
+     * 用户可能会推迟学习，比如本来应该昨天学习完一课的，但是推迟到今天，那这个计数应该返回 2。
+     * </p>
+     * 
+     * <p>
+     * 回调实参：
+     * <pre>
+     * {
+     *     ....: .... // class 词库行记录 
+     *     toLearns: 2,
+     *     toReviews: 3
+     * }
+     * </pre>
+     * </p>
+     * 
+     * @param {String} clazz 指定的词库
+     * @param {Function} cb 回调
+     * @returns {undefined}
+     */
+    countClassPlans: function(clazz, cb) {
+        var db = dbs.openDatabase();
+
+        db.transaction(function(tx) {
+            tx.executeSql('select count(*) as c from plan where classId = ? and date <= ? and type = 0', [clazz.id, new Date().format('yyyyMMdd')], function(tx, result) {
+                var ret = clazz;
+
+                ret.toLearns = result.rows.item(0).c
+
+                db.transaction(function(tx) {
+                    tx.executeSql('select count(*) as c from plan where classId = ? and date <= ? and type = 1', [clazz.id, new Date().format('yyyyMMdd')], function(tx, result) {
+                        ret.toReviews = result.rows.item(0).c;
+
+                        cb(ret);
+                    });
+                });
             });
         });
     },
@@ -185,14 +232,16 @@ var clazz = {
         db.transaction(function(tx) {
             tx.executeSql('select selected from class where id = ?', [clazzId], function(tx, result) {
                 var ret = {};
-                ret.selected = result.rows.item(0);
+                ret.selected = result.rows.item(0).selected;
 
                 db.transaction(function(tx) {
-                    tx.executeSql('select count(*) as c from plan where classId = ? and date = ?', [clazzId, new Date().format('yyyyMMdd')], function(tx, result) {
-                        ret.learnNum = result.rows.item(0).c;
-
+                    tx.executeSql('select * from plan where classId = ? order by date limit 1', [clazzId], function(tx, result) {
                         // 第一次学习时使用默认学习词数
-                        ret.learnNum = ret.learnNum > 0 ? ret.learnNum : clazz.DEFAULT_LEARN_NUM;
+                        ret.learnNum = clazz.DEFAULT_LEARN_NUM;
+
+                        if (result.rows.length > 0) {
+                            ret.learnNum = result.rows.item(0).wordIds.split(',').length;
+                        }
 
                         cb(ret);
                     });
@@ -237,9 +286,12 @@ var clazz = {
                 // 如果学习计划有变则重建计划
                 db.transaction(function(tx) {
                     var today = new Date().format('yyyyMMdd');
+                    tx.executeSql('select * from plan where classId = ? and date <= ? limit 1', [classId, today], function(tx, result) {
+                        var lastLearnNum = 0;
 
-                    tx.executeSql('select count(*) as c from plan where classId = ? and date = ?', [classId, today], function(tx, result) {
-                        var lastLearnNum = result.rows.item(0).c;
+                        if (result.rows.length > 0) {
+                            lastLearnNum = result.rows.item(0).wordIds.split(',').length;
+                        }
 
                         if (0 === lastLearnNum) { // 首次学习时无学习计划
                             var count = 0;
@@ -360,7 +412,7 @@ var clazz = {
                 var db = dbs.openDatabase();
 
                 db.transaction(function(tx) {
-                    tx.executeSql('select * from plan where classId = ? and date = ?', [classId, new Date().format('yyyyMMdd')], function(tx, result) {
+                    tx.executeSql('select * from plan where classId = ? and date <= ? limit 1', [classId, new Date().format('yyyyMMdd')], function(tx, result) {
                         var plan = result.rows.item(0);
 
                         var wordIds = plan.wordIds;
@@ -396,6 +448,44 @@ var clazz = {
 
         db.transaction(function(tx) {
             tx.executeSql('update class set selected = 1 where id = ?', [classId]);
+            tx.executeSql('select times from class where id = ?', [classId], function(tx, result) {
+                var times = result.rows.item(0).times;
+
+                var db = dbs.openDatabase();
+                db.transaction(function(tx) {
+                    tx.executeSql('update class set times = ? where id = ?', [++times, classId]);
+                });
+            });
+        });
+    },
+    /**
+     * 完成今天指定词库的学习.
+     * 
+     * @param {String} classId 指定词库 id
+     * @param {String} date 指定词库学习计划日期
+     * @returns {undefined}
+     */
+    finishLearn: function(classId, date) {
+        var db = dbs.openDatabase();
+
+        db.transaction(function(tx) {
+            tx.executeSql('select * from plan where classId = ? and date = ? limit 1', [clazzId, date], function(tx, result) {
+                var learned = result.rows.item(0).wordIds.split(',').length;
+
+                var db = dbs.openDatabase();
+                db.transaction(function(tx) {
+                    tx.executeSql('select learned from class where id = ?', [classId], function(tx, result) {
+                        var l = result.rows.item(0).learned;
+
+                        var db = dbs.openDatabase();
+                        db.transaction(function(tx) {
+                            tx.executeSql('update class set learned = ? where id = ?', [l + learned, classId]);
+                        });
+                    });
+
+                    tx.executeSql('update plan set done = ? where classId = ? and date = ?', [new Date().format('yyyyMMdd'), classId, date]);
+                });
+            });
         });
     }
 };

@@ -33,7 +33,9 @@ function LexiconCtrl($scope) {
                 id: data[i].id,
                 count: data[i].size,
                 hasReview: true,
-                progress: data[i].finished / data[i].size * 100
+                progress: data[i].finished / data[i].size * 100,
+                toLearns: data[i].toLearns, // 今天需要学习的课程数
+                toReviews: data[i].toReviews // 今天需要复习的课程数
             };
 
             classes.push(clazz);
