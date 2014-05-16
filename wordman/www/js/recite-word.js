@@ -95,6 +95,7 @@ var reciteWord = {
                     window.location = "lexicon-list.html";
                     return false;
                 }
+
                 clazz.selectClass(classId);
             }
 
@@ -102,7 +103,7 @@ var reciteWord = {
             tip.show('请输入今天要学习的单词数',
                     '<input value="' + result.learnNum + '" />', function() {
                         var reciteWords = [];
-                        clazz.genPlan(classId, parseInt($("#tipContent input").val()), function(words) {
+                        clazz.genPlans(classId, parseInt($("#tipContent input").val()), function(words) {
                             for (var i = 0, ii = words.length; i < ii; i++) {
                                 var para = words[i].para.split(". ");
                                 reciteWords.push({

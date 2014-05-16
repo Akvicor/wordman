@@ -59,6 +59,48 @@ ul {
 }
 /* end function */
 
+/* start tip */
+.tip-bg {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+.tip-content {
+    background-color: #303537;
+    display: none;
+    margin: 0 auto;
+    padding-bottom: 1em;
+    position: fixed;
+    width: 70%;
+    z-index: 10;
+}
+
+#tipTitle {
+    border-bottom: 1px solid #5F9200;
+    color: #5F9200;
+    height: 2em;
+    line-height: 2em;
+    padding-left: 1em;
+}
+
+#tipContent {
+    color: #5F9200;
+    padding: 2em 1em;
+    text-align: center;
+}
+
+.tip-content .button {
+    margin: 0 auto;
+    width: 90%;
+    display: block;
+}
+/* end tip */
+
 /* start common */
 .wrap {
     margin: 0 auto;

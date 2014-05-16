@@ -22,10 +22,15 @@ import java.util.List;
  * 课程词库.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.1.1, May 14, 2014
+ * @version 1.0.1.2, May 16, 2014
  * @since 1.0.0
  */
 public final class Clazz {
+
+    /**
+     * SQL 语句分隔标识.
+     */
+    private static final String SQL_STMT_SEPARATOR = "--B3WmSQL--";
 
     /**
      * Id.
@@ -113,20 +118,28 @@ public final class Clazz {
                 + "  `para` varchar(512) NOT NULL,"
                 + "  `build` varchar(512) NOT NULL,"
                 + "  `example` varchar(1024) NOT NULL"
-                + ");----");
+                + ")" + SQL_STMT_SEPARATOR);
 
-        for (final Word word : words) {
+        ret.add("INSERT INTO class VALUES ('" + id + "','" + name + "'," + words.size() + ",0,0,0,0)" + SQL_STMT_SEPARATOR);
+
+        for (int i = 0; i < words.size(); i++) {
+            final Word word = words.get(i);
+
             final String w = word.getWord().replaceAll("'", "''");
             final String phon = word.getPhon().replaceAll("'", "''");
             final String para = word.getPara().replaceAll("'", "''");
             final String build = (null == word.getBuild()) ? null : word.getBuild().replaceAll("'", "''");
             final String example = (null == word.getExample()) ? null : word.getExample().replaceAll("'", "''");
 
-            ret.add("INSERT INTO " + "word_" + id + " VALUES ('" + word.getId() + "','" + w + "','" + id + "','" + phon + "','"
-                    + word.getPron() + "','" + para + "','" + build + "','" + example + "');----");
-        }
+            String sql = "INSERT INTO " + "word_" + id + " VALUES ('" + word.getId() + "','" + w + "','" + id + "','" + phon + "','"
+                         + word.getPron() + "','" + para + "','" + build + "','" + example + "')";
 
-        ret.add("INSERT INTO class VALUES ('" + id + "','" + name + "'," + words.size() + ",0,0,0,0);");
+            if (i != words.size() - 1) {
+                sql += SQL_STMT_SEPARATOR;
+            }
+
+            ret.add(sql);
+        }
 
         return ret;
     }

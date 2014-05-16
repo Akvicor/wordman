@@ -76,6 +76,7 @@ var dbs = {
                                 tx.executeSql(createTableSqls[i], [], function(tx, result) {
                                     count++;
                                     if (parseInt(i) === count) {
+                                        console.info('建表完毕');
                                         cb();
                                     }
                                 }, function(tx, err) {

@@ -4,6 +4,7 @@
 /wordman/platforms/android/CordovaLib/ant-gen/
 /wordman/platforms/android/ant-build/
 /wordman/platforms/android/ant-gen/
+/wordman/platforms/android/assets/
 /wordman/nbproject/private/
 
 *.class

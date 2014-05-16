@@ -52,7 +52,7 @@ var clazz = {
      */
     initClasses: function() {
         dbs.initDB(function() {
-            console.info('建表完毕，开始导入默认词库');
+            console.info('开始导入默认词库');
             // 导入默认的词库
             clazz.importClass('1'); // 六级必备词汇
             clazz.importClass('2'); // 四级必备词汇
@@ -78,7 +78,7 @@ var clazz = {
 
             var zip = new JSZip(data);
 
-            var initClassSqls = zip.file('class.sql').asText().split('----');
+            var initClassSqls = zip.file('class.sql').asText().split('--B3WmSQL--');
             db.transaction(function(tx) {
                 for (var i in initClassSqls) {
                     tx.executeSql(initClassSqls[i], [], function(tx, result) {
@@ -251,7 +251,7 @@ var clazz = {
      * 生成学习计划.
      * 
      * <p>
-     * 回调实参（今天学习的单词列表）：
+     * 回调实参（今天学习一课的单词列表）：
      * <pre>
      * [{
      *     id: "342", 
@@ -267,7 +267,7 @@ var clazz = {
      * @param {Function} cb 回调
      * @returns {undefined}
      */
-    genPlan: function(classId, learnNum, cb) {
+    genPlans: function(classId, learnNum, cb) {
         var classSize;
 
         async.series([
@@ -281,10 +281,9 @@ var clazz = {
             function(callback) {
                 var db = dbs.openDatabase();
 
-                // 如果学习计划有变则重建计划
                 db.transaction(function(tx) {
                     var today = new Date().format('yyyyMMdd');
-                    tx.executeSql('select * from plan where classId = ? and date <= ? and done is null order by date asc limit 1', [classId, today], function(tx, result) {
+                    tx.executeSql('select * from plan where classId = ? and date <= ? and done is null and type = 0 order by date asc limit 1', [classId, today], function(tx, result) {
                         var lastLearnNum = 0;
 
                         if (result.rows.length > 0) {
@@ -338,64 +337,6 @@ var clazz = {
                                             }
                                     );
                                 }
-                            });
-                        } else if (learnNum !== lastLearnNum) { // 用户修改了计划
-                            console.debug('最近该词库设置的学习词数 [' + lastLearnNum + ']，现在修改为 [' + learnNum + ']');
-
-                            var db = dbs.openDatabase();
-
-                            // 删除后续计划
-                            db.transaction(function(tx) {
-                                tx.executeSql('delete from plan where classId = ? and date >= ?', [classId, today], function(tx, result) {
-                                    console.debug('删除了 [' + result.rowsAffected + '] 学习计划');
-
-                                    var count = 0;
-
-                                    // 新建新计划
-                                    db.transaction(function(tx) {
-                                        var pageNum = Math.ceil(result.rowsAffected / learnNum);
-
-                                        var day = 0;
-
-                                        for (var i = 0; i < pageNum; i++) {
-                                            // FIXME: 起始点不对
-                                            tx.executeSql('select id from word_' + classId + ' limit ?, ?', [i * learnNum, learnNum],
-                                                    function(tx, result) {
-                                                        var date = new Date();
-                                                        date.setDate(date.getDate() + day++);
-
-                                                        var wordIds = [];
-
-                                                        // 组装 wordIds 字段
-                                                        for (var i = 0; i < result.rows.length; i++) {
-                                                            var word = result.rows.item(i);
-
-                                                            wordIds.push("'" + word.id + "'");
-                                                        }
-
-                                                        // 保存对该词库一天（一课）的学习计划
-                                                        db.transaction(function(tx) {
-                                                            tx.executeSql('insert into plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), classId, '(' + wordIds.toString() + ')', date.format('yyyyMMdd'), null, 0],
-                                                                    function(tx, result) {
-                                                                        count++;
-
-                                                                        if (count >= 2) { // 生成完毕 2 课
-                                                                            // 先返回，剩余的还在异步执行
-                                                                            callback();
-                                                                        }
-                                                                    },
-                                                                    function(tx, err) {
-                                                                        console.error('生成学习计划异常', err);
-
-                                                                        throw err;
-                                                                    }
-                                                            );
-                                                        });
-                                                    }
-                                            );
-                                        }
-                                    });
-                                });
                             });
                         } else { // 没有修改计划
                             callback();
