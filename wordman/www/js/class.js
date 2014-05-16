@@ -357,9 +357,9 @@ var clazz = {
                         var plan = result.rows.item(0);
 
                         var db = dbs.openDatabase();
-
+                        
                         db.transaction(function(tx) {
-                            tx.executeSql('select * from word_' + classId + " where id in " + plan.wordIds, [], function(tx, result) {
+                            tx.executeSql('select * from word_' + classId + ' where id in ' + plan.wordIds, [], function(tx, result) {
                                 for (var i = 0; i < result.rows.length; i++) {
                                     words.push(result.rows.item(i));
                                 }
