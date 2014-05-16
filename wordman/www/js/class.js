@@ -55,6 +55,7 @@ var clazz = {
             console.info('建表完毕，开始导入默认词库');
             // 导入默认的词库
             clazz.importClass('1'); // 六级必备词汇
+            clazz.importClass('2'); // 四级必备词汇
             // 生成 Wordman 客户端标识
             dbs.wordman();
         });
@@ -62,13 +63,13 @@ var clazz = {
     /**
      * 导入指定的词库.
      * 
-     * @param {type} clazz 指定的词库
+     * @param {String} clazzFile 指定的词库名
      * @returns {undefined}
      */
-    importClass: function(clazz) {
+    importClass: function(clazzFile) {
         var db = dbs.openDatabase();
 
-        JSZipUtils.getBinaryContent('resources/classes/' + clazz + '.zip', function(err, data) {
+        JSZipUtils.getBinaryContent('resources/classes/' + clazzFile + '.zip', function(err, data) {
             if (err) {
                 console.error('加载词库异常', err);
 
@@ -81,11 +82,8 @@ var clazz = {
             db.transaction(function(tx) {
                 for (var i in initClassSqls) {
                     tx.executeSql(initClassSqls[i], [], function(tx, result) {
-                        if (initClassSqls.length - 2 === result.insertId) {
-                            console.info('初始化词库 [' + clazz + '] 完毕');
-                        }
                     }, function(tx, err) {
-                        console.error('导入词库 [' + clazz + '] 异常 [' + tx + ']', err);
+                        console.error('导入词库 [' + clazzFile + '] 异常 [' + tx + ']', err);
 
                         throw err;
                     });
@@ -440,7 +438,7 @@ var clazz = {
     /**
      * “选定”指定的词库.
      * 
-     * @param {type} classId 指定的词库 id
+     * @param {String} classId 指定的词库 id
      * @returns {undefined}
      */
     selectClass: function(classId) {
