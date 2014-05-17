@@ -18,56 +18,43 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.1, May 12, 2014
+ * @version 1.0.0.2, May 17, 2014
  * @since 1.0.0
  */
 var app = {
-    // Application Constructor
     initialize: function() {
         this.bindEvents();
+
+        // 初始化词库，第一次打开应用时将导入词库
+        clazz.initClasses();
     },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
-        document.addEventListener("backbutton", onBackKeyDown, false);
     },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
-    },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
+        document.addEventListener("backbutton", this.onBackKeyDown, false);
+
+        var parentElement = document.getElementById('deviceready');
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
 
         listeningElement.setAttribute('style', 'display:none;');
         receivedElement.setAttribute('style', 'display:block;');
 
-        console.log('Received Event: ' + id);
     },
-};
+    onBackKeyDown: function() {
+        alert('111');
 
-function onConfirm(button) {
-    //alert('You selected button ' + button);
-    if (button == 1) {
-        app.exitApp();
-    }
-}
-
-// Show a custom confirmation dialog
-function onBackKeyDown() {
-    confirm("1111");
-    
 //    notification.confirm('按确定退出程序!', // message
 //            onConfirm, // callback to invoke with index of button pressed
 //            '确定要退出程序吗?', // title
 //            '确定,取消' // buttonLabels
 //            );
+    }
+};
+
+function onConfirm(button) {
+    if (button == 1) {
+        app.exitApp();
+    }
 }
