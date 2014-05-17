@@ -398,10 +398,10 @@ var clazz = {
         });
     },
     /**
-     * 完成今天指定词库的学习.
+     * 完成指定词库在指定的学习计划日期的学习.
      * 
      * @param {String} classId 指定词库 id
-     * @param {String} date 指定词库学习计划日期
+     * @param {String} date 指定学习计划日期
      * @returns {undefined}
      */
     finishLearn: function(classId, date) {

@@ -18,7 +18,7 @@
  * @fileoverview 数据库工具.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.0, May 14, 2014
+ * @version 1.1.1.0, May 16, 2014
  * @since 1.0.0
  */
 
@@ -76,6 +76,7 @@ var dbs = {
                                 tx.executeSql(createTableSqls[i], [], function(tx, result) {
                                     count++;
                                     if (parseInt(i) === count) {
+                                        console.info('建表完毕');
                                         cb();
                                     }
                                 }, function(tx, err) {
@@ -113,6 +114,7 @@ var dbs = {
             tx.executeSql('drop table if exists `option`');
             tx.executeSql('drop table if exists `plan`');
 
+            tx.executeSql('drop table if exists `word_11`');
             tx.executeSql('drop table if exists `word_12`');
         }, function(err) {
         }, function() {
