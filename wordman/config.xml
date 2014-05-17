@@ -2,10 +2,10 @@
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" id="org.b3log.wordman" version="1.0.0">
     <name>沃德曼</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        沃德曼背单词
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="DL88250@gmail.com" href="http://b3log.org">
+        B3log Team
     </author>
     <content src="index.html"/>
     <access origin="*"/>

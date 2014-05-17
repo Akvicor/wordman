@@ -32,6 +32,7 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.addEventListener("backbutton", onBackKeyDown, false);
     },
     // deviceready Event Handler
     //
@@ -50,5 +51,23 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
-    }
+    },
 };
+
+function onConfirm(button) {
+    //alert('You selected button ' + button);
+    if (button == 1) {
+        app.exitApp();
+    }
+}
+
+// Show a custom confirmation dialog
+function onBackKeyDown() {
+    confirm("1111");
+    
+//    notification.confirm('按确定退出程序!', // message
+//            onConfirm, // callback to invoke with index of button pressed
+//            '确定要退出程序吗?', // title
+//            '确定,取消' // buttonLabels
+//            );
+}
