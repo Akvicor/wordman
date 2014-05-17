@@ -356,8 +356,6 @@ var clazz = {
                     tx.executeSql('select * from plan where classId = ? and date <= ? and done is null and type = 0 order by date asc limit 1', [classId, new Date().format('yyyyMMdd')], function(tx, result) {
                         var plan = result.rows.item(0);
 
-                        var db = dbs.openDatabase();
-                        
                         db.transaction(function(tx) {
                             tx.executeSql('select * from word_' + classId + ' where id in ' + plan.wordIds, [], function(tx, result) {
                                 for (var i = 0; i < result.rows.length; i++) {
@@ -398,7 +396,7 @@ var clazz = {
         });
     },
     /**
-     * 完成指定词库在指定的学习计划日期的学习.
+     * 完成指定词库在指定的学习计划日期的学习，生成相应的复习计划.
      * 
      * @param {String} classId 指定词库 id
      * @param {String} date 指定学习计划日期
@@ -423,6 +421,9 @@ var clazz = {
                     });
 
                     tx.executeSql('update plan set done = ? where classId = ? and date = ?', [new Date().format('yyyyMMdd'), classId, date]);
+                    
+                    // 生成复习计划
+                    
                 });
             });
         });

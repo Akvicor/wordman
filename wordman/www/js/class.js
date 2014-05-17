@@ -254,12 +254,15 @@ var clazz = {
      * <p>
      * 回调实参（今天学习一课的单词列表）：
      * <pre>
-     * [{
-     *     id: "342", 
-     *     word: "cloak",
-     *     phon: "[klok]",
-     *     ....
-     * }, ....]
+     * {
+     *     planId: "xxx",
+     *     words: [{
+     *         id: "342", 
+     *         word: "cloak",
+     *         phon: "[klok]",
+     *         ....
+     *     }, ....]
+     * }
      * </pre>
      * </p>
      * 
@@ -356,15 +359,16 @@ var clazz = {
                     tx.executeSql('select * from plan where classId = ? and date <= ? and done is null and type = 0 order by date asc limit 1', [classId, new Date().format('yyyyMMdd')], function(tx, result) {
                         var plan = result.rows.item(0);
 
-                        var db = dbs.openDatabase();
-                        
                         db.transaction(function(tx) {
                             tx.executeSql('select * from word_' + classId + ' where id in ' + plan.wordIds, [], function(tx, result) {
                                 for (var i = 0; i < result.rows.length; i++) {
                                     words.push(result.rows.item(i));
                                 }
 
-                                cb(words);
+                                cb({
+                                    planId: plan.id,
+                                    words: words
+                                });
                             }, function(tx, err) {
                                 console.error(err);
                             });
@@ -398,18 +402,19 @@ var clazz = {
         });
     },
     /**
-     * 完成指定词库在指定的学习计划日期的学习.
+     * 完成指定词库的指定学习计划，生成相应的复习计划.
      * 
      * @param {String} classId 指定词库 id
-     * @param {String} date 指定学习计划日期
+     * @param {String} planId 指定学习计划 id
      * @returns {undefined}
      */
-    finishLearn: function(classId, date) {
+    finishLearn: function(classId, planId) {
         var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
-            tx.executeSql('select * from plan where classId = ? and date = ? limit 1', [clazzId, date], function(tx, result) {
-                var learned = result.rows.item(0).wordIds.split(',').length;
+            tx.executeSql('select * from plan where classId = ? and id = ? limit 1', [classId, planId], function(tx, result) {
+                var learnPlan = result.rows.item(0);
+                var learned = learnPlan.wordIds.split(',').length;
 
                 var db = dbs.openDatabase();
                 db.transaction(function(tx) {
@@ -422,12 +427,45 @@ var clazz = {
                         });
                     });
 
-                    tx.executeSql('update plan set done = ? where classId = ? and date = ?', [new Date().format('yyyyMMdd'), classId, date]);
+                    tx.executeSql('update plan set done = ? where classId = ? and id = ?', [new Date().format('yyyyMMdd'), classId, planId]);
+
+                    // 生成复习计划（+1、2、4、7、15 天）
+                    var day = new Date();
+                    var day1 = day.setDate(day.getDate() + 1).format('yyyyMMdd');
+                    genReviewPlans(classId, learnPlan.wordIds, day1);
+
+                    var day2 = day.setDate(day.getDate() + 2).format('yyyyMMdd');
+                    genReviewPlans(classId, learnPlan.wordIds, day2);
+
+                    var day4 = day.setDate(day.getDate() + 4).format('yyyyMMdd');
+                    genReviewPlans(classId, learnPlan.wordIds, day4);
+
+                    var day7 = day.setDate(day.getDate() + 7).format('yyyyMMdd');
+                    genReviewPlans(classId, learnPlan.wordIds, day7);
+
+                    var day15 = day.setDate(day.getDate() + 15).format('yyyyMMdd');
+                    genReviewPlans(classId, learnPlan.wordIds, day15);
                 });
             });
         });
     }
 };
+
+function genReviewPlans(classId, wordIds, date) {
+    var db = dbs.openDatabase();
+
+    db.transaction(function(tx) {
+        tx.executeSql('insert into plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), classId, wordIds, date, null, 1],
+                function(tx, result) {
+                },
+                function(tx, err) {
+                    console.error('生成复习计划异常', err);
+
+                    throw err;
+                }
+        );
+    });
+}
 
 // 对Date的扩展，将 Date 转化为指定格式的String   
 // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，   

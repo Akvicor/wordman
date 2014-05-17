@@ -49,7 +49,10 @@ function ReciteWordCtrl($scope) {
         } else {
             if ($scope.index === $scope.reciteWords.length - 1) {
                 alert("恭喜你完成该课程的学习");
+
                 // TODO: 标记该课程学完并生成学习计划
+                clazz.finishLearn(classId, planId);
+
                 window.location = 'lexicon-list.html';
                 return false;
             }
@@ -102,7 +105,9 @@ var reciteWord = {
                 // 首次学习需要用户设置对该词库的学习词数
                 tip.show('请设置每课学习的单词数',
                         '<input value="' + result.learnNum + '" />', function() {
-                            clazz.getLearnPlans(classId, parseInt($("#tipContent input").val()), function(words) {
+                            clazz.getLearnPlans(classId, parseInt($("#tipContent input").val()), function(result) {
+                                var planId = result.planId;
+                                var words = result.words;
                                 var reciteWords = [];
 
                                 for (var i = 0, ii = words.length; i < ii; i++) {
@@ -124,7 +129,9 @@ var reciteWord = {
                             });
                         });
             } else { // 已经“选定”该词库
-                clazz.getLearnPlans(classId, parseInt($("#tipContent input").val()), function(words) {
+                clazz.getLearnPlans(classId, parseInt($("#tipContent input").val()), function(result) {
+                    var planId = result.planId;
+                    var words = result.words;
                     var reciteWords = [];
 
                     for (var i = 0, ii = words.length; i < ii; i++) {
