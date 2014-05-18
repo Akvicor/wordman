@@ -17,7 +17,7 @@
     specific language governing permissions and limitations
     under the License.
 -->
-<html>
+<html ng-app="Wordman">
     <head>
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
@@ -31,12 +31,18 @@
             <h1>Apache Cordova</h1>
             <div id="deviceready" class="blink">
                 <p class="event listening">Connecting to Device</p>
-                <a href="lexicon-list.html" class="event received">Device is Ready</a>
+                <a href="#lexicon-list" class="event received">Device is Ready</a>
             </div>
         </div>
 
+        <div ng-view></div>
+
+        <script src="js/lib/angular-1.2.16.min.js"></script>
+        <script src="js/lib/angular-route-1.2.16.min.js"></script>
+        <script src="js/lexicon-list.js"></script>
+
         <script src="js/lib/async-0.8.0.min.js"></script>
-        <script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="js/lib/jquery-1.10.2.min.js"></script>
         <script type="text/javascript" src="js/lib/jszip-utils.min.js"></script>
         <script type="text/javascript" src="js/lib/jszip.min.js"></script>
         <script type="text/javascript" src="js/dbs.js"></script>

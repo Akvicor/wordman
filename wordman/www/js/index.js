@@ -53,6 +53,24 @@ var app = {
     }
 };
 
+// 定义一个 ng 模块
+var wordmanNG = angular.module('Wordman', ['ngRoute']);
+
+// 配置多视图路由
+wordmanNG.config(['$routeProvider',
+    function($routeProvider) {
+        $routeProvider.
+                when('/lexicon-list', {
+                    templateUrl: 'lexicon-list.html',
+                    controller: 'LexiconCtrl'
+                }).
+                otherwise({
+                    redirectTo: '/index.html'
+                });
+    }])
+        .controller('LexiconCtrl', LexiconCtrl);
+
+
 function onConfirm(button) {
     if (button == 1) {
         app.exitApp();
