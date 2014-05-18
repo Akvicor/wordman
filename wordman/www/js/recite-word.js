@@ -17,9 +17,10 @@
  * @fileoverview recite word.
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
- * @version 0.0.0.1, May 11, 2014
+ * @author <a href="http://88250.b3log.org">Liang Ding</a>
+ * @version 1.1.0.1, May 18, 2014
  */
-function ReciteWordCtrl($scope) {
+function ReciteWordCtrl($scope, $routeParams) {
     $scope.reciteWords = [];
     $scope.inputWord = "";
     $scope.btnText = "清空";
@@ -48,7 +49,7 @@ function ReciteWordCtrl($scope) {
             $scope.inputWord = "";
         } else {
             if ($scope.index === $scope.reciteWords.length - 1) {
-                navigator.notification.prompt('已经完成该词库今天的学习', null, '', '返回');
+                alert('已经完成该词库今天的学习');
 
                 // TODO: 标记该课程学完并生成学习计划
                 clazz.finishLearn(classId, planId);
@@ -79,57 +80,52 @@ function ReciteWordCtrl($scope) {
     $scope.back = function() {
         var result = confirm("确定要返回吗?");
         if (result) {
-            window.location = 'lexicon-list.html';
+            window.location = '#lexicon-list';
         }
     };
 
-    reciteWord.init($scope);
+    reciteWord.init($scope, $routeParams.classId);
 }
 
 var reciteWord = {
-    init: function($scope) {
-        var idArray = window.location.search.split("=");
-        var classId = idArray[1];
-
+    init: function($scope, classId) {
         clazz.selectState(classId, function(result) {
             if (!result.selected) { // 没有“选定”该词库
                 // 询问用户是否开始学习该词库，如果确定学习则“选定”该词库，否则返回列表
-                navigator.notification.confirm('确定学习该词库？', function(buttonIndex) {
-                    if (1 === buttonIndex) {
-                        window.location = "lexicon-list.html";
+                if (!confirm("确定学习该词库？")) {
+                    window.location = "#lexicon-list";
+                    
+                    return false;
+                }
 
-                        return false;
-                    } else {
-                        clazz.selectClass(classId);
+                clazz.selectClass(classId);
 
-                        // 首次学习需要用户设置对该词库的学习词数
-                        tip.show('请设置每课学习的单词数',
-                                '<input value="' + result.learnNum + '" />', function() {
-                                    clazz.getLearnPlans(classId, parseInt($("#tipContent input").val()), function(result) {
-                                        var planId = result.planId;
-                                        var words = result.words;
-                                        var reciteWords = [];
+                // 首次学习需要用户设置对该词库的学习词数
+                tip.show('请设置每课学习的单词数',
+                        '<input value="' + result.learnNum + '" />', function() {
+                            clazz.getLearnPlans(classId, parseInt($("#tipContent input").val()), function(result) {
+                                var planId = result.planId;
+                                var words = result.words;
+                                var reciteWords = [];
 
-                                        for (var i = 0, ii = words.length; i < ii; i++) {
-                                            var para = words[i].para.split(". ");
-                                            reciteWords.push({
-                                                sounds: words[i].phon,
-                                                letter: words[i].word,
-                                                explain: para[1],
-                                                speech: para[0] + "."
-                                            });
-                                        }
-
-                                        $scope.reciteWords = reciteWords;
-                                        $scope.sounds = $scope.reciteWords[0].sounds;
-                                        $scope.letter = $scope.reciteWords[0].letter;
-                                        $scope.explain = $scope.reciteWords[0].explain;
-                                        $scope.speech = $scope.reciteWords[0].speech;
-                                        $scope.$apply();
+                                for (var i = 0, ii = words.length; i < ii; i++) {
+                                    var para = words[i].para.split(". ");
+                                    reciteWords.push({
+                                        sounds: words[i].phon,
+                                        letter: words[i].word,
+                                        explain: para[1],
+                                        speech: para[0] + "."
                                     });
-                                });
-                    }
-                }, '', '确定', '取消');
+                                }
+
+                                $scope.reciteWords = reciteWords;
+                                $scope.sounds = $scope.reciteWords[0].sounds;
+                                $scope.letter = $scope.reciteWords[0].letter;
+                                $scope.explain = $scope.reciteWords[0].explain;
+                                $scope.speech = $scope.reciteWords[0].speech;
+                                $scope.$apply();
+                            });
+                        });
             } else { // 已经“选定”该词库
                 clazz.getLearnPlans(classId, parseInt($("#tipContent input").val()), function(result) {
                     var planId = result.planId;

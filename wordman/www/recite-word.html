@@ -1,51 +1,31 @@
-<!DOCTYPE html>
-<html ng-app>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, width=device-width, height=device-height" />
-        <title>单词学习</title>
-        <script src="js/lib/async-0.8.0.min.js"></script>
-        <script src="js/lib/angular.min.js"></script>
-        <script src="js/lib/jquery-2.1.1.min.js"></script>
-        <script type="text/javascript" src="js/dbs.js"></script>
-        <script type="text/javascript" src="js/class.js"></script>
-        <script src="js/common.js"></script>
-        <script src="js/recite-word.js"></script>
-        <link rel="stylesheet" type="text/css" href="css/base.css" />
-    </head>
-    <body ng-controller="ReciteWordCtrl">
-        <header class="fn-clear">
-            <span class="fn-left" ng-click="back()">返回</span>
-            <span class="fn-right">{{index+1}}/{{reciteWords.length}}</span>
-        </header>
-        <div class="recite-word">
-            <div class="word">
-                <h1>{{letter}}</h1>
-                <span>{{sounds}}</span>
-            </div>
-            <div class="explain">
-                <span class="class">{{speech}}</span> {{explain}}
-            </div>
-            <div class="input-wrap">
-                <input ng-show="!hasStudy" ng-model="inputWord" ng-change="mattch()"/>
-            </div>
-            <div class="btns fn-clear">
-                <button ng-show="index != 0" class="btn btn-orange" ng-click="prev()">上一个</button>
-                <button ng-show="hasStudy" class="btn btn-orange fn-right" ng-click="next()">下一个</button>
-                <button ng-show="inputWord != ''"
-                        ng-class="{true: 'btn - green', false: 'btn - red'}[inputWord == letter]"
-                        class="btn fn-right" ng-click="studyNext()">{{btnText}}</button>
-            </div>
-        </div>
-        <div class="tip-content">
-            <div id="tipTitle"></div>
-            <div>
-                <div id="tipContent"></div>
-                <button class="button" onclick="tip.close()">确 定</button>
-            </div>
-        </div>
-        <div class="tip-bg"></div>
-    </body>
-</html>
+<header class="fn-clear">
+    <span class="fn-left" ng-click="back()">返回</span>
+    <span class="fn-right">{{index + 1}}/{{reciteWords.length}}</span>
+</header>
+<div class="recite-word">
+    <div class="word">
+        <h1>{{letter}}</h1>
+        <span>{{sounds}}</span>
+    </div>
+    <div class="explain">
+        <span class="class">{{speech}}</span> {{explain}}
+    </div>
+    <div class="input-wrap">
+        <input ng-show="!hasStudy" ng-model="inputWord" ng-change="mattch()"/>
+    </div>
+    <div class="btns fn-clear">
+        <button ng-show="index != 0" class="btn btn-orange" ng-click="prev()">上一个</button>
+        <button ng-show="hasStudy" class="btn btn-orange fn-right" ng-click="next()">下一个</button>
+        <button ng-show="inputWord != ''"
+                ng-class="{true: 'btn - green', false: 'btn - red'}[inputWord == letter]"
+                class="btn fn-right" ng-click="studyNext()">{{btnText}}</button>
+    </div>
+</div>
+<div class="tip-content">
+    <div id="tipTitle"></div>
+    <div>
+        <div id="tipContent"></div>
+        <button class="button" onclick="tip.close()">确 定</button>
+    </div>
+</div>
+<div class="tip-bg"></div>

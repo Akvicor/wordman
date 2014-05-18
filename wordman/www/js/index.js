@@ -32,7 +32,7 @@ var app = {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
     onDeviceReady: function() {
-        document.addEventListener("backbutton", this.onBackKeyDown, false);
+        // TODO: document.addEventListener("backbutton", this.onBackKeyDown, false);
 
         var parentElement = document.getElementById('deviceready');
         var listeningElement = parentElement.querySelector('.listening');
@@ -40,10 +40,8 @@ var app = {
 
         listeningElement.setAttribute('style', 'display:none;');
         receivedElement.setAttribute('style', 'display:block;');
-
     },
     onBackKeyDown: function() {
-        alert('111');
 
 //    notification.confirm('按确定退出程序!', // message
 //            onConfirm, // callback to invoke with index of button pressed
@@ -52,8 +50,7 @@ var app = {
 //            );
     }
 };
-
-// 定义一个 ng 模块
+// 初始化 ng 应用
 var wordmanNG = angular.module('Wordman', ['ngRoute']);
 
 // 配置多视图路由
@@ -64,12 +61,16 @@ wordmanNG.config(['$routeProvider',
                     templateUrl: 'lexicon-list.html',
                     controller: 'LexiconCtrl'
                 }).
+                when('/recite-word/:classId', {
+                    templateUrl: 'recite-word.html',
+                    controller: 'ReciteWordCtrl'
+                }).
                 otherwise({
                     redirectTo: '/index.html'
                 });
     }])
-        .controller('LexiconCtrl', LexiconCtrl);
-
+        .controller('LexiconCtrl', LexiconCtrl).
+        controller('ReciteWordCtrl', ReciteWordCtrl);
 
 function onConfirm(button) {
     if (button == 1) {

@@ -1,45 +1,29 @@
-<!DOCTYPE html>
-<html ng-app>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, width=device-width, height=device-height" />
-        <title>词库列表</title>
-        <script src="js/lib/angular.min.js"></script>
-        <script type="text/javascript" src="js/dbs.js"></script>
-        <script type="text/javascript" src="js/class.js"></script>
-        <script src="js/lexicon-list.js"></script>
-        <link rel="stylesheet" type="text/css" href="css/base.css" />
-    </head>
-    <body>
-        <div ng-include src="'common/header.html'"></div> 
-        <div ng-controller="LexiconCtrl" class="lexicon">
-            <ul class="list">
-                <li ng-repeat="lexicon in lexicons" class="fn-clear">
-                    <div ng-if="lexicon.hasReview">
-                        <div class="fn-left intro blue">
-                            <div class="title">{{lexicon.title}}</div>
-                            <span class="detail">总计 {{lexicon.count}} 个单词</span>
-                            <div class="rate" style="width: {{lexicon.progress}}%"></div>
-                        </div>
-                        <a href="recite-word.html?id={{lexicon.id}}" class="fn-right link link-green" style="width: 12%">学习</a>
-                        <a href="review-word.html" 
-                           class="fn-right link link-red"
-                           ng-show="{{lexicon.hasReview}}" 
-                           style="width: 12%">复习</a>
-                    </div>
+<div ng-include src="'common/header.html'"></div> 
+<div ng-controller="LexiconCtrl" class="lexicon">
+    <ul class="list">
+        <li ng-repeat="lexicon in lexicons" class="fn-clear">
+            <div ng-if="lexicon.hasReview">
+                <div class="fn-left intro blue">
+                    <div class="title">{{lexicon.title}}</div>
+                    <span class="detail">总计 {{lexicon.count}} 个单词</span>
+                    <div class="rate" style="width: {{lexicon.progress}}%"></div>
+                </div>
+                <a href="#recite-word/{{lexicon.id}}" class="fn-right link link-green" style="width: 12%">学习</a>
+                <a href="review-word.html" 
+                   class="fn-right link link-red"
+                   ng-show="{{lexicon.hasReview}}" 
+                   style="width: 12%">复习</a>
+            </div>
 
-                    <div ng-if="!lexicon.hasReview">
-                        <div class="fn-left intro red" style="width: 88%">
-                            <div class="title">{{lexicon.title}}</div>
-                            <span class="detail">总计 {{lexicon.count}} 个单词</span>
-                        </div>
-                        <a href="recite-word.html?id={{lexicon.id}}" class="fn-right link link-green" style="width: 12%">学习</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </body>
-</html>
+            <div ng-if="!lexicon.hasReview">
+                <div class="fn-left intro red" style="width: 88%">
+                    <div class="title">{{lexicon.title}}</div>
+                    <span class="detail">总计 {{lexicon.count}} 个单词</span>
+                </div>
+                <a href="recite-word.html?id={{lexicon.id}}" class="fn-right link link-green" style="width: 12%">学习</a>
+            </div>
+        </li>
+    </ul>
+</div>
+
 
