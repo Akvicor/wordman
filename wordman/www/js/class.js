@@ -249,7 +249,7 @@ var clazz = {
         });
     },
     /**
-     * 获取今天指定词库的学习计划.
+     * 获取今天指定词库的一课学习计划.
      * 
      * <p>
      * 回调实参（今天学习一课的单词列表）：
@@ -379,6 +379,54 @@ var clazz = {
                 callback();
             }
         ]);
+    },
+    /**
+     * 获取今天指定词库的一课复习计划.
+     * 
+     * <p>
+     * 回调实参（今天复习一课的单词列表）：
+     * <pre>
+     * {
+     *     planId: "xxx",
+     *     words: [{
+     *         id: "342", 
+     *         word: "cloak",
+     *         phon: "[klok]",
+     *         ....
+     *     }, ....]
+     * }
+     * </pre>
+     * </p>
+     * 
+     * @param {String} clazzId 词库 id
+     * @param {Function} cb 回调
+     * @returns {undefined}
+     */
+    getReviewPlans: function(classId, cb) {
+        var words = [];
+
+        var db = dbs.openDatabase();
+
+        db.transaction(function(tx) {
+            tx.executeSql('select * from plan where classId = ? and date <= ? and done is null and type = 1 order by date asc limit 1', [classId, new Date().format('yyyyMMdd')], function(tx, result) {
+                var plan = result.rows.item(0);
+
+                db.transaction(function(tx) {
+                    tx.executeSql('select * from word_' + classId + ' where id in ' + plan.wordIds, [], function(tx, result) {
+                        for (var i = 0; i < result.rows.length; i++) {
+                            words.push(result.rows.item(i));
+                        }
+
+                        cb({
+                            planId: plan.id,
+                            words: words
+                        });
+                    }, function(tx, err) {
+                        console.error(err);
+                    });
+                });
+            });
+        });
     },
     /**
      * “选定”指定的词库.
