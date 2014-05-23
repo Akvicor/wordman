@@ -15,11 +15,19 @@ CREATE TABLE IF NOT EXISTS `class` (
   `finished` int(11) NOT NULL
 );
 ----
-CREATE TABLE IF NOT EXISTS `plan` (
+CREATE TABLE IF NOT EXISTS `learn_plan` (
   `id` char(32) NOT NULL,
   `classId` char(32) NOT NULL,
   `wordIds` varchar(3300) NOT NULL,
   `date` char(8) NOT NULL,
-  `done` char(8),
-  `type` int(1) NOT NULL
+  `done` char(8)
+);
+----
+CREATE TABLE IF NOT EXISTS `review_plan` (
+  `id` char(32) NOT NULL,
+  `roundId` char(32) NOT NULL,
+  `classId` char(32) NOT NULL,
+  `wordIds` varchar(3300) NOT NULL,
+  `date` char(8) NOT NULL,
+  `done` char(8)
 );

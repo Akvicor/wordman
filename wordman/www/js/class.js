@@ -18,7 +18,7 @@
  * 词库操作.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.2.0, May 16, 2014
+ * @version 1.3.2.0, May 23, 2014
  * @since 1.0.0
  */
 
@@ -194,13 +194,13 @@ var clazz = {
         var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
-            tx.executeSql('select count(*) as c from plan where classId = ? and date <= ? and done is null and type = 0', [clazz.id, new Date().format('yyyyMMdd')], function(tx, result) {
+            tx.executeSql('select count(*) as c from learn_plan where classId = ? and date <= ? and done is null', [clazz.id, new Date().format('yyyyMMdd')], function(tx, result) {
                 var ret = clazz;
 
                 ret.toLearns = result.rows.item(0).c
 
                 db.transaction(function(tx) {
-                    tx.executeSql('select count(*) as c from plan where classId = ? and date <= ? and done is null and type = 1', [clazz.id, new Date().format('yyyyMMdd')], function(tx, result) {
+                    tx.executeSql('select count(*) as c from review_plan where classId = ? and date <= ? and done is null', [clazz.id, new Date().format('yyyyMMdd')], function(tx, result) {
                         ret.toReviews = result.rows.item(0).c;
 
                         cb(ret, length);
@@ -235,7 +235,7 @@ var clazz = {
                 ret.selected = result.rows.item(0).selected;
 
                 db.transaction(function(tx) {
-                    tx.executeSql('select * from plan where classId = ? order by date limit 1', [clazzId], function(tx, result) {
+                    tx.executeSql('select * from learn_plan where classId = ? order by date limit 1', [clazzId], function(tx, result) {
                         // 第一次学习时使用默认学习词数
                         ret.learnNum = clazz.DEFAULT_LEARN_NUM;
 
@@ -288,7 +288,7 @@ var clazz = {
 
                 db.transaction(function(tx) {
                     var today = new Date().format('yyyyMMdd');
-                    tx.executeSql('select * from plan where classId = ? and date <= ? and done is null and type = 0 order by date asc limit 1', [classId, today], function(tx, result) {
+                    tx.executeSql('select * from learn_plan where classId = ? and date <= ? and done is null order by date asc limit 1', [classId, today], function(tx, result) {
                         var lastLearnNum = 0;
 
                         if (result.rows.length > 0) {
@@ -327,7 +327,7 @@ var clazz = {
 
                                             // 保存对该词库一天（一课）的学习计划
                                             db.transaction(function(tx) {
-                                                tx.executeSql('insert into plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), classId, '(' + wordIds.toString() + ')', date.format('yyyyMMdd'), null, 0],
+                                                tx.executeSql('insert into learn_plan values (?, ?, ?, ?, ?)', [dbs.genId(), classId, '(' + wordIds.toString() + ')', date.format('yyyyMMdd'), null],
                                                         function(tx, result) {
                                                             count++;
 
@@ -357,7 +357,7 @@ var clazz = {
                 var db = dbs.openDatabase();
 
                 db.transaction(function(tx) {
-                    tx.executeSql('select * from plan where classId = ? and date <= ? and done is null and type = 0 order by date asc limit 1', [classId, new Date().format('yyyyMMdd')], function(tx, result) {
+                    tx.executeSql('select * from learn_plan where classId = ? and date <= ? and done is null order by date asc limit 1', [classId, new Date().format('yyyyMMdd')], function(tx, result) {
                         var plan = result.rows.item(0);
 
                         db.transaction(function(tx) {
@@ -409,7 +409,7 @@ var clazz = {
         var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
-            tx.executeSql('select * from plan where classId = ? and date <= ? and done is null and type = 1 order by date asc limit 1', [classId, new Date().format('yyyyMMdd')], function(tx, result) {
+            tx.executeSql('select * from review_plan where classId = ? and date <= ? and done is null order by date asc limit 1', [classId, new Date().format('yyyyMMdd')], function(tx, result) {
                 var plan = result.rows.item(0);
 
                 db.transaction(function(tx) {
@@ -443,7 +443,6 @@ var clazz = {
             tx.executeSql('select times from class where id = ?', [classId], function(tx, result) {
                 var times = result.rows.item(0).times;
 
-                var db = dbs.openDatabase();
                 db.transaction(function(tx) {
                     tx.executeSql('update class set times = ? where id = ?', [++times, classId]);
                 });
@@ -461,16 +460,14 @@ var clazz = {
         var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
-            tx.executeSql('select * from plan where classId = ? and id = ? limit 1', [classId, planId], function(tx, result) {
+            tx.executeSql('select * from learn_plan where classId = ? and id = ? limit 1', [classId, planId], function(tx, result) {
                 var learnPlan = result.rows.item(0);
                 var learned = learnPlan.wordIds.split(',').length;
 
-                var db = dbs.openDatabase();
                 db.transaction(function(tx) {
                     tx.executeSql('select learned from class where id = ?', [classId], function(tx, result) {
                         var l = result.rows.item(0).learned;
 
-                        var db = dbs.openDatabase();
                         db.transaction(function(tx) {
                             tx.executeSql('update class set learned = ? where id = ?', [l + learned, classId]);
                         });
@@ -478,29 +475,32 @@ var clazz = {
                         console.error(error);
                     });
 
-                    tx.executeSql('update plan set done = ? where classId = ? and id = ?', [new Date().format('yyyyMMdd'), classId, planId]);
+                    tx.executeSql('update learn_plan set done = ? where classId = ? and id = ?', [new Date().format('yyyyMMdd'), classId, planId]);
 
+                    // 复习轮 id
+                    var roundId = dbs.genId();
+                    
                     // 生成复习计划（+1、2、4、7、15 天）
                     var day = new Date();
                     day.setDate(day.getDate() + 1);
                     var day1 = day.format('yyyyMMdd');
-                    genReviewPlans(classId, learnPlan.wordIds, day1);
+                    genReviewPlans(classId, roundId, learnPlan.wordIds, day1);
 
                     day.setDate(day.getDate() + 1);
                     var day2 = day.format('yyyyMMdd');
-                    genReviewPlans(classId, learnPlan.wordIds, day2);
+                    genReviewPlans(classId, roundId, learnPlan.wordIds, day2);
 
                     day.setDate(day.getDate() + 2);
                     var day4 = day.format('yyyyMMdd');
-                    genReviewPlans(classId, learnPlan.wordIds, day4);
+                    genReviewPlans(classId, roundId, learnPlan.wordIds, day4);
 
                     day.setDate(day.getDate() + 3);
                     var day7 = day.format('yyyyMMdd');
-                    genReviewPlans(classId, learnPlan.wordIds, day7);
+                    genReviewPlans(classId, roundId, learnPlan.wordIds, day7);
 
                     day.setDate(day.getDate() + 8);
                     var day15 = day.format('yyyyMMdd');
-                    genReviewPlans(classId, learnPlan.wordIds, day15);
+                    genReviewPlans(classId, roundId, learnPlan.wordIds, day15);
                 });
             });
         });
@@ -516,18 +516,19 @@ var clazz = {
         var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
-            tx.executeSql('update plan set done = ? where classId = ? and id = ?', [new Date().format('yyyyMMdd'), classId, planId]);
+            tx.executeSql('update review_plan set done = ? where classId = ? and id = ?', [new Date().format('yyyyMMdd'), classId, planId]);
         });
         
         // TODO: class.completed
+        
     }
 };
 
-function genReviewPlans(classId, wordIds, date) {
+function genReviewPlans(classId, roundId, wordIds, date) {
     var db = dbs.openDatabase();
 
     db.transaction(function(tx) {
-        tx.executeSql('insert into plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), classId, wordIds, date, null, 1],
+        tx.executeSql('insert into review_plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), roundId, classId, wordIds, date, null],
                 function(tx, result) {
                 },
                 function(tx, err) {

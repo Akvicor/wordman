@@ -32,7 +32,7 @@ var dbs = {
      * @returns {Database}
      */
     openDatabase: function() {
-        return openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 2 * 1024 * 1024);
+        return openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 5 * 1024 * 1024);
     },
     /**
      * 初始化数据库.
@@ -110,10 +110,11 @@ var dbs = {
 
         db.transaction(function(tx) {
             tx.executeSql('drop table if exists `class`');
-            tx.executeSql('drop table if exists `classwords`');
             tx.executeSql('drop table if exists `option`');
             tx.executeSql('drop table if exists `plan`');
-
+            tx.executeSql('drop table if exists `learn_plan`');
+            tx.executeSql('drop table if exists `review_plan`');
+            
             tx.executeSql('drop table if exists `word_11`');
             tx.executeSql('drop table if exists `word_12`');
         }, function(err) {
