@@ -479,7 +479,7 @@ var clazz = {
 
                     // 复习轮 id
                     var roundId = dbs.genId();
-                    
+
                     // 生成复习计划（+1、2、4、7、15 天）
                     var day = new Date();
                     day.setDate(day.getDate() + 1);
@@ -517,10 +517,34 @@ var clazz = {
 
         db.transaction(function(tx) {
             tx.executeSql('update review_plan set done = ? where classId = ? and id = ?', [new Date().format('yyyyMMdd'), classId, planId]);
+
+            db.transaction(function(tx) {
+                tx.executeSql('select * from review_plan where classId = ? and id = ?', [classId, planId], function(tx, result) {
+                    var roundId = result.rows.item(0).roundId;
+                    var words = result.rows.item(0).wordIds.split(',').length;
+
+                    db.transaction(function(tx) {
+                        tx.executeSql('select count(*) as c from review_plan where roundId = ? and done is not null', [roundId], function(tx, result) {
+                            var count = result.rows.item(0).c;
+
+                            if (5 === count) { // 艾宾浩斯一轮一共 5 次，都有 done 日期的话说明这一轮已经结束了
+                                db.transaction(function(tx) {
+                                    tx.executeSql('select finished from class where id = ?', [classId], function(tx, result) {
+                                        var f = result.rows.item(0).finished;
+
+                                        db.transaction(function(tx) {
+                                            tx.executeSql('update class set finished = ? where id = ?', [f + words, classId]);
+                                        });
+                                    }, function(tx, error) {
+                                        console.error(error);
+                                    });
+                                });
+                            }
+                        });
+                    });
+                });
+            });
         });
-        
-        // TODO: class.completed
-        
     }
 };
 
