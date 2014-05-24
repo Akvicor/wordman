@@ -52,6 +52,20 @@ var clazz = {
      */
     initClasses: function() {
         dbs.initDB(function() {
+            var seconds = 0;
+            
+            var interval = setInterval(function() {
+                seconds += 1;
+                document.getElementById('setup').innerHTML = 3 - seconds;
+                if (seconds === 3) {
+                    $('#setup').remove();
+                    
+                    window.clearInterval(interval);
+                    
+                    return;
+                }
+            }, 1000);
+
             console.info('开始导入默认词库');
             // 导入默认的词库
             clazz.importClass('1'); // 六级必备词汇
@@ -59,7 +73,15 @@ var clazz = {
 
             // 生成 Wordman 客户端标识
             dbs.wordman();
+
+            setTimeout(function() {
+                window.location = "#lexicon-list";
+            }, 3000);
+
+            return;
         });
+
+        window.location = "#lexicon-list";
     },
     /**
      * 导入指定的词库.

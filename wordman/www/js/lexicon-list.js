@@ -40,6 +40,7 @@ function LexiconCtrl($scope) {
                 return false;
             }
         }
+
         window.location = '#recite-word/' + classId;
     };
 

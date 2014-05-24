@@ -47,8 +47,8 @@ var dbs = {
 
             db.transaction(function(tx) {
                 tx.executeSql("select 1 from option", [], function(tx, result) {
-                    window.location = "#lexicon-list";
-                    
+                    $('#setup').remove();
+                     
                     console.debug('已经初始化过词库了');
 
                     clazz.countWords(function(count) {

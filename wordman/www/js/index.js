@@ -72,8 +72,7 @@ wordmanNG.config(['$routeProvider',
                 otherwise({
                     redirectTo: '/index.html'
                 });
-    }]).controller('LexiconCtrl', LexiconCtrl).controller('ReciteWordCtrl', ReciteWordCtrl)
-        .controller('ReviewWordCtrl', ReviewWordCtrl);
+    }]);
 
 function onConfirm(button) {
     if (button === 1) {
