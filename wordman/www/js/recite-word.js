@@ -18,7 +18,7 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.2, May 24, 2014
+ * @version 1.1.1.2, May 24, 2014
  */
 function ReciteWordCtrl($scope, $routeParams) {
     $scope.reciteWords = [];
@@ -97,9 +97,6 @@ var reciteWord = {
 
         clazz.selectState(classId, function(result) {
             if (!result.selected) { // 没有“选定”该词库
-
-                clazz.selectClass(classId);
-
                 // 首次学习需要用户设置对该词库的学习词数
                 tip.show('请设置每课学习的单词数',
                         '<input value="' + result.learnNum + '" />', function() {
@@ -110,11 +107,14 @@ var reciteWord = {
                                     return false;
                                 }
                             } else {
-                                 alert("请输入20~100的整数");
+                                alert("请输入20~100的整数");
                                 return false;
                             }
 
                             clazz.getLearnPlans(classId, count, function(result) {
+                                // 选定词库
+                                clazz.selectClass(classId);
+
                                 reciteWord.currentPlanId = result.planId;
 
                                 var words = result.words;
