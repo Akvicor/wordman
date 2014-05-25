@@ -70,7 +70,7 @@ var clazz = {
             setTimeout(function() {
                 $('#setup').remove();
                 window.location = "#lexicon-list";
-            }, 10000);
+            }, 4500);
 
             return;
         });
