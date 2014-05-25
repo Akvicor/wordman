@@ -18,7 +18,7 @@
  * @fileoverview 数据库工具.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.2.0, May 24, 2014
+ * @version 1.1.2.1, May 25, 2014
  * @since 1.0.0
  */
 
@@ -120,6 +120,12 @@ var dbs = {
             
             tx.executeSql('drop table if exists `word_11`');
             tx.executeSql('drop table if exists `word_12`');
+            tx.executeSql('drop table if exists `word_13`');
+            tx.executeSql('drop table if exists `word_14`');
+            tx.executeSql('drop table if exists `word_15`');
+            tx.executeSql('drop table if exists `word_16`');
+            tx.executeSql('drop table if exists `word_140`');
+            tx.executeSql('drop table if exists `word_141`');
         }, function(err) {
         }, function() {
             console.info('删除所有表完毕');

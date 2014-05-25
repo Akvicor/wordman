@@ -18,7 +18,7 @@
  * 词库操作.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.4.2.1, May 25, 2014
+ * @version 1.5.2.1, May 25, 2014
  * @since 1.0.0
  */
 
@@ -54,8 +54,15 @@ var clazz = {
     initClasses: function() {
         dbs.initDB(function() { // 确实初始化过数据库（第一次安装）时执行
             console.info('开始导入默认词库');
-            clazz.importClass('1'); // 六级必备词汇
-            clazz.importClass('2'); // 四级必备词汇
+            
+            clazz.importClass('1');
+            clazz.importClass('2');
+            clazz.importClass('3');
+            clazz.importClass('4');
+            clazz.importClass('5');
+            clazz.importClass('6');
+            clazz.importClass('7');
+            clazz.importClass('8');
 
             // 生成 Wordman 客户端标识
             dbs.wordman();
