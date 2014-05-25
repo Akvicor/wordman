@@ -18,7 +18,7 @@
  * 词库操作.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.3.2.1, May 24, 2014
+ * @version 1.4.2.1, May 25, 2014
  * @since 1.0.0
  */
 
@@ -45,29 +45,15 @@ var clazz = {
      *   <ol>
      *     <li>如果没有初始化数据库，先初始化数据库</li>
      *     <li>将 /resources/classes/ 下的 *.zip 词库包导入到数据库中</li>
+     *     <li>生成客户端标识</li>
      *   </ol>
      * </p>
      * 
      * @returns {undefined}
      */
     initClasses: function() {
-        dbs.initDB(function() {
-            var seconds = 0;
-            
-            var interval = setInterval(function() {
-                seconds += 1;
-                document.getElementById('setup').innerHTML = 3 - seconds;
-                if (seconds === 3) {
-                    $('#setup').remove();
-                    
-                    window.clearInterval(interval);
-                    
-                    return;
-                }
-            }, 1000);
-
+        dbs.initDB(function() { // 确实初始化过数据库（第一次安装）时执行
             console.info('开始导入默认词库');
-            // 导入默认的词库
             clazz.importClass('1'); // 六级必备词汇
             clazz.importClass('2'); // 四级必备词汇
 
@@ -75,13 +61,19 @@ var clazz = {
             dbs.wordman();
 
             setTimeout(function() {
-                window.location = "#lexicon-list";
+                $('#setup').click(function() {
+                    window.location = "#lexicon-list";
+                    $('#setup').remove();
+                });
             }, 3000);
+
+            setTimeout(function() {
+                $('#setup').remove();
+                window.location = "#lexicon-list";
+            }, 10000);
 
             return;
         });
-
-        window.location = "#lexicon-list";
     },
     /**
      * 导入指定的词库.
@@ -340,6 +332,10 @@ var clazz = {
                                             var date = new Date();
                                             date.setDate(date.getDate() + day++);
 
+                                            // 每天早上 6 点开始一个计划
+                                            date.setHours(6);
+                                            date.setMinutes(0);
+
                                             var wordIds = [];
                                             // 组装 wordIds 字段
                                             for (var i = 0; i < result.rows.length; i++) {
@@ -349,23 +345,21 @@ var clazz = {
                                             }
 
                                             // 保存对该词库一天（一课）的学习计划
-                                            db.transaction(function(tx) {
-                                                tx.executeSql('insert into learn_plan values (?, ?, ?, ?, ?)', [dbs.genId(), classId, '(' + wordIds.toString() + ')', date.format('yyyyMMdd'), null],
-                                                        function(tx, result) {
-                                                            count++;
+                                            tx.executeSql('insert into learn_plan values (?, ?, ?, ?, ?)', [dbs.genId(), classId, '(' + wordIds.toString() + ')', date.format('yyyyMMdd'), null],
+                                                    function(tx, result) {
+                                                        count++;
 
-                                                            if (count >= 2) { // 生成完毕 2 课
-                                                                // 先返回，剩余的还在异步执行
-                                                                callback();
-                                                            }
-                                                        },
-                                                        function(tx, err) {
-                                                            console.error('生成学习计划异常', err);
-
-                                                            throw err;
+                                                        if (count >= 2) { // 生成完毕 2 课
+                                                            // 先返回，剩余的还在异步执行
+                                                            callback();
                                                         }
-                                                );
-                                            });
+                                                    },
+                                                    function(tx, err) {
+                                                        console.error('生成学习计划异常', err);
+
+                                                        throw err;
+                                                    }
+                                            );
                                         }
                                 );
                             }

@@ -37,7 +37,7 @@ var dbs = {
     /**
      * 初始化数据库.
      * 
-     * @param {Function} cb 回调
+     * @param {Function} cb 回调，当且仅当确实初始化过数据库后才会执行该回调
      * @returns {undefined}
      */
     initDB: function(cb) {
@@ -54,6 +54,8 @@ var dbs = {
                     clazz.countWords(function(count) {
                         console.info('所有词库单词计数 [' + count + ']');
                     });
+                    
+                    window.location = "#lexicon-list";
                     
                     return;
                 }, function(tx, err) {

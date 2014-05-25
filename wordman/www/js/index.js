@@ -25,7 +25,7 @@ var app = {
     initialize: function() {
         this.bindEvents();
 
-        // 初始化词库，第一次打开应用时将导入词库
+        // 初始化，第一次打开应用时将导入词库
         clazz.initClasses();
     },
     bindEvents: function() {

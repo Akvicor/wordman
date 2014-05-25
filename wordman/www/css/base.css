@@ -123,26 +123,6 @@ header {
     color: #fff;
 }
 
-header .fn-left {
-    position: relative;
-    background-color: #555555;
-    padding: 0 0.5em;
-}
-
-header .fn-left:before {
-    position: absolute;
-    z-index: 2;
-    content: '';
-    top: 0;
-    left: -1.5rem;
-    background-color: transparent;
-    border-bottom: 1.99rem solid transparent;
-    border-right: 1.5rem solid #555;
-    border-top: 1.99rem solid transparent;
-    width: 0;
-    height: 0;
-}
-
 .btn {
     background-color: #5CB85C;
     border-color: #4CAE4C;
