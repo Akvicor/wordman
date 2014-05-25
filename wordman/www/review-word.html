@@ -7,7 +7,7 @@
         {{explain}}
     </div>
     <div class="input-wrap">
-        <input id="reviewInput" ng-show="!hasStudy" ng-model="inputWord" ng-keyup="mattch($event)"/>
+        <input class="input" id="reviewInput" ng-show="!hasStudy" ng-model="inputWord" ng-keyup="mattch($event)"/>
     </div>
     <div class="btns fn-clear">
         <button class="btn fn-right btn-green" ng-click="reviewNext()">确定</button>
@@ -17,15 +17,16 @@
     <div id="tipTitle">错误单词</div>
     <div>
         <div id="tipContent">
-            <ul class="list">
+            <ul class="review-word">
                 <li ng-repeat="word in errorWords" class="fn-clear">
-                       {{word.letter}}
-                        {{word.sounds}}
-                        {{word.explain}}
+                <big>{{word.letter}}</big>
+                <span class="ft-gray">{{word.sounds}}</span>
+                <br/>
+                <small>{{word.explain}}</small>
                 </li>
             </ul>
         </div>
-        <button class="button" onclick="tip.close()">确 定</button>
+        <button class="btn" onclick="tip.close()">确 定</button>
     </div>
 </div>
 <div class="tip-bg"></div>

@@ -2,19 +2,19 @@
 <div ng-controller="LexiconCtrl" class="lexicon">
     <ul class="list">
         <li ng-repeat="lexicon in lexicons" class="fn-clear">
-            <div class="fn-left intro blue">
-                <div class="title">{{lexicon.title}}</div>
+            <div class="fn-left intro">
+                <div>{{lexicon.title}}</div>
                 <span class="detail">总计 {{lexicon.count}} 个单词</span>
                 <div class="rate" style="width: {{lexicon.progress}}%"></div>
             </div>
             <span ng-click="goRecite(lexicon.id, lexicon.toLearns)"
                   class="fn-right link link-green">
-                学习
+                学
                 <span class="count" ng-show="lexicon.toLearns > 0">{{lexicon.toLearns}}</span>
             </span>
             <span class="fn-right link link-red"
                   ng-click="goReviews(lexicon.id, lexicon.toReviews)">
-                复习
+                复
                 <span class="count" ng-show="lexicon.toReviews > 0">{{lexicon.toReviews}}</span>
             </span>
         </li>

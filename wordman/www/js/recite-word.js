@@ -46,6 +46,7 @@ function ReciteWordCtrl($scope, $routeParams) {
         $scope.explain = $scope.reciteWords[$scope.index].explain;
         $scope.hasStudy = $scope.reciteWords[$scope.index].hasStudy;
         $scope.inputWord = "";
+        $("#reciteInput").focus();
     };
 
     $scope.studyNext = function() {
@@ -98,18 +99,20 @@ var reciteWord = {
         clazz.selectState(classId, function(result) {
             if (!result.selected) { // 没有“选定”该词库
                 // 首次学习需要用户设置对该词库的学习词数
-                tip.show('请设置每课学习的单词数',
-                        '<input value="' + result.learnNum + '" />', function() {
-                            if (/^[0-9]*[1-9][0-9]*$/.test($("#tipContent input").val())) {
-                                var count = parseInt($("#tipContent input").val());
-                                if (count < 20 || count > 100) {
-                                    alert("请输入20~100的整数");
-                                    return false;
-                                }
-                            } else {
-                                alert("请输入20~100的整数");
-                                return false;
-                            }
+                tip.show(undefined,
+                        '<input class="input" value="' + result.learnNum + '" />', function() {
+//                            if (/^[0-9]*[1-9][0-9]*$/.test($("#tipContent input").val())) {
+//                                var count = parseInt($("#tipContent input").val());
+//                                if (count < 20 || count > 100) {
+//                                    alert("请输入20~100的整数");
+//                                    $("#tipContent > .input").focus();
+//                                    return false;
+//                                }
+//                            } else {
+//                                alert("请输入20~100的整数");
+//                                $("#tipContent > .input").focus();
+//                                return false;
+//                            }
 
                             clazz.getLearnPlans(classId, count, function(result) {
                                 // 选定词库
@@ -134,6 +137,7 @@ var reciteWord = {
                                 $scope.explain = $scope.reciteWords[0].explain;
                                 $scope.$apply();
                             });
+                            return true;
                         });
             } else { // 已经“选定”该词库
                 clazz.getLearnPlans(classId, parseInt($("#tipContent input").val()), function(result) {

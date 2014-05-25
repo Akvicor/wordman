@@ -21,13 +21,9 @@
  */
 var tip = {
     show: function(title, content, cb) {
-        var windowH = $(window).height(),
-                windowW = $(window).width();
+        var windowW = $(window).width();
 
-        $(".tip-bg").height(windowH < document.documentElement.scrollHeight
-                ? document.documentElement.scrollHeight : windowH);
         $(".tip-content").css({
-            "top": parseInt((windowH - $(".tip-content").height()) / 2) + "px",
             "left": parseInt((windowW - $(".tip-content").width()) / 2) + "px"
         });
 
@@ -39,10 +35,12 @@ var tip = {
             $("#tipContent").html(content);
         }
         $(".tip-content, .tip-bg").show();
+        $(".tip-bg").height($(document).height() + 100);
         this.cb = cb;
     },
     close: function() {
-        this.cb();
-        $(".tip-content, .tip-bg").hide();
+        if (this.cb()) {
+            $(".tip-content, .tip-bg").hide();
+        }
     }
 };

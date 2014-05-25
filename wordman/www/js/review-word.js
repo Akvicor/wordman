@@ -48,10 +48,9 @@ function ReviewWordCtrl($scope, $routeParams) {
         if ($scope.index === $scope.reviewWords.length) {
             var errorLength = $scope.errorWords.length;
             if (errorLength !== 0) {
-                alert('正确率:' + (($scope.reviewWords.length - errorLength) / $scope.reviewWords.length * 100) + "%");
 
                 // 展现错误单词
-                tip.show(undefined, undefined, function() {
+                tip.show('错误：' + (errorLength) + '个', undefined, function() {
                     $scope.reviewWords = $scope.errorWords;
                     $scope.explain = $scope.reviewWords[0].explain;
                     $scope.index = 0;

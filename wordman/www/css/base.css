@@ -57,6 +57,10 @@ ul {
 .fn-none {
     display: none;
 }
+
+.ft-gray {
+    color: gray;
+}
 /* end function */
 
 /* start tip */
@@ -75,9 +79,11 @@ ul {
     display: none;
     margin: 0 auto;
     padding-bottom: 1em;
-    position: fixed;
-    width: 70%;
+    position: absolute;
+    width: 80%;
     z-index: 10;
+    text-align: center;
+    top: 1em;
 }
 
 #tipTitle {
@@ -86,11 +92,12 @@ ul {
     height: 2em;
     line-height: 2em;
     padding-left: 1em;
+    text-align: left;
 }
 
 #tipContent {
     color: #5F9200;
-    padding: 2em 1em;
+    padding: 1em;
     text-align: center;
 }
 
@@ -119,7 +126,7 @@ ul {
 header {
     background-color: #F5F5F5;
     padding: 0.3125em 1rem;
-    font-size: 2em;
+    font-size: 1.2em;
 }
 
 .btn {
@@ -175,10 +182,28 @@ header {
     background-color: #ED9C28;
     border-color: #D58512;
 }
+
+.input {
+    height: 2em;
+    width: 100%;
+    display: block;
+    font-size: 1em;
+    padding: 0 0.3em;
+    border: 1px solid #CCC;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    box-sizing: border-box;
+}
+
+.input:focus {
+    border-color: #66AFE9;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+    outline: none;
+}
 /* end common */
+
 /* start lexicon list */
 .lexicon .rate {
-    height: 4em;
+    height: 3.6em;
     background-color: rgba(150,205,233,0.8);
     z-index: 6;
     position: absolute;
@@ -188,16 +213,13 @@ header {
 }
 
 .lexicon .intro {
-    width: 76%;
-    position: relative;
-    height: 4em;
-    padding-left: 1em;
-    box-sizing: border-box;
-}
-
-.lexicon .blue {
     background-color: #D9EDF7;
     color: #1D4356;
+    width: 70%;
+    position: relative;
+    height: 3em;
+    box-sizing: border-box;
+    padding: 0.5rem 0 0 0.5em;
 }
 
 .lexicon .red {
@@ -205,13 +227,8 @@ header {
     color: #8A6D3B;
 }
 
-.lexicon .title {
-    font-size: 1.2em;
-    padding-top: 0.4em;
-}
-
 .lexicon .detail {
-    font-size: 0.8em;
+    font-size: 0.7em;
     color: #30708f;
 }
 
@@ -221,13 +238,13 @@ header {
 
 .lexicon .link {
     color: #FFF;
-    height: 4em;
-    line-height: 4em;
+    height: 3em;
+    line-height: 3em;
     background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.05));
     box-sizing: border-box;
     text-align: center;
     text-decoration: none;
-    width: 12%;
+    width: 15%;
     position: relative;
 }
 
@@ -240,15 +257,15 @@ header {
 }
 
 .lexicon .link .count {
-    color: #333;
-    background-color: #FFF;
-    border-radius: 30px;
-    font-size: 0.5em;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 3em;
     position: absolute;
-    padding: 6px;
-    top: 11px;
-    line-height: 0.5rem;
-    left: 25%;
+    top: 0;
+    left: 0;
+    text-align: center;
+    width: 100%;
+    font-weight: bold;
+    font-style: italic;
 }
 /* end lexicon list */
 
@@ -259,31 +276,10 @@ header {
     background-color: #FCF8E3;
 }
 
-.recite-word .word > span {
-    color: gray;
-}
-
 .recite-word .explain {
     padding: 1em;
     border-bottom: 2px solid #BCE8F1;
     background-color: #D9EDF7;
-}
-
-.recite-word input {
-    height: 3rem;
-    width: 100%;
-    display: block;
-    font-size: 1em;
-    padding: 0 0.3125em;
-    border: 1px solid #CCC;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-    box-sizing: border-box;
-}
-
-.recite-word input:focus {
-    border-color: #66AFE9;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
-    outline: none;
 }
 
 .recite-word .btns {
@@ -295,7 +291,21 @@ header {
 }
 
 .recite-word .input-wrap {
-    padding: 1em;
+    padding: 1em 1em 0 1em;
 
 }
 /* end recite word */
+
+/* start review word */
+.review-word li {
+    text-align: left;
+    font-size: 1rem;
+    border-bottom: 1px solid #5F9200;
+    color: #FFF;
+    padding: 5px 0;
+}
+
+.review-word small {
+    color: #5F9200;
+}
+/* end review word */
