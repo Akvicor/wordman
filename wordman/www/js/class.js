@@ -60,17 +60,19 @@ var clazz = {
             // 生成 Wordman 客户端标识
             dbs.wordman();
 
+            var timer = setTimeout(function() {
+                $('#setup').remove();
+                window.location = "#lexicon-list";
+            }, 4000);
+
             setTimeout(function() {
                 $('#setup').click(function() {
+                    window.clearTimeout(timer);
+                    
                     window.location = "#lexicon-list";
                     $('#setup').remove();
                 });
-            }, 3000);
-
-            setTimeout(function() {
-                $('#setup').remove();
-                window.location = "#lexicon-list";
-            }, 4500);
+            }, 2000);
 
             return;
         });
