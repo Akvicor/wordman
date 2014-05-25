@@ -251,14 +251,6 @@ header {
     background-color: #FCF8E3;
 }
 
-.recite-word .class {
-    background-color: #EEEEEE;
-    padding: 0.3125em 0.8125em;
-    border-radius: 0.8125em;
-    margin-right: 1em;
-    border: 1px solid #DDDDDD;
-}
-
 .recite-word input {
     height: 3rem;
     width: 100%;

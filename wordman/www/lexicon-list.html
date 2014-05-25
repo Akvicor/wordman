@@ -2,27 +2,18 @@
 <div ng-controller="LexiconCtrl" class="lexicon">
     <ul class="list">
         <li ng-repeat="lexicon in lexicons" class="fn-clear">
-            <div ng-if="lexicon.hasReview">
-                <div class="fn-left intro blue">
-                    <div class="title">{{lexicon.title}}</div>
-                    <span class="detail">总计 {{lexicon.count}} 个单词</span>
-                    <div class="rate" style="width: {{lexicon.progress}}%"></div>
-                </div>
-                <a href="#recite-word/{{lexicon.id}}" class="fn-right link link-green" style="width: 12%">学习{{lexicon.toLearns}}</a>
-                <a href="javascript:void(0)"
-                   class="fn-right link link-red"
-                   ng-show="{{lexicon.hasReview}}" 
-                   style="width: 12%"
-                   ng-click="goReviews(lexicon.id)">复习{{lexicon.toReviews}}</a>
-                
+            <div class="fn-left intro blue">
+                <div class="title">{{lexicon.title}}</div>
+                <span class="detail">总计 {{lexicon.count}} 个单词</span>
+                <div class="rate" style="width: {{lexicon.progress}}%"></div>
             </div>
-
-            <div ng-if="!lexicon.hasReview">
-                <div class="fn-left intro red" style="width: 88%">
-                    <div class="title">{{lexicon.title}}</div>
-                    <span class="detail">总计 {{lexicon.count}} 个单词</span>
-                </div>
-            </div>
+            <a href="javascript:void(0)" 
+               ng-click="goRecite(lexicon.id, lexicon.toLearns)"
+               class="fn-right link link-green" style="width: 12%">学习{{lexicon.toLearns}}</a>
+            <a href="javascript:void(0)"
+               class="fn-right link link-red"
+               style="width: 12%"
+               ng-click="goReviews(lexicon.id, lexicon.toReviews)">复习{{lexicon.toReviews}}</a>
         </li>
     </ul>
 </div>

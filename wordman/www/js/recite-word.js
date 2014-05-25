@@ -18,7 +18,7 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.1, May 18, 2014
+ * @version 1.1.0.2, May 24, 2014
  */
 function ReciteWordCtrl($scope, $routeParams) {
     $scope.reciteWords = [];
@@ -44,8 +44,8 @@ function ReciteWordCtrl($scope, $routeParams) {
         $scope.sounds = $scope.reciteWords[$scope.index].sounds;
         $scope.letter = $scope.reciteWords[$scope.index].letter;
         $scope.explain = $scope.reciteWords[$scope.index].explain;
-        $scope.speech = $scope.reciteWords[$scope.index].speech;
         $scope.hasStudy = $scope.reciteWords[$scope.index].hasStudy;
+        $scope.inputWord = "";
     };
 
     $scope.studyNext = function() {
@@ -53,7 +53,7 @@ function ReciteWordCtrl($scope, $routeParams) {
             $scope.inputWord = "";
         } else {
             if ($scope.index === $scope.reciteWords.length - 1) {
-                alert('已经完成该词库今天的学习');
+                alert('已完该课程的学习');
 
                 clazz.finishLearn(reciteWord.currentClassId, reciteWord.currentPlanId);
 
@@ -64,7 +64,6 @@ function ReciteWordCtrl($scope, $routeParams) {
             $scope.sounds = $scope.reciteWords[$scope.index].sounds;
             $scope.letter = $scope.reciteWords[$scope.index].letter;
             $scope.explain = $scope.reciteWords[$scope.index].explain;
-            $scope.speech = $scope.reciteWords[$scope.index].speech;
             $scope.reciteWords[$scope.index - 1].hasStudy = true;
             $scope.hasStudy = false;
             $scope.inputWord = "";
@@ -76,13 +75,12 @@ function ReciteWordCtrl($scope, $routeParams) {
         $scope.sounds = $scope.reciteWords[$scope.index].sounds;
         $scope.letter = $scope.reciteWords[$scope.index].letter;
         $scope.explain = $scope.reciteWords[$scope.index].explain;
-        $scope.speech = $scope.reciteWords[$scope.index].speech;
         $scope.hasStudy = true;
+        $scope.inputWord = "";
     };
 
     $scope.back = function() {
-        var result = confirm("确定要返回吗?");
-        if (result) {
+        if (confirm("要重头开始吗?")) {
             window.location = '#lexicon-list';
         }
     };
@@ -98,12 +96,6 @@ var reciteWord = {
 
         clazz.selectState(classId, function(result) {
             if (!result.selected) { // 没有“选定”该词库
-                // 询问用户是否开始学习该词库，如果确定学习则“选定”该词库，否则返回列表
-                if (!confirm("确定学习该词库？")) {
-                    window.location = "#lexicon-list";
-
-                    return false;
-                }
 
                 clazz.selectClass(classId);
 
@@ -117,12 +109,10 @@ var reciteWord = {
                                 var reciteWords = [];
 
                                 for (var i = 0, ii = words.length; i < ii; i++) {
-                                    var para = words[i].para.split(". ");
                                     reciteWords.push({
-                                        sounds: words[i].phon,
                                         letter: words[i].word,
-                                        explain: para[1],
-                                        speech: para[0] + "."
+                                        explain: words[i].para,
+                                        sounds: words[i].phon
                                     });
                                 }
 
@@ -130,7 +120,6 @@ var reciteWord = {
                                 $scope.sounds = $scope.reciteWords[0].sounds;
                                 $scope.letter = $scope.reciteWords[0].letter;
                                 $scope.explain = $scope.reciteWords[0].explain;
-                                $scope.speech = $scope.reciteWords[0].speech;
                                 $scope.$apply();
                             });
                         });
@@ -142,12 +131,10 @@ var reciteWord = {
                     var reciteWords = [];
 
                     for (var i = 0, ii = words.length; i < ii; i++) {
-                        var para = words[i].para.split(". ");
                         reciteWords.push({
                             sounds: words[i].phon,
                             letter: words[i].word,
-                            explain: para[1],
-                            speech: para[0] + "."
+                            explain: words[i].para
                         });
                     }
 
@@ -155,7 +142,6 @@ var reciteWord = {
                     $scope.sounds = $scope.reciteWords[0].sounds;
                     $scope.letter = $scope.reciteWords[0].letter;
                     $scope.explain = $scope.reciteWords[0].explain;
-                    $scope.speech = $scope.reciteWords[0].speech;
                     $scope.$apply();
                 });
             }

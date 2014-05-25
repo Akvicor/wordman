@@ -17,7 +17,7 @@
  * @fileoverview common
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
- * @version 0.0.0.1, Apr 15, 2014
+ * @version 0.1.0.1, May 25, 2014
  */
 var tip = {
     show: function(title, content, cb) {
@@ -31,9 +31,13 @@ var tip = {
             "left": parseInt((windowW - $(".tip-content").width()) / 2) + "px"
         });
 
-        $("#tipTitle").html(title);
-        $("#tipContent").html(content);
+        if (title) {
+            $("#tipTitle").html(title);
+        }
 
+        if (content) {
+            $("#tipContent").html(content);
+        }
         $(".tip-content, .tip-bg").show();
         this.cb = cb;
     },

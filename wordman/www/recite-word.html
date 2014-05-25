@@ -7,9 +7,7 @@
         <h1>{{letter}}</h1>
         <span>{{sounds}}</span>
     </div>
-    <div class="explain">
-        <span class="class">{{speech}}</span> {{explain}}
-    </div>
+    <div class="explain"> {{explain}}</div>
     <div class="input-wrap">
         <input ng-show="!hasStudy" ng-model="inputWord" ng-keyup="mattch($event)"/>
     </div>
@@ -17,7 +15,7 @@
         <button ng-show="index != 0" class="btn btn-orange" ng-click="prev()">上一个</button>
         <button ng-show="hasStudy" class="btn btn-orange fn-right" ng-click="next()">下一个</button>
         <button ng-show="inputWord != ''"
-                ng-class="{true: 'btn - green', false: 'btn - red'}[inputWord == letter]"
+                ng-class="{true: 'btn-green', false: 'btn-red'}[inputWord == letter]"
                 class="btn fn-right" ng-click="studyNext()">{{btnText}}</button>
     </div>
 </div>

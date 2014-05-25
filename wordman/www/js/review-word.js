@@ -18,71 +18,55 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.1, May 18, 2014
+ * @version 1.1.0.1, May 25, 2014
  */
 function ReviewWordCtrl($scope, $routeParams) {
     $scope.reviewWords = [];
+    $scope.errorWords = [];
     $scope.inputWord = "";
-    $scope.btnText = "清空";
     $scope.index = 0;
-    $scope.hasStudy = false;
 
     $scope.mattch = function(event) {
         if (event.keyCode === 13) {
-            this.studyNext();
-            return false;
-        }
-        if ($scope.inputWord === $scope.letter) {
-            $scope.btnText = '确定';
-        } else {
-            $scope.btnText = '清空';
+            this.reviewNext();
         }
     };
 
-    $scope.next = function() {
+    $scope.reviewNext = function() {
+        if ($scope.reviewWords[$scope.index] &&
+                $scope.inputWord !== $scope.reviewWords[$scope.index].letter) {
+            $scope.errorWords.push($scope.reviewWords[$scope.index]);
+        }
         $scope.index++;
-        $scope.sounds = $scope.reviewWords[$scope.index].sounds;
-        $scope.letter = $scope.reviewWords[$scope.index].letter;
-        $scope.explain = $scope.reviewWords[$scope.index].explain;
-        $scope.speech = $scope.reviewWords[$scope.index].speech;
-        $scope.hasStudy = $scope.reviewWords[$scope.index].hasStudy;
-    };
+        if ($scope.index === $scope.reviewWords.length) {
+            var errorLength = $scope.errorWords.length;
+            if (errorLength !== 0) {
+                alert('正确率:' + (($scope.reviewWords.length - errorLength) / $scope.reviewWords.length * 100) + "%");
 
-    $scope.studyNext = function() {
-        if ($scope.btnText === "清空") {
-            $scope.inputWord = "";
-        } else {
-            if ($scope.index === $scope.reviewWords.length - 1) {
-                alert('已完成当前课程的复习');
+                // 展现错误单词
+                tip.show(undefined, undefined, function() {
+                    $scope.reviewWords = $scope.errorWords;
+                    $scope.explain = $scope.reviewWords[0].explain;
+                    $scope.index = 0;
+                    $scope.inputWord = "";
+                    $scope.errorWords = [];
+                    $scope.$apply();
+                });
+            } else {
+                alert('已完成该课程的复习');
 
                 clazz.finishReview(reviewWord.currentClassId, reviewWord.currentPlanId);
 
                 window.location = '#lexicon-list';
-                return false;
             }
-            $scope.index++;
-            $scope.sounds = $scope.reviewWords[$scope.index].sounds;
-            $scope.letter = $scope.reviewWords[$scope.index].letter;
-            $scope.explain = $scope.reviewWords[$scope.index].explain;
-            $scope.speech = $scope.reviewWords[$scope.index].speech;
-            $scope.reviewWords[$scope.index - 1].hasStudy = true;
-            $scope.hasStudy = false;
-            $scope.inputWord = "";
+            return false;
         }
-    };
-
-    $scope.prev = function() {
-        $scope.index--;
-        $scope.sounds = $scope.reviewWords[$scope.index].sounds;
-        $scope.letter = $scope.reviewWords[$scope.index].letter;
         $scope.explain = $scope.reviewWords[$scope.index].explain;
-        $scope.speech = $scope.reviewWords[$scope.index].speech;
-        $scope.hasStudy = true;
+        $scope.inputWord = "";
     };
 
     $scope.back = function() {
-        var result = confirm("确定要返回吗?");
-        if (result) {
+        if (confirm("要重头开始吗?")) {
             window.location = '#lexicon-list';
         }
     };
@@ -95,7 +79,7 @@ var reviewWord = {
     currentClassId: "",
     init: function($scope, classId) {
         reviewWord.currentClassId = classId;
-       
+
         clazz.getReviewPlans(classId, function(result) {
             reviewWord.currentPlanId = result.planId;
 
@@ -103,20 +87,15 @@ var reviewWord = {
             var reviewWords = [];
 
             for (var i = 0, ii = words.length; i < ii; i++) {
-                var para = words[i].para.split(". ");
                 reviewWords.push({
-                    sounds: words[i].phon,
                     letter: words[i].word,
-                    explain: para[1],
-                    speech: para[0] + "."
+                    explain: words[i].para,
+                    sounds: words[i].phon
                 });
             }
 
             $scope.reviewWords = reviewWords;
-            $scope.sounds = $scope.reviewWords[0].sounds;
-            $scope.letter = $scope.reviewWords[0].letter;
             $scope.explain = $scope.reviewWords[0].explain;
-            $scope.speech = $scope.reviewWords[0].speech;
             $scope.$apply();
         });
     }

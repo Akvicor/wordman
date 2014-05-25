@@ -3,28 +3,28 @@
     <span class="fn-right">{{index + 1}}/{{reviewWords.length}}</span>
 </header>
 <div class="recite-word">
-    <div class="word">
-        <h1>{{letter}}</h1>
-        <span>{{sounds}}</span>
-    </div>
     <div class="explain">
-        <span class="class">{{speech}}</span> {{explain}}
+        {{explain}}
     </div>
     <div class="input-wrap">
         <input ng-show="!hasStudy" ng-model="inputWord" ng-keyup="mattch($event)"/>
     </div>
     <div class="btns fn-clear">
-        <button ng-show="index != 0" class="btn btn-orange" ng-click="prev()">上一个</button>
-        <button ng-show="hasStudy" class="btn btn-orange fn-right" ng-click="next()">下一个</button>
-        <button ng-show="inputWord != ''"
-                ng-class="{true: 'btn - green', false: 'btn - red'}[inputWord == letter]"
-                class="btn fn-right" ng-click="studyNext()">{{btnText}}</button>
+        <button class="btn fn-right btn-green" ng-click="reviewNext()">确定</button>
     </div>
 </div>
 <div class="tip-content">
-    <div id="tipTitle"></div>
+    <div id="tipTitle">错误单词</div>
     <div>
-        <div id="tipContent"></div>
+        <div id="tipContent">
+            <ul class="list">
+                <li ng-repeat="word in errorWords" class="fn-clear">
+                       {{word.letter}}
+                        {{word.sounds}}
+                        {{word.explain}}
+                </li>
+            </ul>
+        </div>
         <button class="button" onclick="tip.close()">确 定</button>
     </div>
 </div>

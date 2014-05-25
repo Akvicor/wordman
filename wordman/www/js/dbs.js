@@ -47,12 +47,14 @@ var dbs = {
 
             db.transaction(function(tx) {
                 tx.executeSql("select 1 from option", [], function(tx, result) {
+                    window.location = "#lexicon-list";
+                    
                     console.debug('已经初始化过词库了');
 
                     clazz.countWords(function(count) {
                         console.info('所有词库单词计数 [' + count + ']');
                     });
-
+                    
                     return;
                 }, function(tx, err) {
                     if (5 !== err.code) { // 非“表不存在”异常

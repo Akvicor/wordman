@@ -18,27 +18,48 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.2, May 12, 2014
+ * @version 1.0.0.3, May 25, 2014
  * @since 1.0.0
  */
 function LexiconCtrl($scope) {
     $scope.lexicons = [];
-    
-    $scope.goReviews = function (classId) {
+
+    $scope.goReviews = function(classId, count) {
+        if (count === 0) {
+            alert("温故知新足以！");
+            return false;
+        }
         window.location = '#review-word/' + classId;
+    };
+    $scope.goRecite = function(classId, count) {
+        if (count === 0) {
+            alert("不要太勤奋，明天再来！");
+            return false;
+        } else if (count === -1) {
+            if (!confirm("确定学习该词库？")) {
+                return false;
+            }
+        }
+        window.location = '#recite-word/' + classId;
     };
 
     clazz.getClasses(function(data) {
         var classes = [];
 
         for (var i = 0; i < data.length; i++) {
+            var toLearns = data[i].toLearns;
+            if (data[i].selected === 0) {
+                // 还未选中该词库进学习
+                toLearns = -1;
+            }
+
             var clazz = {
                 title: data[i].name,
                 id: data[i].id,
                 count: data[i].size,
-                hasReview: true,
                 progress: data[i].finished / data[i].size * 100,
-                toLearns: data[i].toLearns, // 今天需要学习的课程数
+                times: data[i].times, // 该词库学习过的次数
+                toLearns: toLearns, // 今天需要学习的课程数
                 toReviews: data[i].toReviews // 今天需要复习的课程数
             };
 

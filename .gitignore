@@ -1,12 +1,6 @@
 /word/target/
-
-/wordman/platforms/android/CordovaLib/ant-build/
-/wordman/platforms/android/CordovaLib/ant-gen/
-/wordman/platforms/android/ant-build/
-/wordman/platforms/android/ant-gen/
-/wordman/platforms/android/assets/
+/wordman/platforms/
 /wordman/nbproject/private/
 
 *.class
 *.apk
-/wordman/nbproject/private/
