@@ -63,12 +63,12 @@ var clazz = {
             var timer = setTimeout(function() {
                 $('#setup').remove();
                 window.location = "#lexicon-list";
-            }, 4000);
+            }, 3000);
 
             setTimeout(function() {
                 $('#setup').click(function() {
                     window.clearTimeout(timer);
-                    
+
                     window.location = "#lexicon-list";
                     $('#setup').remove();
                 });

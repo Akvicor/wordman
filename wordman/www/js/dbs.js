@@ -42,7 +42,7 @@ var dbs = {
      */
     initDB: function(cb) {
         // TODO: 不重新初始化库
-        //this.dropTables(function() {
+       //this.dropTables(function() {
             var db = dbs.openDatabase();
 
             db.transaction(function(tx) {
