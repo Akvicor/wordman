@@ -18,7 +18,7 @@
  * @fileoverview 数据库工具.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.1.0, May 16, 2014
+ * @version 1.1.2.0, May 24, 2014
  * @since 1.0.0
  */
 
@@ -113,7 +113,6 @@ var dbs = {
         db.transaction(function(tx) {
             tx.executeSql('drop table if exists `class`');
             tx.executeSql('drop table if exists `option`');
-            tx.executeSql('drop table if exists `plan`');
             tx.executeSql('drop table if exists `learn_plan`');
             tx.executeSql('drop table if exists `review_plan`');
             

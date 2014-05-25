@@ -18,7 +18,7 @@
  * 词库操作.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.3.2.0, May 23, 2014
+ * @version 1.3.2.1, May 24, 2014
  * @since 1.0.0
  */
 
@@ -139,7 +139,8 @@ var clazz = {
      *     selected: true,
      *     learned: 500, 
      *     finished: 300, 
-     *     planLearns: 2 // 今天需要学习的课程数
+     *     toLearns: 2, // 今天需要学习的课程数
+     *     toReviews: 3 // 今天需要复习的课程数
      * }, ....]
      * </pre>
      * </p>
@@ -179,8 +180,8 @@ var clazz = {
      * <pre>
      * {
      *     ....: .... // class 词库行记录 
-     *     toLearns: 2,
-     *     toReviews: 3
+     *     toLearns: 2, // 今天需要学习的课程数
+     *     toReviews: 3 // 今天需要复习的课程数
      * }
      * </pre>
      * </p>
