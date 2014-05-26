@@ -30,12 +30,35 @@
         <div id="setup" style="width:100%;height:100%">
         </div>
         <div ng-view></div>
+        <div class="keyboard fn-none">
+            <div class="fn-clear">
+                <span>q</span><span>w</span><span>e</span><span>r</span><span>t</span>
+                <span>y</span><span>u</span><span>i</span><span>o</span><span>p</span>
+            </div>
+            <div class="fn-clear">
+                <span style="margin-left: 5%">a</span><span>s</span><span>d</span><span>f</span><span>g</span>
+                <span>h</span><span>j</span><span>k</span><span>l</span>
+            </div>
+            <div class="fn-clear">
+                <span class="icon-arrow-up long"></span><span>z</span><span>x</span><span>c</span><span>v</span>
+                <span>b</span><span>n</span><span>m</span><span class="icon-erase long"></span>
+            </div>
+            <div class="fn-clear">
+                <span>(</span><span>)</span><span>-</span> <span class="longer">&nbsp;</span><span>'</span><span>,</span>
+                <span>.</span><span class="icon-arrow long"></span>
+            </div>
+            <div class="fn-clear">
+                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                <span>6</span><span>7</span><span>8</span><span>9</span><span>0</span>
+            </div>
+        </div>
         <script src="js/lib/angular-1.2.16.min.js"></script>
         <script src="js/lib/angular-route-1.2.16.min.js"></script>
         <script src="js/lib/async-0.8.0.min.js"></script>
         <script type="text/javascript" src="js/lib/jquery-1.10.2.min.js"></script>
         <script type="text/javascript" src="js/lib/jszip-utils.min.js"></script>
         <script type="text/javascript" src="js/lib/jszip.min.js"></script>
+        <script type="text/javascript" src="js/common.js"></script>
         <script type="text/javascript" src="js/dbs.js"></script>
         <script type="text/javascript" src="js/class.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
@@ -43,10 +66,11 @@
         <script src="js/recite-word.js"></script>
         <script src="js/review-word.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript" src="js/common.js"></script>
 
         <script type="text/javascript">
             app.initialize();
+            // TODO: index.js onDeviceReady
+            // keyboard.init();
         </script>
     </body>
 </html>

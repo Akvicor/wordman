@@ -17,7 +17,7 @@
  * @fileoverview common
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
- * @version 0.1.0.1, May 25, 2014
+ * @version 1.2.0.1, May 26, 2014
  */
 var tip = {
     show: function(title, content, cb) {
@@ -41,5 +41,88 @@ var tip = {
         if (this.cb()) {
             $(".tip-content").hide();
         }
+    }
+};
+
+var keyboard = {
+    $it: {},
+    placeholder: "",
+    hide: function() {
+        $(".keyboard").hide();
+    },
+    show: function(cb) {
+        if (cb && typeof (cb) === "function") {
+            keyboard.cb = cb;
+        }
+        $(".keyboard").show();
+        
+        if ($(window).height() > 1000) {
+            $(".keyboard").css("position", "fixed");
+        } else {
+            $(".keyboard").css("position", "inherit");
+        }
+    },
+    init: function() {
+        this.$it = $(".keyboard");
+        var $element = this.$it;
+
+        this.placeholder = $("#wordInput").attr("placeholder");
+
+        $element[0].addEventListener('touchstart', function(event) {
+            if (event.target.nodeName.toLowerCase() !== "span") {
+                return false;
+            }
+            $(event.target).addClass("touch");
+        });
+
+        $element[0].addEventListener("touchend", function(event) {
+            if (event.target.nodeName.toLowerCase() !== "span") {
+                return false;
+            }
+
+            var $it = $(event.target),
+                    $input = $("#wordInput"),
+                    key = $it.text();
+
+            $it.removeClass("touch");
+
+            if (event.target.className.indexOf("icon") > -1) {
+                if ($it.hasClass("icon-arrow-up")) {
+                    // 大小写切换
+                    if ($element.hasClass("uppercase")) {
+                        $element.removeClass("uppercase");
+                    } else {
+                        $element.addClass("uppercase");
+                    }
+                } else if ($it.hasClass("icon-erase")) {
+                    // 删除
+                    var text = $input.val();
+                    if (keyboard.placeholder === text) {
+                        return false;
+                    }
+                    
+                    if (keyboard.cb) {
+                        keyboard.cb(text.substr(0, text.length - 1));
+                    }
+                } else if ($it.hasClass("icon-arrow")) {
+                    $(".btn-green").click();
+                    $(".btn-red").click();
+                }
+                return false;
+            }
+
+            var text = $input.val();
+            if (keyboard.placeholder === text) {
+                text = "";
+            }
+
+            if (keyboard.$it.hasClass("uppercase")) {
+                key = key.toUpperCase();
+            }
+
+            if (keyboard.cb) {
+                keyboard.cb(text + key);
+            }
+        });
     }
 };

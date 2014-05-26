@@ -18,7 +18,7 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.1, May 25, 2014
+ * @version 1.2.0.1, May 26, 2014
  */
 function ReviewWordCtrl($scope, $routeParams) {
     $scope.reviewWords = [];
@@ -26,18 +26,7 @@ function ReviewWordCtrl($scope, $routeParams) {
     $scope.inputWord = "";
     $scope.index = 0;
 
-    $scope.mattch = function(event) {
-        if (event.keyCode === 13) {
-            this.reviewNext();
-        }
-    };
-
     $scope.reviewNext = function() {
-        if ($.trim($scope.inputWord).length === 0) {
-            alert("输入不能为空");
-            return false;
-        }
-
         if ($scope.reviewWords[$scope.index] &&
                 $scope.inputWord !== $scope.reviewWords[$scope.index].letter) {
             $scope.errorWords.push($scope.reviewWords[$scope.index]);
@@ -48,7 +37,8 @@ function ReviewWordCtrl($scope, $routeParams) {
         if ($scope.index === $scope.reviewWords.length) {
             var errorLength = $scope.errorWords.length;
             if (errorLength !== 0) {
-
+                keyboard.hide();
+                
                 // 展现错误单词
                 tip.show('错误：' + (errorLength) + '个', undefined, function() {
                     $scope.reviewWords = $scope.errorWords;
@@ -56,7 +46,8 @@ function ReviewWordCtrl($scope, $routeParams) {
                     $scope.index = 0;
                     $scope.inputWord = "";
                     $scope.errorWords = [];
-                    $scope.$apply();
+                    $scope.$apply(); 
+                    keyboard.show();
                     return true;
                 });
             } else {
@@ -71,7 +62,6 @@ function ReviewWordCtrl($scope, $routeParams) {
 
         $scope.explain = $scope.reviewWords[$scope.index].explain;
         $scope.inputWord = "";
-        $("#reviewInput").focus();
     };
 
     $scope.back = function() {
@@ -87,8 +77,13 @@ var reviewWord = {
     currentPlanId: "",
     currentClassId: "",
     init: function($scope, classId) {
+        keyboard.show(function(val) {
+            $scope.inputWord = val;
+            $scope.$apply();
+        });
+        
         reviewWord.currentClassId = classId;
-
+        
         clazz.getReviewPlans(classId, function(result) {
             reviewWord.currentPlanId = result.planId;
 

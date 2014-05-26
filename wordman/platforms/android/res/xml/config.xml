@@ -4,7 +4,7 @@
     <feature name="App">
         <param name="android-package" value="org.apache.cordova.App" />
     </feature>
-    <name>沃德曼</name>
+    <name>Wordman</name>
     <description>
         沃德曼背单词
     </description>

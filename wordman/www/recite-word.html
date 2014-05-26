@@ -11,7 +11,9 @@
         {{explain}}
     </div>
     <div class="input-wrap">
-        <input class="input" placeholder="拼写一次吧" id="reciteInput" ng-show="!hasStudy" ng-model="inputWord" ng-keyup="mattch($event)"/>
+        <input readonly="readonly" class="input" 
+               placeholder="拼写一次吧" id="wordInput"
+               ng-show="!hasStudy" ng-model="inputWord"/>
     </div>
     <div class="btns fn-clear">
         <button ng-show="index != 0" class="btn btn-orange" ng-click="prev()">上一个</button>

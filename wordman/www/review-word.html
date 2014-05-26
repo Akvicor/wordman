@@ -7,7 +7,10 @@
         {{explain}}
     </div>
     <div class="input-wrap">
-        <input class="input" placeholder="拼写一次吧" id="reviewInput" ng-show="!hasStudy" ng-model="inputWord" ng-keyup="mattch($event)"/>
+        <input class="input" readonly="readonly"
+               placeholder="拼写一次吧" 
+               id="wordInput" 
+               ng-model="inputWord"/>
     </div>
     <div class="btns fn-clear">
         <button class="btn fn-right btn-green" ng-click="reviewNext()">确定</button>

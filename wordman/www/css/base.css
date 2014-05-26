@@ -2,7 +2,7 @@
 * base style
 *
 * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
-* @version 0.0.0.1, May 11, 2014
+* @version 1.1.0.1, May 26, 2014
 */
 body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
@@ -17,16 +17,15 @@ body {
     width:100%;
 }
 
-@keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
-}
-
-@-webkit-keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
+@font-face {
+    font-family: 'icomoon';
+    src:url('fonts/icomoon.eot?5g5st9');
+    src:url('fonts/icomoon.eot?#iefix5g5st9') format('embedded-opentype'),
+        url('fonts/icomoon.woff?5g5st9') format('woff'),
+        url('fonts/icomoon.ttf?5g5st9') format('truetype'),
+        url('fonts/icomoon.svg?5g5st9#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
 
 ul {
@@ -34,6 +33,35 @@ ul {
     padding: 0;
     margin: 0;
 }
+
+/* start icon */
+[class^="icon-"], [class*=" icon-"] {
+    font-family: 'icomoon';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-keyboard:before {
+    content: " ";
+}
+.icon-erase:before {
+    content: "\e602";
+}
+.icon-arrow:before {
+    content: "\e603";
+}
+.icon-arrow-up:before {
+    content: "\e604";
+}
+/* end icon */
 
 /* start function */
 .fn-clear:before,
@@ -98,6 +126,42 @@ ul {
     display: block;
 }
 /* end tip */
+
+/* start keybored */
+.keyboard {
+    background-color: #1F1F1F;
+    width: 100%;
+    bottom: 0;
+}
+
+.keyboard.uppercase {
+    text-transform: uppercase;
+}
+
+.keyboard span {
+    float: left;
+    background-color: #474747;
+    color: #FFF;
+    border: 1px solid #1F1F1F;
+    width: 10%;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 0.1em 0;
+    line-height: 2em;
+}
+
+.keyboard span.touch {
+    background-color: #BCE8F1;
+}
+
+.keyboard span.long {
+    width: 15%;
+}
+
+.keyboard span.longer {
+    width: 25%;    
+}
+/* end keybored */
 
 /* start common */
 .wrap {
@@ -283,7 +347,8 @@ header {
 }
 
 .recite-word .btns {
-    padding: 0.5em;
+    padding: 0 0.5em 0.5em 0.5em;
+    height: 2em;
 }
 
 .recite-word .btns > .btn {

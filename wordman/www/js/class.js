@@ -18,7 +18,7 @@
  * 词库操作.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.5.2.1, May 25, 2014
+ * @version 1.5.3.1, May 26, 2014
  * @since 1.0.0
  */
 
@@ -340,10 +340,6 @@ var clazz = {
                                         function(tx, result) {
                                             var date = new Date();
                                             date.setDate(date.getDate() + day++);
-
-                                            // 每天早上 6 点开始一个计划
-                                            date.setHours(6);
-                                            date.setMinutes(0);
 
                                             var wordIds = [];
                                             // 组装 wordIds 字段

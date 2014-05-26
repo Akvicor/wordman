@@ -18,7 +18,7 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.1.2, May 24, 2014
+ * @version 1.2.1.2, May 26, 2014
  */
 function ReciteWordCtrl($scope, $routeParams) {
     $scope.reciteWords = [];
@@ -27,11 +27,7 @@ function ReciteWordCtrl($scope, $routeParams) {
     $scope.index = 0;
     $scope.hasStudy = false;
 
-    $scope.mattch = function(event) {
-        if (event.keyCode === 13) {
-            this.studyNext();
-            return false;
-        }
+    $scope.mattch = function() {
         if ($scope.inputWord === $scope.letter) {
             $scope.btnText = '确定';
         } else {
@@ -46,7 +42,11 @@ function ReciteWordCtrl($scope, $routeParams) {
         $scope.explain = $scope.reciteWords[$scope.index].explain;
         $scope.hasStudy = $scope.reciteWords[$scope.index].hasStudy;
         $scope.inputWord = "";
-        $("#reciteInput").focus();
+        if ($scope.hasStudy) {
+            keyboard.hide();
+        } else {
+            keyboard.show();
+        }
     };
 
     $scope.studyNext = function() {
@@ -79,6 +79,7 @@ function ReciteWordCtrl($scope, $routeParams) {
         $scope.explain = $scope.reciteWords[$scope.index].explain;
         $scope.hasStudy = true;
         $scope.inputWord = "";
+        keyboard.hide();
     };
 
     $scope.back = function() {
@@ -136,10 +137,23 @@ var reciteWord = {
                                 $scope.letter = $scope.reciteWords[0].letter;
                                 $scope.explain = $scope.reciteWords[0].explain;
                                 $scope.$apply();
+                                // 键盘按键展现及回调
+                                keyboard.show(function(val) {
+                                    $scope.inputWord = val;
+                                    $scope.mattch();
+                                    $scope.$apply();
+                                });
                             });
                             return true;
                         });
             } else { // 已经“选定”该词库
+                // 键盘按键展现及回调
+                keyboard.show(function(val) {
+                    $scope.inputWord = val;
+                    $scope.mattch();
+                    $scope.$apply();
+                });
+
                 clazz.getLearnPlans(classId, parseInt($("#tipContent input").val()), function(result) {
                     reciteWord.currentPlanId = result.planId;
 

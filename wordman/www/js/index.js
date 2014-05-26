@@ -18,7 +18,7 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.2, May 17, 2014
+ * @version 1.0.0.3, May 26, 2014
  * @since 1.0.0
  */
 var app = {
@@ -32,22 +32,14 @@ var app = {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
     onDeviceReady: function() {
-        // TODO: document.addEventListener("backbutton", this.onBackKeyDown, false);
-
-        var parentElement = document.getElementById('deviceready');
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
+        keyboard.init();
     },
     onBackKeyDown: function() {
-
-//    notification.confirm('按确定退出程序!', // message
-//            onConfirm, // callback to invoke with index of button pressed
-//            '确定要退出程序吗?', // title
-//            '确定,取消' // buttonLabels
-//            );
+        notification.confirm('按确定退出程序!', // message
+                onConfirm, // callback to invoke with index of button pressed
+                '确定要退出程序吗?', // title
+                '确定,取消' // buttonLabels
+                );
     }
 };
 // 初始化 ng 应用
