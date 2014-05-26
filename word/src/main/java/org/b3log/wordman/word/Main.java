@@ -32,7 +32,7 @@ import org.jsoup.select.Elements;
  * 词库获取与生成.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.1, May 12, 2014
+ * @version 1.2.0.1, May 26, 2014
  * @since 1.0.0
  */
 public final class Main {
@@ -56,7 +56,7 @@ public final class Main {
      * 课程词库名.
      */
     private static final String CLASS_NAME = "雅思必备词汇";
-    
+
     /**
      * 课程词库 id.
      */
@@ -98,7 +98,11 @@ public final class Main {
                     word.setId(UUID.randomUUID().toString().replaceAll("-", ""));
 
                     final Element w = li.select("div.word_main_list_w").get(0);
-                    word.setWord(w.select("span").get(0).text());
+                    final String spell = w.select("span").get(0).text();
+                    word.setWord(spell);
+                    if (!checkWord(spell)) { // 如果存在特殊拼写
+                        throw new IllegalStateException("存在特殊拼写 [" + spell + ']');
+                    }
 
                     final Element y = li.select("div.word_main_list_y").get(0);
                     word.setPhon(y.select("strong").get(0).text());
@@ -131,5 +135,42 @@ public final class Main {
         final OutputStream outputStream = new FileOutputStream(new File("C:\\" + CLASS_NAME + ".sql"));
         IOUtils.write(sqlBuilder.toString(), outputStream, "UTF-8");
         IOUtils.closeQuietly(outputStream);
+    }
+
+    /**
+     * 检查指定的单词是否包含非预期的字符.
+     *
+     * <p>
+     * 预期的字符：
+     * <ul>
+     * <li>26 个英文字母 a-z（忽略大小写）</li>
+     * <li>10 个数字 0-9</li>
+     * <li>英文句号 . </li>
+     * <li>英文逗号 , </li>
+     * <li>英文左圆括号 ( </li>
+     * <li>英文右圆括号 ) </li>
+     * <li>英文单引号 ' </li>
+     * <li>英文空格 </li>
+     * <li>英文减号 - </li>
+     * </ul>
+     * </p>
+     *
+     * @param word 指定的单词
+     * @return {@code true} 如果不包含非预期字符，否则返回 {@code false}
+     */
+    private static boolean checkWord(final String word) {
+        final int length = word.length();
+
+        for (int i = 0; i < length; i++) {
+            final char ch = word.charAt(i);
+
+            if ((ch < 'a' || ch > 'z') && (ch < 'A' || ch > 'Z') && (ch < '0' || ch > '9')
+                && (ch != '.') && (ch != ',') && (ch != '\'') && (ch != ' ') && (ch != '(') && (ch != ')')
+                && (ch != '-')) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
