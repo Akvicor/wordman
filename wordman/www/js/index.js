@@ -18,7 +18,7 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.0.3, May 26, 2014
+ * @version 1.1.0.3, May 27, 2014
  * @since 1.0.0
  */
 var app = {
@@ -29,16 +29,21 @@ var app = {
         clazz.initClasses();
     },
     bindEvents: function() {
+        document.addEventListener("backbutton", this.onBackKeyDown, false);
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
     onDeviceReady: function() {
         keyboard.init();
     },
     onBackKeyDown: function() {
-        notification.confirm('按确定退出程序!', // message
-                onConfirm, // callback to invoke with index of button pressed
-                '确定要退出程序吗?', // title
-                '确定,取消' // buttonLabels
+        navigator.notification.confirm('',
+                function(button) {
+                    if (button === 2) {
+                        navigator.app.exitApp();
+                    }
+                },
+                '确定要退出吗?',
+                '取消,确定'
                 );
     }
 };
@@ -65,9 +70,3 @@ wordmanNG.config(['$routeProvider',
                     redirectTo: '/index.html'
                 });
     }]);
-
-function onConfirm(button) {
-    if (button === 1) {
-        app.exitApp();
-    }
-}
