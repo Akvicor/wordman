@@ -38,7 +38,7 @@ function LexiconCtrl($scope) {
             alert("不要太勤奋，明天再来！");
             return false;
         } else if (count === -1) {
-            if (!app.confirm("确定学习该词库？")) {
+            if (!confirm("确定学习该词库？")) {
                 return false;
             }
         }

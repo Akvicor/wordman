@@ -41,36 +41,11 @@ var app = {
     onDeviceReady: function() {
         keyboard.init();
 
-        this.deviced = true;
+        app.deviced = true;
     },
     onBackKeyDown: function() {
-        navigator.notification.confirm('',
-                function(button) {
-                    if (button === 2) {
-                        navigator.app.exitApp();
-                    }
-                },
-                '确定要退出吗?',
-                '取消,确定'
-                );
-    },
-    /**
-     * 封装了真机和开发时在浏览器上使用的 confirm.
-     * 
-     * @param {type} title 指定的确认提示
-     * @returns {undefined}
-     */
-    confirm: function(title) {
-        if (this.deviced) {
-            navigator.notification.confirm('',
-                    function(button) {
-                        return button === 2;
-                    },
-                    title,
-                    '取消,确定'
-                    );
-        } else {
-            return confirm(title);
+        if (confirm('确定要退出吗?')) {
+            navigator.app.exitApp();
         }
     }
 };
