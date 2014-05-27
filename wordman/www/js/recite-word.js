@@ -61,6 +61,7 @@ function ReciteWordCtrl($scope, $routeParams) {
                 window.location = '#lexicon-list';
                 return false;
             }
+            
             $scope.index++;
             $scope.sounds = $scope.reciteWords[$scope.index].sounds;
             $scope.letter = $scope.reciteWords[$scope.index].letter;
@@ -83,7 +84,7 @@ function ReciteWordCtrl($scope, $routeParams) {
     };
 
     $scope.back = function() {
-        if (confirm("要重头开始吗?")) {
+        if (app.confirm("要重头开始吗?")) {
             window.location = '#lexicon-list';
         }
     };

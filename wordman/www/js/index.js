@@ -22,6 +22,12 @@
  * @since 1.0.0
  */
 var app = {
+    /**
+     * 是否在真机上运行.
+     * 
+     * @type Boolean
+     */
+    deviced: false,
     initialize: function() {
         this.bindEvents();
 
@@ -34,6 +40,8 @@ var app = {
     },
     onDeviceReady: function() {
         keyboard.init();
+
+        this.deviced = true;
     },
     onBackKeyDown: function() {
         navigator.notification.confirm('',
@@ -45,6 +53,25 @@ var app = {
                 '确定要退出吗?',
                 '取消,确定'
                 );
+    },
+    /**
+     * 封装了真机和开发时在浏览器上使用的 confirm.
+     * 
+     * @param {type} title 指定的确认提示
+     * @returns {undefined}
+     */
+    confirm: function(title) {
+        if (this.deviced) {
+            navigator.notification.confirm('',
+                    function(button) {
+                        return button === 2;
+                    },
+                    title,
+                    '取消,确定'
+                    );
+        } else {
+            return confirm(title);
+        }
     }
 };
 // 初始化 ng 应用

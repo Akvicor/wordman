@@ -65,7 +65,7 @@ function ReviewWordCtrl($scope, $routeParams) {
     };
 
     $scope.back = function() {
-        if (confirm("要重头开始吗?")) {
+        if (app.confirm("要重头开始吗?")) {
             window.location = '#lexicon-list';
         }
     };
