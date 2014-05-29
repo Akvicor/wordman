@@ -54,15 +54,9 @@ var clazz = {
     initClasses: function() {
         dbs.initDB(function() { // 确实初始化过数据库（第一次安装）时执行
             console.info('开始导入默认词库');
-            
-            clazz.importClass('1');
-            clazz.importClass('2');
-            clazz.importClass('3');
-            clazz.importClass('4');
-            clazz.importClass('5');
-            clazz.importClass('6');
-            clazz.importClass('7');
-            clazz.importClass('8');
+
+            clazz.importClass('11');
+            clazz.importClass('12');
 
             // 生成 Wordman 客户端标识
             dbs.wordman();
@@ -87,13 +81,13 @@ var clazz = {
     /**
      * 导入指定的词库.
      * 
-     * @param {String} clazzFile 指定的词库名
+     * @param {String} clazzId 指定的词库 id
      * @returns {undefined}
      */
-    importClass: function(clazzFile) {
+    importClass: function(clazzId) {
         var db = dbs.openDatabase();
 
-        JSZipUtils.getBinaryContent('resources/classes/' + clazzFile + '.zip', function(err, data) {
+        JSZipUtils.getBinaryContent('resources/classes/' + clazzId + '.zip', function(err, data) {
             if (err) {
                 console.error('加载词库异常', err);
 
@@ -106,8 +100,11 @@ var clazz = {
             db.transaction(function(tx) {
                 for (var i in initClassSqls) {
                     tx.executeSql(initClassSqls[i], [], function(tx, result) {
+                        db.transaction(function(tx) {
+                            tx.executeSql('update class set state = 2 where id = ?', [clazzId]);
+                        });
                     }, function(tx, err) {
-                        console.error('导入词库 [' + clazzFile + '] 异常 [' + tx + ']', err);
+                        console.error('导入词库 [' + clazzId + '] 异常 [' + tx + ']', err);
 
                         throw err;
                     });
@@ -158,13 +155,25 @@ var clazz = {
      *     id: "12",
      *     name: "六级必备词汇",
      *     size: 2087,
+     *     state: 2, // 0: 未下载，1：已下载未安装，2：已安装
      *     times: 1,
      *     selected: true,
      *     learned: 500, 
      *     finished: 300, 
      *     toLearns: 2, // 今天需要学习的课程数
      *     toReviews: 3 // 今天需要复习的课程数
-     * }, ....]
+     * }, {
+     *     id: "16",
+     *     name: "GRE考试必备词汇",
+     *     size: 7496,
+     *     state: 1,
+     *     times: 0,
+     *     selected: false,
+     *     learned: 0, 
+     *     finished: 0, 
+     *     toLearns: 0,
+     *     toReviews: 0
+     * }]
      * </pre>
      * </p>
      * 

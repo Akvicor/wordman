@@ -22,7 +22,7 @@ import java.util.List;
  * 课程词库.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.0.1.2, May 16, 2014
+ * @version 1.0.1.3, May 29, 2014
  * @since 1.0.0
  */
 public final class Clazz {
@@ -119,8 +119,6 @@ public final class Clazz {
                 + "  `build` varchar(512) NOT NULL,"
                 + "  `example` varchar(1024) NOT NULL"
                 + ")" + SQL_STMT_SEPARATOR);
-
-        ret.add("INSERT INTO class VALUES ('" + id + "','" + name + "'," + words.size() + ",0,0,0,0)" + SQL_STMT_SEPARATOR);
 
         for (int i = 0; i < words.size(); i++) {
             final Word word = words.get(i);

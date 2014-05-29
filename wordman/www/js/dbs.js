@@ -42,21 +42,21 @@ var dbs = {
      */
     initDB: function(cb) {
         // TODO: 不重新初始化库
-       //this.dropTables(function() {
+        this.dropTables(function() {
             var db = dbs.openDatabase();
 
             db.transaction(function(tx) {
                 tx.executeSql("select 1 from option", [], function(tx, result) {
                     $('#setup').remove();
-                     
+
                     console.debug('已经初始化过词库了');
 
                     clazz.countWords(function(count) {
                         console.info('所有词库单词计数 [' + count + ']');
                     });
-                    
+
                     window.location = "#lexicon-list";
-                    
+
                     return;
                 }, function(tx, err) {
                     if (5 !== err.code) { // 非“表不存在”异常
@@ -75,7 +75,7 @@ var dbs = {
                             var createTableSqls = data.split('----');
 
                             var count = 0;
-                            
+
                             for (var i in createTableSqls) {
                                 tx.executeSql(createTableSqls[i], [], function(tx, result) {
                                     count++;
@@ -85,7 +85,7 @@ var dbs = {
                                     }
                                 }, function(tx, err) {
                                     console.error(err);
-                                    
+
                                     cb(err);
                                 });
                             }
@@ -93,7 +93,7 @@ var dbs = {
                     });
                 });
             });
-        //});
+        });
     },
     /**
      * 生成 32 字符长度的唯一 id 字符串.
@@ -117,7 +117,7 @@ var dbs = {
             tx.executeSql('drop table if exists `option`');
             tx.executeSql('drop table if exists `learn_plan`');
             tx.executeSql('drop table if exists `review_plan`');
-            
+
             tx.executeSql('drop table if exists `word_11`');
             tx.executeSql('drop table if exists `word_12`');
             tx.executeSql('drop table if exists `word_13`');
@@ -153,7 +153,7 @@ var dbs = {
                 console.info('沃德曼 [' + JSON.stringify(value) + ']');
             }, function(tx, err) {
                 console.error('生成沃德曼异常', err);
-                
+
                 throw err;
             });
         });
