@@ -26,7 +26,7 @@ function LexiconCtrl($scope) {
     
     $scope.lexicons = [];
 
-    $scope.goReviews = function(classId, count) {
+    $scope.goReview = function(classId, count) {
         if (count === 0) {
             alert("温故知新足以！");
             return false;
