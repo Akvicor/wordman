@@ -7,7 +7,7 @@
         {{explain}}
     </div>
     <div class="input-wrap">
-        <input ng-show="!hasStudy" ng-model="inputWord" ng-keyup="mattch($event)"/>
+        <input id="reviewInput" ng-show="!hasStudy" ng-model="inputWord" ng-keyup="mattch($event)"/>
     </div>
     <div class="btns fn-clear">
         <button class="btn fn-right btn-green" ng-click="reviewNext()">确定</button>

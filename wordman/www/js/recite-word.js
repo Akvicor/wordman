@@ -68,6 +68,7 @@ function ReciteWordCtrl($scope, $routeParams) {
             $scope.hasStudy = false;
             $scope.inputWord = "";
         }
+        $("#reciteInput").focus();
     };
 
     $scope.prev = function() {
@@ -102,7 +103,18 @@ var reciteWord = {
                 // 首次学习需要用户设置对该词库的学习词数
                 tip.show('请设置每课学习的单词数',
                         '<input value="' + result.learnNum + '" />', function() {
-                            clazz.getLearnPlans(classId, parseInt($("#tipContent input").val()), function(result) {
+                            if (/^[0-9]*[1-9][0-9]*$/.test($("#tipContent input").val())) {
+                                var count = parseInt($("#tipContent input").val());
+                                if (count < 20 || count > 100) {
+                                    alert("请输入20~100的整数");
+                                    return false;
+                                }
+                            } else {
+                                 alert("请输入20~100的整数");
+                                return false;
+                            }
+
+                            clazz.getLearnPlans(classId, count, function(result) {
                                 reciteWord.currentPlanId = result.planId;
 
                                 var words = result.words;
@@ -126,7 +138,7 @@ var reciteWord = {
             } else { // 已经“选定”该词库
                 clazz.getLearnPlans(classId, parseInt($("#tipContent input").val()), function(result) {
                     reciteWord.currentPlanId = result.planId;
-                    
+
                     var words = result.words;
                     var reciteWords = [];
 

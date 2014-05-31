@@ -33,11 +33,18 @@ function ReviewWordCtrl($scope, $routeParams) {
     };
 
     $scope.reviewNext = function() {
+        if ($.trim($scope.inputWord).length === 0) {
+            alert("输入不能为空");
+            return false;
+        }
+
         if ($scope.reviewWords[$scope.index] &&
                 $scope.inputWord !== $scope.reviewWords[$scope.index].letter) {
             $scope.errorWords.push($scope.reviewWords[$scope.index]);
         }
+
         $scope.index++;
+
         if ($scope.index === $scope.reviewWords.length) {
             var errorLength = $scope.errorWords.length;
             if (errorLength !== 0) {
@@ -61,8 +68,10 @@ function ReviewWordCtrl($scope, $routeParams) {
             }
             return false;
         }
+
         $scope.explain = $scope.reviewWords[$scope.index].explain;
         $scope.inputWord = "";
+        $("#reviewInput").focus();
     };
 
     $scope.back = function() {

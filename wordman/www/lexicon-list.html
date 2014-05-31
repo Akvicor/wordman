@@ -7,13 +7,16 @@
                 <span class="detail">总计 {{lexicon.count}} 个单词</span>
                 <div class="rate" style="width: {{lexicon.progress}}%"></div>
             </div>
-            <a href="javascript:void(0)" 
-               ng-click="goRecite(lexicon.id, lexicon.toLearns)"
-               class="fn-right link link-green" style="width: 12%">学习{{lexicon.toLearns}}</a>
-            <a href="javascript:void(0)"
-               class="fn-right link link-red"
-               style="width: 12%"
-               ng-click="goReviews(lexicon.id, lexicon.toReviews)">复习{{lexicon.toReviews}}</a>
+            <span ng-click="goRecite(lexicon.id, lexicon.toLearns)"
+                  class="fn-right link link-green">
+                学习
+                <span class="count" ng-show="lexicon.toLearns > 0">{{lexicon.toLearns}}</span>
+            </span>
+            <span class="fn-right link link-red"
+                  ng-click="goReviews(lexicon.id, lexicon.toReviews)">
+                复习
+                <span class="count" ng-show="lexicon.toReviews > 0">{{lexicon.toReviews}}</span>
+            </span>
         </li>
     </ul>
 </div>
