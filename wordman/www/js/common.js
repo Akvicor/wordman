@@ -55,8 +55,8 @@ var keyboard = {
             keyboard.cb = cb;
         }
         $(".keyboard").show();
-        
-        if ($(window).height() > 1000) {
+
+        if ($(window).height() > 583) {
             $(".keyboard").css("position", "fixed");
         } else {
             $(".keyboard").css("position", "inherit");

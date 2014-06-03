@@ -18,7 +18,7 @@
  * 词库操作.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.5.3.1, May 26, 2014
+ * @version 1.6.3.1, Jun 3, 2014
  * @since 1.0.0
  */
 
@@ -67,7 +67,7 @@ var clazz = {
             }, 3000);
 
             setTimeout(function() {
-                $('#setup').click(function() {
+                document.getElementById("setup").addEventListener("touchend", function(event) {
                     window.clearTimeout(timer);
 
                     window.location = "#lexicon-list";
@@ -82,9 +82,10 @@ var clazz = {
      * 导入指定的词库.
      * 
      * @param {String} clazzId 指定的词库 id
+     * @param {Function} cb 回调（可选）
      * @returns {undefined}
      */
-    importClass: function(clazzId) {
+    importClass: function(clazzId, cb) {
         var db = dbs.openDatabase();
 
         JSZipUtils.getBinaryContent('resources/classes/' + clazzId + '.zip', function(err, data) {
@@ -99,15 +100,21 @@ var clazz = {
             var initClassSqls = zip.file('class.sql').asText().split('--B3WmSQL--');
             db.transaction(function(tx) {
                 for (var i in initClassSqls) {
-                    tx.executeSql(initClassSqls[i], [], function(tx, result) {
-                        db.transaction(function(tx) {
-                            tx.executeSql('update class set state = 2 where id = ?', [clazzId]);
-                        });
-                    }, function(tx, err) {
+                    tx.executeSql(initClassSqls[i], [], null, function(tx, err) {
                         console.error('导入词库 [' + clazzId + '] 异常 [' + tx + ']', err);
 
                         throw err;
                     });
+                }
+            }, null, function() { // 导入词库事务成功后更新词库状态为【2已安装】
+                db.transaction(function(tx) {
+                    tx.executeSql('update class set state = 2 where id = ?', [clazzId]);
+                });
+
+                console.info('已导入词库 [' + clazzId + ']');
+
+                if (cb && (typeof (cb)).toLowerCase() === "function") {
+                    cb();
                 }
             });
         });

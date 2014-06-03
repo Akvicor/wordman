@@ -10,7 +10,7 @@ body {
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
     background-attachment:fixed;
     font-family: 'HelveticaNeue-Light', '微软雅黑';
-    font-size: 2.5em;
+    font-size: 1em;
     height:100%;
     margin:0px;
     padding:0px;
@@ -317,6 +317,10 @@ header {
 
 .lexicon .link-green {
     background-color: #5BBD72;
+}
+.lexicon .link-orange {
+    background-color: #f0ad4e;
+    width: 30%;
 }
 
 .lexicon .link .count {

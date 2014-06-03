@@ -23,7 +23,7 @@
  */
 function LexiconCtrl($scope) {
     keyboard.hide();
-    
+
     $scope.lexicons = [];
 
     $scope.goReview = function(classId, count) {
@@ -46,6 +46,19 @@ function LexiconCtrl($scope) {
         window.location = '#recite-word/' + classId;
     };
 
+    $scope.setup = function(clazzId) {
+        clazz.importClass(clazzId, function() {
+            var lexicons = $scope.lexicons;
+            for (var i = 0; i < lexicons.length; i++) {
+                if (lexicons[i].id === clazzId) {
+                    lexicons[i].state = 2;
+                    $scope.$apply();
+                    break;
+                }
+            }
+        });
+    };
+
     clazz.getClasses(function(data) {
         var classes = [];
 
@@ -59,6 +72,7 @@ function LexiconCtrl($scope) {
             var clazz = {
                 title: data[i].name,
                 id: data[i].id,
+                state: data[i].state,
                 count: data[i].size,
                 progress: data[i].finished / data[i].size * 100,
                 times: data[i].times, // 该词库学习过的次数
