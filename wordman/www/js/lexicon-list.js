@@ -23,6 +23,10 @@
  */
 function LexiconCtrl($scope) {
     $scope.lexicons = [];
+    
+    $scope.goReviews = function (classId) {
+        window.location = '#review-word/' + classId;
+    };
 
     clazz.getClasses(function(data) {
         var classes = [];

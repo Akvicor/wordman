@@ -65,15 +65,18 @@ wordmanNG.config(['$routeProvider',
                     templateUrl: 'recite-word.html',
                     controller: 'ReciteWordCtrl'
                 }).
+                when('/review-word/:classId', {
+                    templateUrl: 'review-word.html',
+                    controller: 'ReviewWordCtrl'
+                }).
                 otherwise({
                     redirectTo: '/index.html'
                 });
-    }])
-        .controller('LexiconCtrl', LexiconCtrl).
-        controller('ReciteWordCtrl', ReciteWordCtrl);
+    }]).controller('LexiconCtrl', LexiconCtrl).controller('ReciteWordCtrl', ReciteWordCtrl)
+        .controller('ReviewWordCtrl', ReviewWordCtrl);
 
 function onConfirm(button) {
-    if (button == 1) {
+    if (button === 1) {
         app.exitApp();
     }
 }

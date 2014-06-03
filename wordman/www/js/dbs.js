@@ -42,7 +42,7 @@ var dbs = {
      */
     initDB: function(cb) {
         // TODO: 不重新初始化库
-        this.dropTables(function() {
+        //this.dropTables(function() {
             var db = dbs.openDatabase();
 
             db.transaction(function(tx) {
@@ -89,7 +89,7 @@ var dbs = {
                     });
                 });
             });
-        });
+        //});
     },
     /**
      * 生成 32 字符长度的唯一 id 字符串.

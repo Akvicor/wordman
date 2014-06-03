@@ -8,11 +8,13 @@
                     <span class="detail">总计 {{lexicon.count}} 个单词</span>
                     <div class="rate" style="width: {{lexicon.progress}}%"></div>
                 </div>
-                <a href="#recite-word/{{lexicon.id}}" class="fn-right link link-green" style="width: 12%">学习</a>
-                <a href="review-word.html" 
+                <a href="#recite-word/{{lexicon.id}}" class="fn-right link link-green" style="width: 12%">学习{{lexicon.toLearns}}</a>
+                <a href="javascript:void(0)"
                    class="fn-right link link-red"
                    ng-show="{{lexicon.hasReview}}" 
-                   style="width: 12%">复习</a>
+                   style="width: 12%"
+                   ng-click="goReviews(lexicon.id)">复习{{lexicon.toReviews}}</a>
+                
             </div>
 
             <div ng-if="!lexicon.hasReview">

@@ -27,7 +27,11 @@ function ReciteWordCtrl($scope, $routeParams) {
     $scope.index = 0;
     $scope.hasStudy = false;
 
-    $scope.mattch = function() {
+    $scope.mattch = function(event) {
+        if (event.keyCode === 13) {
+            this.studyNext();
+            return false;
+        }
         if ($scope.inputWord === $scope.letter) {
             $scope.btnText = '确定';
         } else {
@@ -51,10 +55,9 @@ function ReciteWordCtrl($scope, $routeParams) {
             if ($scope.index === $scope.reciteWords.length - 1) {
                 alert('已经完成该词库今天的学习');
 
-                // TODO: 标记该课程学完并生成学习计划
-                clazz.finishLearn(classId, planId);
+                clazz.finishLearn(reciteWord.currentClassId, reciteWord.currentPlanId);
 
-                window.location = 'lexicon-list.html';
+                window.location = '#lexicon-list';
                 return false;
             }
             $scope.index++;
@@ -88,13 +91,17 @@ function ReciteWordCtrl($scope, $routeParams) {
 }
 
 var reciteWord = {
+    currentPlanId: "",
+    currentClassId: "",
     init: function($scope, classId) {
+        reciteWord.currentClassId = classId;
+
         clazz.selectState(classId, function(result) {
             if (!result.selected) { // 没有“选定”该词库
                 // 询问用户是否开始学习该词库，如果确定学习则“选定”该词库，否则返回列表
                 if (!confirm("确定学习该词库？")) {
                     window.location = "#lexicon-list";
-                    
+
                     return false;
                 }
 
@@ -104,7 +111,8 @@ var reciteWord = {
                 tip.show('请设置每课学习的单词数',
                         '<input value="' + result.learnNum + '" />', function() {
                             clazz.getLearnPlans(classId, parseInt($("#tipContent input").val()), function(result) {
-                                var planId = result.planId;
+                                reciteWord.currentPlanId = result.planId;
+
                                 var words = result.words;
                                 var reciteWords = [];
 
@@ -128,7 +136,8 @@ var reciteWord = {
                         });
             } else { // 已经“选定”该词库
                 clazz.getLearnPlans(classId, parseInt($("#tipContent input").val()), function(result) {
-                    var planId = result.planId;
+                    reciteWord.currentPlanId = result.planId;
+                    
                     var words = result.words;
                     var reciteWords = [];
 

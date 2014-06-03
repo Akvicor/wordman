@@ -156,10 +156,10 @@ var clazz = {
             tx.executeSql('select * from class order by selected desc, id asc', [], function(tx, result) {
                 for (var i = 0; i < result.rows.length; i++) {
 
-                    clazz.countClassPlans(result.rows.item(i), function(clz) {
+                    clazz.countClassPlans(result.rows.item(i), i, function(clz, length) {
                         classes.push(clz);
 
-                        if (i === result.rows.length) {
+                        if (length === result.rows.length - 1) {
                             cb(classes);
                         }
                     });
@@ -187,9 +187,10 @@ var clazz = {
      * 
      * @param {String} clazz 指定的词库
      * @param {Function} cb 回调
+     * @param {Number} length 回调实参，用于回调中判断是否返回
      * @returns {undefined}
      */
-    countClassPlans: function(clazz, cb) {
+    countClassPlans: function(clazz, length, cb) {
         var db = dbs.openDatabase();
 
         db.transaction(function(tx) {
@@ -202,7 +203,7 @@ var clazz = {
                     tx.executeSql('select count(*) as c from plan where classId = ? and date <= ? and done is null and type = 1', [clazz.id, new Date().format('yyyyMMdd')], function(tx, result) {
                         ret.toReviews = result.rows.item(0).c;
 
-                        cb(ret);
+                        cb(ret, length);
                     });
                 });
             });
@@ -473,29 +474,52 @@ var clazz = {
                         db.transaction(function(tx) {
                             tx.executeSql('update class set learned = ? where id = ?', [l + learned, classId]);
                         });
+                    }, function(tx, error) {
+                        console.error(error);
                     });
 
                     tx.executeSql('update plan set done = ? where classId = ? and id = ?', [new Date().format('yyyyMMdd'), classId, planId]);
 
                     // 生成复习计划（+1、2、4、7、15 天）
                     var day = new Date();
-                    var day1 = day.setDate(day.getDate() + 1).format('yyyyMMdd');
+                    day.setDate(day.getDate() + 1);
+                    var day1 = day.format('yyyyMMdd');
                     genReviewPlans(classId, learnPlan.wordIds, day1);
 
-                    var day2 = day.setDate(day.getDate() + 2).format('yyyyMMdd');
+                    day.setDate(day.getDate() + 1);
+                    var day2 = day.format('yyyyMMdd');
                     genReviewPlans(classId, learnPlan.wordIds, day2);
 
-                    var day4 = day.setDate(day.getDate() + 4).format('yyyyMMdd');
+                    day.setDate(day.getDate() + 2);
+                    var day4 = day.format('yyyyMMdd');
                     genReviewPlans(classId, learnPlan.wordIds, day4);
 
-                    var day7 = day.setDate(day.getDate() + 7).format('yyyyMMdd');
+                    day.setDate(day.getDate() + 3);
+                    var day7 = day.format('yyyyMMdd');
                     genReviewPlans(classId, learnPlan.wordIds, day7);
 
-                    var day15 = day.setDate(day.getDate() + 15).format('yyyyMMdd');
+                    day.setDate(day.getDate() + 8);
+                    var day15 = day.format('yyyyMMdd');
                     genReviewPlans(classId, learnPlan.wordIds, day15);
                 });
             });
         });
+    },
+    /**
+     * 完成指定词库的指定复习计划.
+     * 
+     * @param {String} classId 指定词库 id
+     * @param {String} planId 指定复习计划 id
+     * @returns {undefined}
+     */
+    finishReview: function(classId, planId) {
+        var db = dbs.openDatabase();
+
+        db.transaction(function(tx) {
+            tx.executeSql('update plan set done = ? where classId = ? and id = ?', [new Date().format('yyyyMMdd'), classId, planId]);
+        });
+        
+        // TODO: class.completed
     }
 };
 

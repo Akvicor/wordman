@@ -11,7 +11,7 @@
         <span class="class">{{speech}}</span> {{explain}}
     </div>
     <div class="input-wrap">
-        <input ng-show="!hasStudy" ng-model="inputWord" ng-change="mattch()"/>
+        <input ng-show="!hasStudy" ng-model="inputWord" ng-keyup="mattch($event)"/>
     </div>
     <div class="btns fn-clear">
         <button ng-show="index != 0" class="btn btn-orange" ng-click="prev()">上一个</button>
