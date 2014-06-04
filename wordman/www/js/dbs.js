@@ -161,8 +161,6 @@ var dbs = {
 
 };
 
-
-
 function uuid() {
     var s = [];
     var hexDigits = "0123456789abcdef";
@@ -175,8 +173,3 @@ function uuid() {
 
     return s.join("");
 }
-
-
-
-
-
