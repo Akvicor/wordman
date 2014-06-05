@@ -70,8 +70,8 @@ var clazz = {
                 document.getElementById("setup").addEventListener("touchend", function(event) {
                     window.clearTimeout(timer);
 
-                    window.location = "#lexicon-list";
                     $('#setup').remove();
+                    window.location = "#lexicon-list";
                 });
             }, 5000);
 

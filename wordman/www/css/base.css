@@ -2,7 +2,7 @@
 * base style
 *
 * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
-* @version 1.2.0.1, Jun 5, 2014
+* @version 1.2.0.2, Jun 5, 2014
 */
 body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
@@ -341,6 +341,7 @@ header {
     padding: 0.5em;
     border-bottom: 2px solid #FAEBCC;
     background-color: #FCF8E3;
+    font-size: 1.3em;
 }
 
 .recite-word .explain {
@@ -381,6 +382,7 @@ header {
     width: 100%;
     color: #FFF;
     text-align: center;
+    display: none;
 }
 
 #setup a {

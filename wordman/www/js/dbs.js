@@ -18,7 +18,7 @@
  * @fileoverview 数据库工具.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.2.1, May 25, 2014
+ * @version 1.1.2.2, Jun 5, 2014
  * @since 1.0.0
  */
 
@@ -42,7 +42,7 @@ var dbs = {
      */
     initDB: function(cb) {
         // TODO: 不重新初始化库
-        this.dropTables(function() {
+        //this.dropTables(function() {
             var db = dbs.openDatabase();
 
             db.transaction(function(tx) {
@@ -66,7 +66,9 @@ var dbs = {
                     }
 
                     // option 表不存在，说明是第一次使用，进行数据库初始化
-
+                    
+                    $("#setup").show();
+                    
                     $.get('resources/sql/install/1.0.0.sql', function(data) { // 获取建表语句
                         db.transaction(function(tx) {
                             console.info('第一次使用，初始化数据库');
@@ -93,7 +95,7 @@ var dbs = {
                     });
                 });
             });
-        });
+        //});
     },
     /**
      * 生成 32 字符长度的唯一 id 字符串.
