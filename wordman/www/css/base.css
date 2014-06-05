@@ -2,7 +2,7 @@
 * base style
 *
 * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
-* @version 1.1.0.1, May 26, 2014
+* @version 1.2.0.1, Jun 5, 2014
 */
 body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
@@ -373,3 +373,60 @@ header {
     color: #5F9200;
 }
 /* end review word */
+
+/* start flash screen */
+#setup {
+    background-color: #F47B5A;
+    height: 100%;
+    width: 100%;
+    color: #FFF;
+    text-align: center;
+}
+
+#setup a {
+    color: #600600;
+}
+
+#copyright {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    margin-left: -96px;
+}
+
+@-webkit-keyframes wordman {
+    0% {-webkit-transform: rotate(0deg);left:0px;}
+    25% {transform: rotate(20deg);left:0px;}
+    100% {-webkit-transform: rotate(-360deg);left:50%;}
+}
+
+#wordman {
+    color: #6B0500;
+    font-size: 2em;
+    font-weight: bold;
+    position:absolute;
+    top: 50%;
+    -webkit-animation:wordman 5s 1;
+    animation:wordman 5s 1;
+    left: 50%;
+    margin-left: -81px;
+    margin-top: -2em;
+}
+
+@-webkit-keyframes wordmanc {
+    0%   {color: #F47B5A;}
+    25%  {color: #FFF;}
+    50%  {color:#6B0500;}
+    100% {color: #FFF;}
+}
+
+#wordmanC {
+    color:#FFF;
+    -webkit-animation: wordmanc 5s ease-in-out 5s 1;
+    animation:wordmanc 5s 1;
+    top: 50%;
+    position: absolute;
+    left: 50%;
+    margin-left: -24px;
+}
+/* end flash screen */

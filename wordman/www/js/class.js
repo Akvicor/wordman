@@ -18,7 +18,7 @@
  * 词库操作.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.6.3.1, Jun 3, 2014
+ * @version 1.6.4.1, Jun 5, 2014
  * @since 1.0.0
  */
 
@@ -64,7 +64,7 @@ var clazz = {
             var timer = setTimeout(function() {
                 $('#setup').remove();
                 window.location = "#lexicon-list";
-            }, 3000);
+            }, 10000);
 
             setTimeout(function() {
                 document.getElementById("setup").addEventListener("touchend", function(event) {
@@ -73,7 +73,7 @@ var clazz = {
                     window.location = "#lexicon-list";
                     $('#setup').remove();
                 });
-            }, 2000);
+            }, 5000);
 
             return;
         });

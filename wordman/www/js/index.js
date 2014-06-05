@@ -18,7 +18,7 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.3, May 27, 2014
+ * @version 1.1.1.3, Jun 5, 2014
  * @since 1.0.0
  */
 var app = {
@@ -33,6 +33,9 @@ var app = {
 
         // 初始化，第一次打开应用时将导入词库
         clazz.initClasses();
+        
+        // 第一次打开应用屏幕
+        $('#setup').height($(window).height());
     },
     bindEvents: function() {
         document.addEventListener("backbutton", this.onBackKeyDown, false);
