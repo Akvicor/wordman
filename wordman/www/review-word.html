@@ -20,8 +20,7 @@
             <ul class="review-word">
                 <li ng-repeat="word in errorWords" class="fn-clear">
                 <big>{{word.letter}}</big>
-                <span class="ft-gray">{{word.sounds}}</span>
-                <br/>
+                <div class="ft-gray">{{word.sounds}}</div>
                 <small>{{word.explain}}</small>
                 </li>
             </ul>
@@ -29,4 +28,3 @@
         <button class="btn" onclick="tip.close()">确 定</button>
     </div>
 </div>
-<div class="tip-bg"></div>

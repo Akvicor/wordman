@@ -101,6 +101,7 @@ var reciteWord = {
                 // 首次学习需要用户设置对该词库的学习词数
                 tip.show(undefined,
                         '<input class="input" value="' + result.learnNum + '" />', function() {
+                            // TODO
 //                            if (/^[0-9]*[1-9][0-9]*$/.test($("#tipContent input").val())) {
 //                                var count = parseInt($("#tipContent input").val());
 //                                if (count < 20 || count > 100) {
@@ -114,7 +115,7 @@ var reciteWord = {
 //                                return false;
 //                            }
 
-                            clazz.getLearnPlans(classId, count, function(result) {
+                            clazz.getLearnPlans(classId, 2, function(result) {
                                 // 选定词库
                                 clazz.selectClass(classId);
 

@@ -57,6 +57,7 @@ function ReviewWordCtrl($scope, $routeParams) {
                     $scope.inputWord = "";
                     $scope.errorWords = [];
                     $scope.$apply();
+                    return true;
                 });
             } else {
                 alert('已完成该课程的复习');

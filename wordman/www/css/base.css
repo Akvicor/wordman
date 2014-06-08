@@ -10,7 +10,7 @@ body {
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
     background-attachment:fixed;
     font-family: 'HelveticaNeue-Light', '微软雅黑';
-    font-size: 2em;
+    font-size: 2.5em;
     height:100%;
     margin:0px;
     padding:0px;
@@ -60,30 +60,21 @@ ul {
 
 .ft-gray {
     color: gray;
+    font-size: 0.8em;
 }
 /* end function */
 
 /* start tip */
-.tip-bg {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
-    top: 0;
-    left: 0;
-    display: none;
-}
-
 .tip-content {
     background-color: #303537;
     display: none;
     margin: 0 auto;
     padding-bottom: 1em;
     position: absolute;
-    width: 80%;
     z-index: 10;
     text-align: center;
-    top: 1em;
+    top: 0;
+    width: 100%;
 }
 
 #tipTitle {
@@ -91,14 +82,14 @@ ul {
     color: #5F9200;
     height: 2em;
     line-height: 2em;
-    padding-left: 1em;
+    padding-left: 0.5em;
     text-align: left;
 }
 
 #tipContent {
     color: #5F9200;
-    padding: 1em;
     text-align: center;
+    padding: 1em 0.4em;
 }
 
 .tip-content .button {
@@ -124,15 +115,39 @@ ul {
 }
 
 header {
-    background-color: #F5F5F5;
-    padding: 0.3125em 1rem;
+    background-color: #dddddd;
+    padding: 0.3125em 0.5em;
     font-size: 1.2em;
+    background-image: linear-gradient(to bottom, #222222, #111111);
+    background-color: #1B1B1B;
+    color: #fff;
+}
+
+header .fn-left {
+    position: relative;
+    background-color: #555555;
+    padding: 0 0.5em;
+}
+
+header .fn-left:before {
+    position: absolute;
+    z-index: 2;
+    content: '';
+    top: 0;
+    left: -1.5rem;
+    background-color: transparent;
+    border-bottom: 1.99rem solid transparent;
+    border-right: 1.5rem solid #555;
+    border-top: 1.99rem solid transparent;
+    width: 0;
+    height: 0;
 }
 
 .btn {
     background-color: #5CB85C;
     border-color: #4CAE4C;
     color: #FFFFFF;
+    color: #777;
 }
 .btn {
     -moz-user-select: none;
@@ -183,6 +198,10 @@ header {
     border-color: #D58512;
 }
 
+.input-wrap {
+    padding: 0.5em;
+}
+
 .input {
     height: 2em;
     width: 100%;
@@ -203,7 +222,7 @@ header {
 
 /* start lexicon list */
 .lexicon .rate {
-    height: 3.6em;
+    height: 3em;
     background-color: rgba(150,205,233,0.8);
     z-index: 6;
     position: absolute;
@@ -219,7 +238,7 @@ header {
     position: relative;
     height: 3em;
     box-sizing: border-box;
-    padding: 0.5rem 0 0 0.5em;
+    padding: 0.2em 0 0 0.5em;
 }
 
 .lexicon .red {
@@ -242,10 +261,10 @@ header {
     line-height: 3em;
     background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.05));
     box-sizing: border-box;
-    text-align: center;
     text-decoration: none;
     width: 15%;
     position: relative;
+    text-align: center;
 }
 
 .lexicon .link-red {
@@ -257,52 +276,48 @@ header {
 }
 
 .lexicon .link .count {
-    color: rgba(0, 0, 0, 0.5);
-    font-size: 3em;
+    color: rgba(0, 0, 0, 0.2);
+    font-size: 2.4em;
     position: absolute;
     top: 0;
     left: 0;
-    text-align: center;
     width: 100%;
     font-weight: bold;
     font-style: italic;
+    text-align: left;
 }
 /* end lexicon list */
 
 /* end recite word */
 .recite-word .word {
-    padding: 1em;
+    padding: 0.5em;
     border-bottom: 2px solid #FAEBCC;
     background-color: #FCF8E3;
 }
 
 .recite-word .explain {
-    padding: 1em;
+    padding: 0.5em;
     border-bottom: 2px solid #BCE8F1;
     background-color: #D9EDF7;
+    margin-bottom: 0.5em;
 }
 
 .recite-word .btns {
-    padding: 1em;
+    padding: 0.5em;
 }
 
 .recite-word .btns > .btn {
     width: 45%;
-}
-
-.recite-word .input-wrap {
-    padding: 1em 1em 0 1em;
-
 }
 /* end recite word */
 
 /* start review word */
 .review-word li {
     text-align: left;
-    font-size: 1rem;
+    font-size: 1em;
     border-bottom: 1px solid #5F9200;
     color: #FFF;
-    padding: 5px 0;
+    padding: 0.5rem 1rem;
 }
 
 .review-word small {

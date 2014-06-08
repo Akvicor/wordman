@@ -34,13 +34,12 @@ var tip = {
         if (content) {
             $("#tipContent").html(content);
         }
-        $(".tip-content, .tip-bg").show();
-        $(".tip-bg").height($(document).height() + 100);
+        $(".tip-content").show();
         this.cb = cb;
     },
     close: function() {
         if (this.cb()) {
-            $(".tip-content, .tip-bg").hide();
+            $(".tip-content").hide();
         }
     }
 };
