@@ -100,13 +100,21 @@ var keyboard = {
                     if (keyboard.placeholder === text) {
                         return false;
                     }
-                    
+
                     if (keyboard.cb) {
                         keyboard.cb(text.substr(0, text.length - 1));
                     }
                 } else if ($it.hasClass("icon-arrow")) {
-                    $(".btn-green").click();
-                    $(".btn-red").click();
+                    if (keyboard.cb) {
+                        keyboard.cb($input.val());
+                    }
+                    if ($(".btn-red").length === 1) {
+                        $(".btn-red").click();
+                    }
+                    if ($(".btn-green").length === 1) {
+                        $(".btn-green").click();
+                    }
+                    
                 }
                 return false;
             }
