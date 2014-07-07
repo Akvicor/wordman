@@ -17,7 +17,7 @@
  * @fileoverview common
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
- * @version 1.2.0.1, May 26, 2014
+ * @version 1.2.1.1, July 7, 2014
  */
 var tip = {
     show: function(title, content, cb) {
@@ -55,8 +55,8 @@ var keyboard = {
             keyboard.cb = cb;
         }
         $(".keyboard").show();
-
-        if ($(window).height() > 583) {
+        
+        if ($(".keyboard").height() + $(".recite-word").height() < $(window).height()) {
             $(".keyboard").css("position", "fixed");
         } else {
             $(".keyboard").css("position", "inherit");

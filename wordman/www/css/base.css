@@ -2,7 +2,7 @@
 * base style
 *
 * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
-* @version 1.2.0.2, Jun 5, 2014
+* @version 1.2.0.3, July 7, 2014
 */
 body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
@@ -148,6 +148,7 @@ ul {
     text-align: center;
     padding: 0.1em 0;
     line-height: 2em;
+    height: 2.5em;
 }
 
 .keyboard span.touch {
