@@ -18,7 +18,7 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.3, May 26, 2014
+ * @version 1.1.0.4, July 14, 2014
  * @since 1.0.0
  */
 function LexiconCtrl($scope) {
@@ -46,7 +46,8 @@ function LexiconCtrl($scope) {
         window.location = '#recite-word/' + classId;
     };
 
-    $scope.setup = function(clazzId) {
+    $scope.setup = function(clazzId, event) {
+        $(event.target).text('安装...');
         clazz.importClass(clazzId, function() {
             var lexicons = $scope.lexicons;
             for (var i = 0; i < lexicons.length; i++) {

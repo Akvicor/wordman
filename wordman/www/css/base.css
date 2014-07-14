@@ -343,6 +343,7 @@ header {
     border-bottom: 2px solid #FAEBCC;
     background-color: #FCF8E3;
     font-size: 1.3em;
+    min-height: 1.35em;
 }
 
 .recite-word .explain {
@@ -350,6 +351,7 @@ header {
     border-bottom: 2px solid #BCE8F1;
     background-color: #D9EDF7;
     margin-bottom: 0.5em;
+    min-height: 1.35em;
 }
 
 .recite-word .btns {

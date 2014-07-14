@@ -18,7 +18,7 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.1.2, May 26, 2014
+ * @version 1.2.2.2, July 14, 2014
  */
 function ReciteWordCtrl($scope, $routeParams) {
     $scope.reciteWords = [];
@@ -61,7 +61,7 @@ function ReciteWordCtrl($scope, $routeParams) {
                 window.location = '#lexicon-list';
                 return false;
             }
-            
+
             $scope.index++;
             $scope.sounds = $scope.reciteWords[$scope.index].sounds;
             $scope.letter = $scope.reciteWords[$scope.index].letter;
@@ -89,6 +89,10 @@ function ReciteWordCtrl($scope, $routeParams) {
         }
     };
 
+    $scope.cancel = function() {
+        window.location = '#lexicon-list';
+    };
+
     reciteWord.init($scope, $routeParams.classId);
 }
 
@@ -102,7 +106,7 @@ var reciteWord = {
             if (!result.selected) { // 没有“选定”该词库
                 // 首次学习需要用户设置对该词库的学习词数
                 tip.show(undefined,
-                        '<input class="input" value="' + result.learnNum + '" />', function() {
+                        '<br/><input class="input" value="' + result.learnNum + '" /><br/>', function() {
                             if (/^[0-9]*[1-9][0-9]*$/.test($("#tipContent input").val())) {
                                 var count = parseInt($("#tipContent input").val());
                                 if (count < 20 || count > 100) {
