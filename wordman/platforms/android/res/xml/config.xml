@@ -13,4 +13,7 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <feature name="SQLitePlugin">
+        <param name="android-package" value="org.pgsqlite.SQLitePlugin" />
+    </feature>
 </widget>

@@ -18,7 +18,7 @@
  * @fileoverview 数据库工具.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.2.2, Jun 5, 2014
+ * @version 1.2.2.2, Jul 15, 2014
  * @since 1.0.0
  */
 
@@ -32,7 +32,7 @@ var dbs = {
      * @returns {Database}
      */
     openDatabase: function() {
-        return openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 5 * 1024 * 1024);
+        return sqlitePlugin.openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 5 * 1024 * 1024);
     },
     /**
      * 初始化数据库.
