@@ -17,7 +17,7 @@
  * @fileoverview common
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
- * @version 1.2.1.1, July 7, 2014
+ * @version 1.2.2.1, July 15, 2014
  */
 var tip = {
     show: function(title, content, cb) {
@@ -108,11 +108,11 @@ var keyboard = {
                     if (keyboard.cb) {
                         keyboard.cb($input.val());
                     }
-                    if ($(".btn-red").length === 1) {
-                        $(".btn-red").click();
+                    if ($(".btns .btn-red").length === 1) {
+                        $(".btns .btn-red").click();
                     }
-                    if ($(".btn-green").length === 1) {
-                        $(".btn-green").click();
+                    if ($(".btns .btn-green").length === 1) {
+                        $(".btns .btn-green").click();
                     }
                     
                 }
