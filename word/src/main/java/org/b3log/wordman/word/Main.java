@@ -98,7 +98,13 @@ public final class Main {
                     word.setId(UUID.randomUUID().toString().replaceAll("-", ""));
 
                     final Element w = li.select("div.word_main_list_w").get(0);
-                    final String spell = w.select("span").get(0).attr("title").trim();
+                    String spell = w.select("span").get(0).attr("title");
+
+                    // 移除源词库中有误字符
+                    spell = spell.replace("*", "").replaceAll("\\(.*\\)", "").replace("\\", "");
+                    
+                    spell = spell.trim();
+
                     word.setWord(spell);
                     if (!checkWord(spell)) { // 如果存在特殊拼写
                         throw new IllegalStateException("存在特殊拼写 [" + spell + ']');
