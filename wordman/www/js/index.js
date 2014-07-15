@@ -31,9 +31,6 @@ var app = {
     initialize: function() {
         this.bindEvents();
 
-        // 初始化，第一次打开应用时将导入词库
-        clazz.initClasses();
-        
         // 第一次打开应用屏幕
         $('#setup').height($(window).height());
     },
@@ -42,9 +39,12 @@ var app = {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
     onDeviceReady: function() {
-        keyboard.init();
+        // 初始化，第一次打开应用时将导入词库
+        clazz.initClasses();
 
         app.deviced = true;
+        
+        keyboard.init();
     },
     onBackKeyDown: function() {
         if (confirm('确定要退出吗?')) {

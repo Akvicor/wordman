@@ -18,7 +18,7 @@
  * @fileoverview 数据库工具.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.2.2, Jul 15, 2014
+ * @version 1.2.3.2, Jul 15, 2014
  * @since 1.0.0
  */
 
@@ -32,7 +32,7 @@ var dbs = {
      * @returns {Database}
      */
     openDatabase: function() {
-        return sqlitePlugin.openDatabase('b3log-wordman', '1.0', 'Wordman 数据库', 5 * 1024 * 1024);
+        return window.sqlitePlugin.openDatabase({name: "wordman.db"});
     },
     /**
      * 初始化数据库.
@@ -41,60 +41,53 @@ var dbs = {
      * @returns {undefined}
      */
     initDB: function(cb) {
-        // TODO: 不重新初始化库
         //this.dropTables(function() {
-            var db = dbs.openDatabase();
+        var db = dbs.openDatabase();
+        
+        db.transaction(function(tx) {
+            tx.executeSql("select 1 from option", [], function(tx, result) {
+                $('#setup').remove();
 
-            db.transaction(function(tx) {
-                tx.executeSql("select 1 from option", [], function(tx, result) {
-                    $('#setup').remove();
+                console.debug('已经初始化过词库了');
 
-                    console.debug('已经初始化过词库了');
+                clazz.countWords(function(count) {
+                    console.info('所有词库单词计数 [' + count + ']');
+                });
 
-                    clazz.countWords(function(count) {
-                        console.info('所有词库单词计数 [' + count + ']');
-                    });
+                window.location = "#lexicon-list";
 
-                    window.location = "#lexicon-list";
+                return;
+            }, function(tx, err) {
+                // option 表不存在，说明是第一次使用，进行数据库初始化
 
-                    return;
-                }, function(tx, err) {
-                    if (5 !== err.code) { // 非“表不存在”异常
-                        console.error(err);
+                $("#setup").show();
 
-                        throw err;
-                    }
+                $.get('resources/sql/install/1.0.0.sql', function(data) { // 获取建表语句
+                    db.transaction(function(tx) {
+                        console.info('第一次使用，初始化数据库');
 
-                    // option 表不存在，说明是第一次使用，进行数据库初始化
-                    
-                    $("#setup").show();
-                    
-                    $.get('resources/sql/install/1.0.0.sql', function(data) { // 获取建表语句
-                        db.transaction(function(tx) {
-                            console.info('第一次使用，初始化数据库');
+                        // 每一句建表 SQL 使用 ---- 分割
+                        var createTableSqls = data.split('----');
 
-                            // 每一句建表 SQL 使用 ---- 分割
-                            var createTableSqls = data.split('----');
+                        var count = 0;
 
-                            var count = 0;
+                        for (var i in createTableSqls) {
+                            tx.executeSql(createTableSqls[i], [], function(tx, result) {
+                                count++;
+                                if (parseInt(i) === count) {
+                                    console.info('建表完毕');
+                                    cb();
+                                }
+                            }, function(tx, err) {
+                                console.error(err);
 
-                            for (var i in createTableSqls) {
-                                tx.executeSql(createTableSqls[i], [], function(tx, result) {
-                                    count++;
-                                    if (parseInt(i) === count) {
-                                        console.info('建表完毕');
-                                        cb();
-                                    }
-                                }, function(tx, err) {
-                                    console.error(err);
-
-                                    cb(err);
-                                });
-                            }
-                        });
+                                cb(err);
+                            });
+                        }
                     });
                 });
             });
+        });
         //});
     },
     /**
