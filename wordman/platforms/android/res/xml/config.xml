@@ -4,6 +4,9 @@
     <feature name="App">
         <param name="android-package" value="org.apache.cordova.App" />
     </feature>
+    <feature name="SQLitePlugin">
+        <param name="android-package" value="org.pgsqlite.SQLitePlugin" />
+    </feature>
     <name>Wordman</name>
     <description>
         沃德曼背单词
@@ -13,7 +16,4 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <feature name="SQLitePlugin">
-        <param name="android-package" value="org.pgsqlite.SQLitePlugin" />
-    </feature>
 </widget>
