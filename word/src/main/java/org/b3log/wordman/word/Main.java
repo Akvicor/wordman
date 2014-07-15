@@ -32,7 +32,7 @@ import org.jsoup.select.Elements;
  * 词库获取与生成.
  *
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.0.1, May 26, 2014
+ * @version 1.2.1.1, Jul 15, 2014
  * @since 1.0.0
  */
 public final class Main {
@@ -98,7 +98,7 @@ public final class Main {
                     word.setId(UUID.randomUUID().toString().replaceAll("-", ""));
 
                     final Element w = li.select("div.word_main_list_w").get(0);
-                    final String spell = w.select("span").get(0).text();
+                    final String spell = w.select("span").get(0).attr("title").trim();
                     word.setWord(spell);
                     if (!checkWord(spell)) { // 如果存在特殊拼写
                         throw new IllegalStateException("存在特殊拼写 [" + spell + ']');
