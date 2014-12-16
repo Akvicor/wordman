@@ -18,7 +18,7 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.0.4, July 14, 2014
+ * @version 1.2.0.4, Dec 16, 2014
  * @since 1.0.0
  */
 function LexiconCtrl($scope) {
@@ -26,14 +26,18 @@ function LexiconCtrl($scope) {
 
     $scope.lexicons = [];
 
-    $scope.goReview = function(classId, count) {
+    $scope.goDict = function () {
+        window.location = '#dict-list';
+    };
+
+    $scope.goReview = function (classId, count) {
         if (count === 0) {
             alert("温故知新足以！");
             return false;
         }
         window.location = '#review-word/' + classId;
     };
-    $scope.goRecite = function(classId, count) {
+    $scope.goRecite = function (classId, count) {
         if (count === 0) {
             alert("不要太勤奋，明天再来！");
             return false;
@@ -46,9 +50,9 @@ function LexiconCtrl($scope) {
         window.location = '#recite-word/' + classId;
     };
 
-    $scope.setup = function(clazzId, event) {
+    $scope.setup = function (clazzId, event) {
         $(event.target).text('安装...');
-        clazz.importClass(clazzId, function() {
+        clazz.importClass(clazzId, function () {
             var lexicons = $scope.lexicons;
             for (var i = 0; i < lexicons.length; i++) {
                 if (lexicons[i].id === clazzId) {
@@ -60,7 +64,7 @@ function LexiconCtrl($scope) {
         });
     };
 
-    clazz.getClasses(function(data) {
+    clazz.getClasses(function (data) {
         var classes = [];
 
         for (var i = 0; i < data.length; i++) {

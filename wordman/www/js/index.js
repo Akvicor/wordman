@@ -18,7 +18,7 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.1.1.3, Jun 5, 2014
+ * @version 1.2.1.3, Dec 5, 2014
  * @since 1.0.0
  */
 var app = {
@@ -33,7 +33,7 @@ var app = {
 
         // 第一次打开应用屏幕
         $('#setup').height($(window).height());
-        
+
         // XXX: 打包时删了下面两行
         clazz.initClasses();
         keyboard.init();
@@ -67,6 +67,10 @@ wordmanNG.config(['$routeProvider',
                     templateUrl: 'lexicon-list.html',
                     controller: 'LexiconCtrl'
                 }).
+                when('/dict-list', {
+                    templateUrl: 'dict-list.html',
+                    controller: 'DictCtrl'
+                }).
                 when('/recite-word/:classId', {
                     templateUrl: 'recite-word.html',
                     controller: 'ReciteWordCtrl'
@@ -78,4 +82,5 @@ wordmanNG.config(['$routeProvider',
                 otherwise({
                     redirectTo: '/index.html'
                 });
-    }]);
+    }
+]);
