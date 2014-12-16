@@ -37,6 +37,7 @@ function LexiconCtrl($scope) {
         }
         window.location = '#review-word/' + classId;
     };
+    
     $scope.goRecite = function (classId, count) {
         if (count === 0) {
             alert("不要太勤奋，明天再来！");

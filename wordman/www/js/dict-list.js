@@ -24,5 +24,14 @@ function DictCtrl($scope) {
     $scope.back = function () {
         window.location = '#lexicon-list';
     };
+
+    $scope.remove = function (wordId, classId) {
+        clazz.removeNewWord(wordId, classId);
+    };
+
+    clazz.getNewWords(function (data) {
+        $scope.dicts = data;
+        $scope.$apply();
+    });
 }
 

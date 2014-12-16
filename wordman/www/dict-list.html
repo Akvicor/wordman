@@ -3,11 +3,11 @@
 </header>
 <div class="lexicon">
     <ul class="list">
-        <li ng-repeat="lexicon in lexicons" class="fn-clear">
+        <li ng-repeat="word in dicts" class="fn-clear">
             <div class="fn-left intro">
         
             </div>
-            <span>
+            <span ng-click="remove(word.wordId, word.classId)">
                 移除
             </span>
         </li>

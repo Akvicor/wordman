@@ -18,7 +18,7 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.0.1, May 26, 2014
+ * @version 1.2.1.1, Dec 16, 2014
  */
 function ReviewWordCtrl($scope, $routeParams) {
     $scope.reviewWords = [];
@@ -26,7 +26,11 @@ function ReviewWordCtrl($scope, $routeParams) {
     $scope.inputWord = "";
     $scope.index = 0;
 
-    $scope.reviewNext = function() {
+    $scope.addDict = function (wordId, wordId) {
+        clazz.addNewWord(wordId, wordId);
+    };
+
+    $scope.reviewNext = function () {
         if ($scope.reviewWords[$scope.index] &&
                 $scope.inputWord !== $scope.reviewWords[$scope.index].letter) {
             $scope.errorWords.push($scope.reviewWords[$scope.index]);
@@ -38,15 +42,15 @@ function ReviewWordCtrl($scope, $routeParams) {
             var errorLength = $scope.errorWords.length;
             if (errorLength !== 0) {
                 keyboard.hide();
-                
+
                 // 展现错误单词
-                tip.show('错误：' + (errorLength) + '个', undefined, function() {
+                tip.show('错误：' + (errorLength) + '个', undefined, function () {
                     $scope.reviewWords = $scope.errorWords;
                     $scope.explain = $scope.reviewWords[0].explain;
                     $scope.index = 0;
                     $scope.inputWord = "";
                     $scope.errorWords = [];
-                    $scope.$apply(); 
+                    $scope.$apply();
                     keyboard.show();
                     return true;
                 });
@@ -64,7 +68,7 @@ function ReviewWordCtrl($scope, $routeParams) {
         $scope.inputWord = "";
     };
 
-    $scope.back = function() {
+    $scope.back = function () {
         if (confirm("要重头开始吗?")) {
             window.location = '#lexicon-list';
         }
@@ -76,15 +80,15 @@ function ReviewWordCtrl($scope, $routeParams) {
 var reviewWord = {
     currentPlanId: "",
     currentClassId: "",
-    init: function($scope, classId) {
-        keyboard.show(function(val) {
+    init: function ($scope, classId) {
+        keyboard.show(function (val) {
             $scope.inputWord = val;
             $scope.$apply();
         });
-        
+
         reviewWord.currentClassId = classId;
-        
-        clazz.getReviewPlans(classId, function(result) {
+
+        clazz.getReviewPlans(classId, function (result) {
             reviewWord.currentPlanId = result.planId;
 
             var words = result.words;
