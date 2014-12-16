@@ -1,3 +1,9 @@
+CREATE TABLE IF NOT EXISTS `new_word` (
+  `id` char(32) NOT NULL,
+  `wordId` varchar(55) NOT NULL,
+  `classId` varchar(32) NOT NULL
+);
+----
 CREATE TABLE IF NOT EXISTS `option` (
   `id` char(32) NOT NULL,
   `category` char(32) NOT NULL,
