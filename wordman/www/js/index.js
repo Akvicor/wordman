@@ -28,25 +28,29 @@ var app = {
      * @type Boolean
      */
     deviced: false,
-    initialize: function() {
+    initialize: function () {
         this.bindEvents();
 
         // 第一次打开应用屏幕
         $('#setup').height($(window).height());
+        
+        // XXX: 打包时删了下面两行
+        clazz.initClasses();
+        keyboard.init();
     },
-    bindEvents: function() {
+    bindEvents: function () {
         document.addEventListener("backbutton", this.onBackKeyDown, false);
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
-    onDeviceReady: function() {
+    onDeviceReady: function () {
         // 初始化，第一次打开应用时将导入词库
         clazz.initClasses();
 
         app.deviced = true;
-        
+
         keyboard.init();
     },
-    onBackKeyDown: function() {
+    onBackKeyDown: function () {
         if (confirm('确定要退出吗?')) {
             navigator.app.exitApp();
         }
@@ -57,7 +61,7 @@ var wordmanNG = angular.module('Wordman', ['ngRoute']);
 
 // 配置多视图路由
 wordmanNG.config(['$routeProvider',
-    function($routeProvider) {
+    function ($routeProvider) {
         $routeProvider.
                 when('/lexicon-list', {
                     templateUrl: 'lexicon-list.html',

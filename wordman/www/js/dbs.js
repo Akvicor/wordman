@@ -31,8 +31,12 @@ var dbs = {
      * 
      * @returns {Database}
      */
-    openDatabase: function() {
-        return window.sqlitePlugin.openDatabase({name: "wordman.db"});
+    openDatabase: function () {
+        if (window.sqlitePlugin) {
+            return window.sqlitePlugin.openDatabase({name: "wordman.db"});
+        }
+
+        return window.openDatabase("wordman.db", "1.0", "Wordman DB", 1000000);
     },
     /**
      * 初始化数据库.
@@ -40,62 +44,63 @@ var dbs = {
      * @param {Function} cb 回调，当且仅当确实初始化过数据库后才会执行该回调
      * @returns {undefined}
      */
-    initDB: function(cb) {
-        //this.dropTables(function() {
-        var db = dbs.openDatabase();
-        
-        db.transaction(function(tx) {
-            tx.executeSql("select 1 from option", [], function(tx, result) {
-                $('#setup').remove();
+    initDB: function (cb) {
+        // XXX: 打包时
+        this.dropTables(function () {
+            var db = dbs.openDatabase();
 
-                console.debug('已经初始化过词库了');
+            db.transaction(function (tx) {
+                tx.executeSql("select 1 from option", [], function (tx, result) {
+                    $('#setup').remove();
 
-                clazz.countWords(function(count) {
-                    console.info('所有词库单词计数 [' + count + ']');
-                });
+                    console.debug('已经初始化过词库了');
 
-                window.location = "#lexicon-list";
+                    clazz.countWords(function (count) {
+                        console.info('所有词库单词计数 [' + count + ']');
+                    });
 
-                return;
-            }, function(tx, err) {
-                // option 表不存在，说明是第一次使用，进行数据库初始化
+                    window.location = "#lexicon-list";
 
-                $("#setup").show();
+                    return;
+                }, function (tx, err) {
+                    // option 表不存在，说明是第一次使用，进行数据库初始化
 
-                $.get('resources/sql/install/1.0.0.sql', function(data) { // 获取建表语句
-                    db.transaction(function(tx) {
-                        console.info('第一次使用，初始化数据库');
+                    $("#setup").show();
 
-                        // 每一句建表 SQL 使用 ---- 分割
-                        var createTableSqls = data.split('----');
+                    $.get('resources/sql/install/1.0.0.sql', function (data) { // 获取建表语句
+                        db.transaction(function (tx) {
+                            console.info('第一次使用，初始化数据库');
 
-                        var count = 0;
+                            // 每一句建表 SQL 使用 ---- 分割
+                            var createTableSqls = data.split('----');
 
-                        for (var i in createTableSqls) {
-                            tx.executeSql(createTableSqls[i], [], function(tx, result) {
-                                count++;
-                                if (parseInt(i) === count) {
-                                    console.info('建表完毕');
-                                    cb();
-                                }
-                            }, function(tx, err) {
-                                console.error(err);
+                            var count = 0;
 
-                                cb(err);
-                            });
-                        }
+                            for (var i in createTableSqls) {
+                                tx.executeSql(createTableSqls[i], [], function (tx, result) {
+                                    count++;
+                                    if (parseInt(i) === count) {
+                                        console.info('建表完毕');
+                                        cb();
+                                    }
+                                }, function (tx, err) {
+                                    console.error(err);
+
+                                    cb(err);
+                                });
+                            }
+                        });
                     });
                 });
             });
         });
-        //});
     },
     /**
      * 生成 32 字符长度的唯一 id 字符串.
      * 
      * @returns {String}
      */
-    genId: function() {
+    genId: function () {
         return uuid().replace(new RegExp('-', 'gm'), '');
     },
     /**
@@ -104,10 +109,10 @@ var dbs = {
      * @param {Function} cb 回调
      * @returns {undefined}
      */
-    dropTables: function(cb) {
+    dropTables: function (cb) {
         var db = dbs.openDatabase();
 
-        db.transaction(function(tx) {
+        db.transaction(function (tx) {
             tx.executeSql('drop table if exists `class`');
             tx.executeSql('drop table if exists `option`');
             tx.executeSql('drop table if exists `learn_plan`');
@@ -121,8 +126,8 @@ var dbs = {
             tx.executeSql('drop table if exists `word_16`');
             tx.executeSql('drop table if exists `word_140`');
             tx.executeSql('drop table if exists `word_141`');
-        }, function(err) {
-        }, function() {
+        }, function (err) {
+        }, function () {
             console.info('删除所有表完毕');
 
             cb();
@@ -133,7 +138,7 @@ var dbs = {
      * 
      * @returns {undefined}
      */
-    wordman: function() {
+    wordman: function () {
         var uuid = dbs.genId();
         var time = new Date().getTime();
 
@@ -143,10 +148,10 @@ var dbs = {
         };
 
         var db = dbs.openDatabase();
-        db.transaction(function(tx) {
-            tx.executeSql('insert into option values (?, ?, ?, ?)', [dbs.genId(), 'conf', 'client', JSON.stringify(value)], function(tx, result) {
+        db.transaction(function (tx) {
+            tx.executeSql('insert into option values (?, ?, ?, ?)', [dbs.genId(), 'conf', 'client', JSON.stringify(value)], function (tx, result) {
                 console.info('沃德曼 [' + JSON.stringify(value) + ']');
-            }, function(tx, err) {
+            }, function (tx, err) {
                 console.error('生成沃德曼异常', err);
 
                 throw err;
