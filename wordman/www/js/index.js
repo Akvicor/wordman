@@ -18,7 +18,7 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.2.3, Dec 16, 2014
+ * @version 1.2.2.4, Dec 17, 2014
  * @since 1.0.0
  */
 var app = {
@@ -35,8 +35,8 @@ var app = {
         $('#setup').height($(window).height());
 
         // XXX: 打包时删了下面两行
-        //clazz.initClasses();
-        //keyboard.init();
+//        clazz.initClasses();
+//        keyboard.init();
     },
     bindEvents: function () {
         document.addEventListener("backbutton", this.onBackKeyDown, false);

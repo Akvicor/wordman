@@ -18,13 +18,14 @@
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
  * @author <a href="http://88250.b3log.org">Liang Ding</a>
- * @version 1.2.0.4, Dec 16, 2014
+ * @version 1.2.0.5, Dec 17, 2014
  * @since 1.0.0
  */
 function LexiconCtrl($scope) {
     keyboard.hide();
 
     $scope.lexicons = [];
+    $scope.dicts = [];
 
     $scope.goDict = function () {
         window.location = '#dict-list';
@@ -64,6 +65,11 @@ function LexiconCtrl($scope) {
             }
         });
     };
+    
+     clazz.getNewWords(function (data) {
+        $scope.dicts = data.words;
+        $scope.$apply();
+    });
 
     clazz.getClasses(function (data) {
         var classes = [];

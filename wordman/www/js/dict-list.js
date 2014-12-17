@@ -17,7 +17,7 @@
  * @fileoverview lexicon.
  *
  * @author <a href="mailto:LLY219@gmail.com">Liyuan Li</a>
- * @version 1.0.0.1, Dec 16, 2014
+ * @version 1.0.0.2, Dec 17, 2014
  * @since 1.0.0
  */
 function DictCtrl($scope) {
@@ -25,9 +25,9 @@ function DictCtrl($scope) {
         window.location = '#lexicon-list';
     };
 
-    $scope.remove = function (wordId, classId) {
+    $scope.remove = function (wordId, classId, target) {
         clazz.removeNewWord(wordId, classId);
-        $("#word" + wordId).parent().remove();
+        $(target).parent().remove();
     };
 
     clazz.getNewWords(function (data) {
