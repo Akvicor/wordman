@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" id="org.b3log.wordman" version="1.1.3">
-    <name>Wordman</name>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" id="org.b3log.wordman" version="1.1.4">
+    <name>沃德曼</name>
     <description>
     </description>
     <author email="DL88250@gmail.com" href="http://b3log.org">
@@ -8,4 +8,5 @@
     </author>
     <content src="index.html"/>
     <access origin="*"/>
+	<icon src="ps/drawable/icon.png" />
 </widget>
