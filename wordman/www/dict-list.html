@@ -8,6 +8,6 @@
             <span class="ft-gray">{{word.phon}}</span><br/>
             <small>{{word.para}}</small>
         </div>
-        <button class="fn-right btn btn-red" ng-click="remove(word.id, word.classId)">-生词</button>
+        <button id="word{{word.id}}" class="fn-right btn btn-red" ng-click="remove(word.id, word.classId)">-生词</button>
     </li>
 </ul>

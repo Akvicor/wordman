@@ -27,6 +27,7 @@ function DictCtrl($scope) {
 
     $scope.remove = function (wordId, classId) {
         clazz.removeNewWord(wordId, classId);
+        $("#word" + wordId).parent().remove();
     };
 
     clazz.getNewWords(function (data) {

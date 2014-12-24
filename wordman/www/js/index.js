@@ -35,8 +35,8 @@ var app = {
         $('#setup').height($(window).height());
 
         // XXX: 打包时删了下面两行
-        clazz.initClasses();
-        keyboard.init();
+        //clazz.initClasses();
+        //keyboard.init();
     },
     bindEvents: function () {
         document.addEventListener("backbutton", this.onBackKeyDown, false);
