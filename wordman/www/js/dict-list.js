@@ -30,7 +30,7 @@ function DictCtrl($scope) {
     };
 
     clazz.getNewWords(function (data) {
-        $scope.dicts = data;
+        $scope.dicts = data.words;
         $scope.$apply();
     });
 }

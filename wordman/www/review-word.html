@@ -22,12 +22,15 @@
         <div id="tipContent">
             <ul class="review-word">
                 <li ng-repeat="word in errorWords" class="fn-clear">
-                <big>{{word.letter}}</big>
-                <div class="ft-gray">{{word.sounds}}</div>
-                <small>{{word.explain}}</small>
+                    <div class="fn-left">
+                        <big>{{word.letter}}</big>
+                        <div class="ft-gray">{{word.sounds}}</div>
+                        <small>{{word.explain}}</small>
+                    </div>
+                    <button class="fn-right btn" ng-click="addDict(word.id, word.classId)">+生词</button>
                 </li>
             </ul>
-        </div>
-        <button class="btn" onclick="tip.close()">确 定</button>
+        </div> 
+        <button class="btn btn-red" onclick="tip.close()">确 定</button>
     </div>
 </div>

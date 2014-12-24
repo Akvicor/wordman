@@ -26,8 +26,8 @@ function ReviewWordCtrl($scope, $routeParams) {
     $scope.inputWord = "";
     $scope.index = 0;
 
-    $scope.addDict = function (wordId, wordId) {
-        clazz.addNewWord(wordId, wordId);
+    $scope.addDict = function (wordId, classId) {
+        clazz.addNewWord(wordId, classId);
     };
 
     $scope.reviewNext = function () {
@@ -98,7 +98,9 @@ var reviewWord = {
                 reviewWords.push({
                     letter: words[i].word,
                     explain: words[i].para,
-                    sounds: words[i].phon
+                    sounds: words[i].phon,
+                    classId: words[i].classId,
+                    id: words[i].id
                 });
             }
 

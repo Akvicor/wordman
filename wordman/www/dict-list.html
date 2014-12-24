@@ -1,17 +1,13 @@
 <header>
-   <span ng-click="back()">返回</span>
+    <span ng-click="back()">返回</span>
 </header>
-<div class="lexicon">
-    <ul class="list">
-        <li ng-repeat="word in dicts" class="fn-clear">
-            <div class="fn-left intro">
-        
-            </div>
-            <span ng-click="remove(word.wordId, word.classId)">
-                移除
-            </span>
-        </li>
-    </ul>
-</div>
-
-
+<ul class="review-word dict">
+    <li class="fn-clear" ng-repeat="word in dicts">
+        <div class="fn-left">
+            <big>{{word.word}}</big>
+            <span class="ft-gray">{{word.phon}}</span><br/>
+            <small>{{word.para}}</small>
+        </div>
+        <button class="fn-right btn btn-red" ng-click="remove(word.id, word.classId)">-生词</button>
+    </li>
+</ul>

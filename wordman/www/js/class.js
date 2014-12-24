@@ -617,7 +617,7 @@ var clazz = {
         var db = dbs.openDatabase();
 
         db.transaction(function (tx) {
-            tx.executeSql('delete from new_word where wordId = ? and classId = ?', [dbs.genId(), wordId, classId],
+            tx.executeSql('delete from new_word where wordId = ? and classId = ?', [wordId, classId],
                     function (tx, result) {
                     },
                     function (tx, err) {
@@ -652,31 +652,31 @@ var clazz = {
         var db = dbs.openDatabase();
 
         db.transaction(function (tx) {
-            tx.executeSql('select * from new_word', function (tx, result) {
-                var newWords = [];
+            tx.executeSql('select * from new_word', [], function (tx, result) {
+                var newWords = {};
 
                 for (var i = 0; i < result.rows.length; i++) {
                     var newWord = result.rows.item(i);
 
 
-                    if (!newWords[newWord.classId]) {
-                        newWords[newWord.classId] = [];
+                    if (!newWords["_" + newWord.classId]) {
+                        newWords["_" + newWord.classId] = [];
                     }
 
-                    newWords[newWord.classId].push(newWord.wordId);
+                    newWords["_" + newWord.classId].push("'" + newWord.wordId + "'");
                 }
 
                 var words = [];
-                var length = newWords.length;
+                var length = Object.getOwnPropertyNames(newWords).length;
                 var i = 0;
                 for (var classId in newWords) {
                     var wordIds = newWords[classId];
                     i++;
 
                     db.transaction(function (tx) {
-                        tx.executeSql('select * from word_' + classId + ' where id in ' + wordIds, [], function (tx, result) {
-                            for (var i = 0; i < result.rows.length; i++) {
-                                words.push(result.rows.item(i));
+                        tx.executeSql('select * from word' + classId + ' where id in (' + wordIds + ')', [], function (tx, result) {
+                            for (var j = 0; j < result.rows.length; j++) {
+                                words.push(result.rows.item(j));
                             }
 
                             if (i === length) {
@@ -689,6 +689,8 @@ var clazz = {
                         });
                     });
                 }
+            }, function (tx, err) {
+                console.error(err);
             });
         });
     }

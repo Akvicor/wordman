@@ -117,7 +117,7 @@ ul {
 #tipContent {
     color: #5F9200;
     text-align: center;
-    padding: 1em 0.4em;
+    padding: 0em 0.4em 1em;
 }
 
 .tip-content .button {
@@ -377,6 +377,12 @@ header {
     color: #5F9200;
 }
 /* end review word */
+
+/* start dict list */
+.dict {
+    background-color: #303537;
+}
+/* end dict list */
 
 /* start flash screen */
 #setup {

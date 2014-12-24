@@ -21,12 +21,6 @@
  */
 var tip = {
     show: function(title, content, cb) {
-        var windowW = $(window).width();
-
-        $(".tip-content").css({
-            "left": parseInt((windowW - $(".tip-content").width()) / 2) + "px"
-        });
-
         if (title) {
             $("#tipTitle").html(title);
         }

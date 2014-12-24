@@ -46,7 +46,7 @@ var dbs = {
      */
     initDB: function (cb) {
         // XXX: 打包时
-        this.dropTables(function () {
+        //this.dropTables(function () {
             var db = dbs.openDatabase();
 
             db.transaction(function (tx) {
@@ -93,7 +93,7 @@ var dbs = {
                     });
                 });
             });
-        });
+        //});
     },
     /**
      * 生成 32 字符长度的唯一 id 字符串.
@@ -117,6 +117,7 @@ var dbs = {
             tx.executeSql('drop table if exists `option`');
             tx.executeSql('drop table if exists `learn_plan`');
             tx.executeSql('drop table if exists `review_plan`');
+            tx.executeSql('drop table if exists `new_word`');
 
             tx.executeSql('drop table if exists `word_11`');
             tx.executeSql('drop table if exists `word_12`');
