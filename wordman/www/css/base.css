@@ -186,6 +186,7 @@ header {
     background-image: linear-gradient(to bottom, #222222, #111111);
     background-color: #1B1B1B;
     color: #fff;
+    text-align: center;
 }
 
 .btn {

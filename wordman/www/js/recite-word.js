@@ -26,8 +26,9 @@ function ReciteWordCtrl($scope, $routeParams) {
     $scope.btnText = "清空";
     $scope.index = 0;
     $scope.hasStudy = false;
+    $scope.num = 1;
 
-    $scope.mattch = function() {
+    $scope.mattch = function () {
         if ($scope.inputWord === $scope.letter) {
             $scope.btnText = '确定';
         } else {
@@ -35,7 +36,7 @@ function ReciteWordCtrl($scope, $routeParams) {
         }
     };
 
-    $scope.next = function() {
+    $scope.next = function () {
         $scope.index++;
         $scope.sounds = $scope.reciteWords[$scope.index].sounds;
         $scope.letter = $scope.reciteWords[$scope.index].letter;
@@ -49,7 +50,7 @@ function ReciteWordCtrl($scope, $routeParams) {
         }
     };
 
-    $scope.studyNext = function() {
+    $scope.studyNext = function () {
         if ($scope.btnText === "清空") {
             $scope.inputWord = "";
         } else {
@@ -73,7 +74,7 @@ function ReciteWordCtrl($scope, $routeParams) {
         $("#reciteInput").focus();
     };
 
-    $scope.prev = function() {
+    $scope.prev = function () {
         $scope.index--;
         $scope.sounds = $scope.reciteWords[$scope.index].sounds;
         $scope.letter = $scope.reciteWords[$scope.index].letter;
@@ -83,13 +84,13 @@ function ReciteWordCtrl($scope, $routeParams) {
         keyboard.hide();
     };
 
-    $scope.back = function() {
+    $scope.back = function () {
         if (confirm("要重头开始吗?")) {
             window.location = '#lexicon-list';
         }
     };
 
-    $scope.cancel = function() {
+    $scope.cancel = function () {
         window.location = '#lexicon-list';
     };
 
@@ -99,14 +100,14 @@ function ReciteWordCtrl($scope, $routeParams) {
 var reciteWord = {
     currentPlanId: "",
     currentClassId: "",
-    init: function($scope, classId) {
+    init: function ($scope, classId) {
         reciteWord.currentClassId = classId;
 
-        clazz.selectState(classId, function(result) {
+        clazz.selectState(classId, function (result) {
             if (!result.selected) { // 没有“选定”该词库
                 // 首次学习需要用户设置对该词库的学习词数
                 tip.show(undefined,
-                        '<br/><input class="input" value="' + result.learnNum + '" /><br/>', function() {
+                        '<br/><input class="input" value="' + result.learnNum + '" /><br/>', function () {
                             if (/^[0-9]*[1-9][0-9]*$/.test($("#tipContent input").val())) {
                                 var count = parseInt($("#tipContent input").val());
                                 if (count < 20 || count > 100) {
@@ -120,7 +121,7 @@ var reciteWord = {
                                 return false;
                             }
 
-                            clazz.getLearnPlans(classId, count, function(result) {
+                            clazz.getLearnPlans(classId, count, function (result) {
                                 // 选定词库
                                 clazz.selectClass(classId);
 
@@ -138,12 +139,13 @@ var reciteWord = {
                                 }
 
                                 $scope.reciteWords = reciteWords;
+                                $scope.num = result.num;
                                 $scope.sounds = $scope.reciteWords[0].sounds;
                                 $scope.letter = $scope.reciteWords[0].letter;
                                 $scope.explain = $scope.reciteWords[0].explain;
                                 $scope.$apply();
                                 // 键盘按键展现及回调
-                                keyboard.show(function(val) {
+                                keyboard.show(function (val) {
                                     $scope.inputWord = val;
                                     $scope.mattch();
                                     $scope.$apply();
@@ -153,13 +155,13 @@ var reciteWord = {
                         });
             } else { // 已经“选定”该词库
                 // 键盘按键展现及回调
-                keyboard.show(function(val) {
+                keyboard.show(function (val) {
                     $scope.inputWord = val;
                     $scope.mattch();
                     $scope.$apply();
                 });
 
-                clazz.getLearnPlans(classId, parseInt($("#tipContent input").val()), function(result) {
+                clazz.getLearnPlans(classId, parseInt($("#tipContent input").val()), function (result) {
                     reciteWord.currentPlanId = result.planId;
 
                     var words = result.words;
@@ -174,6 +176,7 @@ var reciteWord = {
                     }
 
                     $scope.reciteWords = reciteWords;
+                    $scope.num = result.num;
                     $scope.sounds = $scope.reciteWords[0].sounds;
                     $scope.letter = $scope.reciteWords[0].letter;
                     $scope.explain = $scope.reciteWords[0].explain;

@@ -22,6 +22,8 @@
  */
 function ReviewWordCtrl($scope, $routeParams) {
     $scope.reviewWords = [];
+    $scope.num = 1;
+    $scope.roundNum = 1;
     $scope.errorWords = [];
     $scope.inputWord = "";
     $scope.index = 0;
@@ -106,6 +108,8 @@ var reviewWord = {
             }
 
             $scope.reviewWords = reviewWords;
+            $scope.num = result.num;
+            $scope.roundNum = result.roundNum;
             $scope.explain = $scope.reviewWords[0].explain;
             $scope.$apply();
         });

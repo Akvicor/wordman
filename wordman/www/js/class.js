@@ -350,7 +350,10 @@ var clazz = {
                         db.transaction(function (tx) {
                             var pageNum = Math.ceil(classSize / learnNum);
                             var day = 0;
-
+                            
+                            // 课程序号
+                            var num = 1;
+                            
                             for (var i = 0; i < pageNum; i++) {
                                 tx.executeSql('select id from word_' + classId + ' limit ?, ?', [i * learnNum, learnNum],
                                         function (tx, result) {
@@ -366,7 +369,7 @@ var clazz = {
                                             }
 
                                             // 保存对该词库一天（一课）的学习计划
-                                            tx.executeSql('insert into learn_plan values (?, ?, ?, ?, ?)', [dbs.genId(), classId, '(' + wordIds.toString() + ')', date.format('yyyyMMdd'), null],
+                                            tx.executeSql('insert into learn_plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), num, classId, '(' + wordIds.toString() + ')', date.format('yyyyMMdd'), null],
                                                     function (tx, result) {
                                                         count++;
 
@@ -381,6 +384,8 @@ var clazz = {
                                                         throw err;
                                                     }
                                             );
+                                    
+                                            ++num;
                                         }
                                 );
                             }
@@ -406,7 +411,8 @@ var clazz = {
 
                                 cb({
                                     planId: plan.id,
-                                    words: words
+                                    words: words,
+                                    num: plan.num   // 课程序号
                                 });
                             }, function (tx, err) {
                                 console.error(err);
@@ -458,7 +464,9 @@ var clazz = {
 
                         cb({
                             planId: plan.id,
-                            words: words
+                            words: words,
+                            roundNum: plan.roundNum,
+                            num: plan.num
                         });
                     }, function (tx, err) {
                         console.error(err);
@@ -517,28 +525,31 @@ var clazz = {
 
                     // 复习轮 id
                     var roundId = dbs.genId();
+                    
+                    // 复习轮序号
+                    var num = 1;
 
                     // 生成复习计划（+1、2、4、7、15 天）
                     var day = new Date();
                     day.setDate(day.getDate() + 1);
                     var day1 = day.format('yyyyMMdd');
-                    genReviewPlans(classId, roundId, learnPlan.wordIds, day1);
+                    genReviewPlans(learnPlan.num, num++, classId, roundId, learnPlan.wordIds, day1);
 
                     day.setDate(day.getDate() + 1);
                     var day2 = day.format('yyyyMMdd');
-                    genReviewPlans(classId, roundId, learnPlan.wordIds, day2);
+                    genReviewPlans(learnPlan.num, num++, classId, roundId, learnPlan.wordIds, day2);
 
                     day.setDate(day.getDate() + 2);
                     var day4 = day.format('yyyyMMdd');
-                    genReviewPlans(classId, roundId, learnPlan.wordIds, day4);
+                    genReviewPlans(learnPlan.num, num++, classId, roundId, learnPlan.wordIds, day4);
 
                     day.setDate(day.getDate() + 3);
                     var day7 = day.format('yyyyMMdd');
-                    genReviewPlans(classId, roundId, learnPlan.wordIds, day7);
+                    genReviewPlans(learnPlan.num, num++, classId, roundId, learnPlan.wordIds, day7);
 
                     day.setDate(day.getDate() + 8);
                     var day15 = day.format('yyyyMMdd');
-                    genReviewPlans(classId, roundId, learnPlan.wordIds, day15);
+                    genReviewPlans(learnPlan.num, num++, classId, roundId, learnPlan.wordIds, day15);
                 });
             });
         });
@@ -669,11 +680,11 @@ var clazz = {
                 var words = [];
                 var length = Object.getOwnPropertyNames(newWords).length;
                 var i = 0;
-                for (var classId in newWords) {
-                    var wordIds = newWords[classId];
-                    i++;
 
-                    db.transaction(function (tx) {
+                db.transaction(function (tx) {
+                    for (var classId in newWords) {
+                        var wordIds = newWords[classId];
+                        i++;
                         tx.executeSql('select * from word' + classId + ' where id in (' + wordIds + ')', [], function (tx, result) {
                             for (var j = 0; j < result.rows.length; j++) {
                                 words.push(result.rows.item(j));
@@ -687,8 +698,8 @@ var clazz = {
                         }, function (tx, err) {
                             console.error(err);
                         });
-                    });
-                }
+                    }
+                });
             }, function (tx, err) {
                 console.error(err);
             });
@@ -696,11 +707,11 @@ var clazz = {
     }
 };
 
-function genReviewPlans(classId, roundId, wordIds, date) {
+function genReviewPlans(num, roundNum, classId, roundId, wordIds, date) {
     var db = dbs.openDatabase();
 
     db.transaction(function (tx) {
-        tx.executeSql('insert into review_plan values (?, ?, ?, ?, ?, ?)', [dbs.genId(), roundId, classId, wordIds, date, null],
+        tx.executeSql('insert into review_plan values (?, ?, ?, ?, ?, ?, ?, ?)', [dbs.genId(), num, roundNum, roundId, classId, wordIds, date, null],
                 function (tx, result) {
                 },
                 function (tx, err) {

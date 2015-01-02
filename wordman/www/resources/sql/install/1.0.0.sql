@@ -40,6 +40,7 @@ INSERT INTO class VALUES ('15','雅思必备词汇',4541,1,0,0,0,0);
 ----
 CREATE TABLE IF NOT EXISTS `learn_plan` (
   `id` char(32) NOT NULL,
+  `num` int NOT NULL,
   `classId` char(32) NOT NULL,
   `wordIds` varchar(3300) NOT NULL,
   `date` char(8) NOT NULL,
@@ -48,6 +49,8 @@ CREATE TABLE IF NOT EXISTS `learn_plan` (
 ----
 CREATE TABLE IF NOT EXISTS `review_plan` (
   `id` char(32) NOT NULL,
+  `num` int NOT NULL,
+  `roundNum` int NOT NULL,
   `roundId` char(32) NOT NULL,
   `classId` char(32) NOT NULL,
   `wordIds` varchar(3300) NOT NULL,

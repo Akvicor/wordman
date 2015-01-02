@@ -34,9 +34,8 @@ var app = {
         // 第一次打开应用屏幕
         $('#setup').height($(window).height());
 
-        // XXX: 打包时删了下面两行
-//        clazz.initClasses();
-//        keyboard.init();
+        // XXX: 打包时
+        //clazz.initClasses();
     },
     bindEvents: function () {
         document.addEventListener("backbutton", this.onBackKeyDown, false);
