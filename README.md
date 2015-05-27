@@ -124,6 +124,6 @@ review_plan
 
 第 3、4 两点表达的是一个策略：当天的时间如果大于等于计划的就开展学习或复习。这样设计主要是要“逼迫”用户把学习/复习任务按照制定的计划进行。
 
+----
 
-
-请参考[这里](https://docs.google.com/document/d/1mIxzQrUSCZCKOczYYX2wJAV-OVxFU5X7cPwz0IiEHN0/edit?usp=sharing)。
+![logo](https://github.com/b3log/b3log-wordman/blob/master/wordman/ps/drawable/icon.png)
