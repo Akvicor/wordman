@@ -55,11 +55,11 @@ word_${classId}
 
 ![image](https://cloud.githubusercontent.com/assets/873584/7827322/74ef66d8-0458-11e5-9566-4d361a2f8317.png)
 
-●	phon：音标
-●	pron：语音路径
-●	para：释义
-●	build：构词法
-●	example：JSON 格式例句
+* phon：音标
+* pron：语音路径
+* para：释义
+* build：构词法
+* example：JSON 格式例句
 
 应用端的单词表是通过下载词库包导入的，一个词库对应一张单词表，表名：词库 word_12，例如 word_12。
 
@@ -69,12 +69,12 @@ class
 
 ![image](https://cloud.githubusercontent.com/assets/873584/7827326/80a6127e-0458-11e5-9c37-0b3a7902090a.png)
 
-●	size：单词总数
-●	state：0: 未下载；1：已下载未安装；2：已安装
-●	times：第几次学习该词库
-●	selected：当前是否选定，0：未选定；1：选定
-●	learned：完成学习（尚未完成所有复习轮）的单词数
-●	finished：完成所有复习轮的单词数
+* size：单词总数
+* state：0: 未下载；1：已下载未安装；2：已安装
+* times：第几次学习该词库
+* selected：当前是否选定，0：未选定；1：选定
+* learned：完成学习（尚未完成所有复习轮）的单词数
+* finished：完成所有复习轮的单词数
 
 
 #### 学习计划表 ####
@@ -84,9 +84,9 @@ learn_plan
 ![image](https://cloud.githubusercontent.com/assets/873584/7827330/926d8b7c-0458-11e5-9f96-e8231c5857da.png)
 
 在用户添加一个词库后会生成对这个词库的学习计划，默认每天 20 个词。
-●	wordIds：今天需要学习的单词 id
-●	date：计划学习开始日期
-●	done：实际学习结束日期
+* wordIds：今天需要学习的单词 id
+* date：计划学习开始日期
+* done：实际学习结束日期
 
 #### 复习计划表 ####
 
@@ -95,10 +95,10 @@ review_plan
 ![image](https://cloud.githubusercontent.com/assets/873584/7827337/9fe83e6e-0458-11e5-8420-84d95a193201.png)
 
 在用户添加一个词库后会生成对这个词库的学习计划，默认每天 20 个词。
-●	roundId：因为同一课需要复习 5 次（艾宾浩斯），这 5 次的复习计划属于同一轮，轮 id 一样
-●	wordIds：今天需要复习的单词 id
-●	date：计划复习开始日期
-●	done：实际复习结束日期
+* roundId：因为同一课需要复习 5 次（艾宾浩斯），这 5 次的复习计划属于同一轮，轮 id 一样
+* wordIds：今天需要复习的单词 id
+* date：计划复习开始日期
+* done：实际复习结束日期
 
 
 #### 词库包 ####
