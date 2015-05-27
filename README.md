@@ -20,6 +20,24 @@ Wordman
 * 艾宾浩斯记忆：第 1 天、第 2 天、第 4 天、第 7 天和第 15 天提醒，拼写后到下一个词，过完这课后重复错词，直到没有错词才进入下一课复习
 * 生词本：记不住的词随时回顾
 
+## 截图 ##
+
+### 主界面 ###
+
+![image](https://cloud.githubusercontent.com/assets/873584/7827675/af7a666e-045c-11e5-85f1-9153749f941c.png)
+
+### 学习 ###
+
+![image](https://cloud.githubusercontent.com/assets/873584/7827700/f8b054e2-045c-11e5-81cd-ec670c9b0b36.png)
+
+### 复习 ###
+
+![image](https://cloud.githubusercontent.com/assets/873584/7827686/cb4d5324-045c-11e5-87b8-e7404b8728cc.png)
+
+### 生词本 ###
+
+![image](https://cloud.githubusercontent.com/assets/873584/7827705/20ae285c-045d-11e5-9d03-0f8c9e0943b0.png)
+
 ## 实现 ##
 
 ### 架构 ###
