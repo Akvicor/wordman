@@ -124,6 +124,21 @@ review_plan
 
 第 3、4 两点表达的是一个策略：当天的时间如果大于等于计划的就开展学习或复习。这样设计主要是要“逼迫”用户把学习/复习任务按照制定的计划进行。
 
+## 开发 ##
+
+1. 安装 Cordova：`npm -g install cordova@3.4.0-0.1.0`
+2. 安装目标平台（例如 Android），在 wordman 目录下执行：`cordova platform add android --verbose`
+3. 安装 SQLite 插件，在 wordman 目录下执行：`cordova plugin add https://github.com/brodysoft/Cordova-SQLitePlugin`
+
+构建时不要使用 NetBeans IDE 的构建，而要使用 `cordova build`
+
+### 注意 ###
+
+* JSZip/JSZipUtils 不支持中文，所以词库 zip 包名使用数字，里面的 SQL 脚本统一命名为 class.sql
+* ~~Wordman 1.0.0 使用 Web SQL 作为数据库，存在兼容性以及数据量问题，后续需要考虑使用 SQLite 插件~~ 1.1.3 版本已经使用 SQLite 插件实现
+
+
+
 ----
 
 ![logo](https://github.com/b3log/b3log-wordman/blob/master/wordman/ps/drawable/icon.png)
