@@ -1,4 +1,4 @@
-b3log-wordman
+Wordman
 =============
 
 沃德曼（Wordman）是一个移动端的背单词应用，[下载](http://pan.baidu.com/s/1sjtw5Rn)。
